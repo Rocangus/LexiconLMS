@@ -19,6 +19,21 @@ namespace LexiconLMS.Data
 
             using (var context = new ApplicationDbContext(option))
             {
+                string[] roleNames = { "Student", "Teacher" };
+
+                foreach (var name in roleNames)
+                {
+                    IdentityResult roleResult;
+                    if (!await roleManager.RoleExistsAsync(name))
+                    {
+                        roleResult = await roleManager.CreateAsync(new IdentityRole(name));
+                        if(roleResult != IdentityResult.Success)
+                        {
+                            throw new Exception(string.Join("\n", roleResult.Errors));
+                        }
+                    }
+                }
+
                 string adminName = "Administrator";
                 string adminEmail = "admin@lexiconlms.se";
                 if (!context.Users.Any(u => u.Email == adminEmail))
