@@ -11,20 +11,21 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using LexiconLMS.Core.Models;
 
 namespace LexiconLMS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<SystemUser> _userManager;
+        private readonly SignInManager<SystemUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, 
+        public LoginModel(SignInManager<SystemUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager,
+            UserManager<SystemUser> userManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
