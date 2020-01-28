@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using LexiconLMS.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,17 +12,17 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<SystemUser> _userManager;
+        private readonly SignInManager<SystemUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<SystemUser> userManager,
+            SignInManager<SystemUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
+        public string Name { get; set; }
         public string Username { get; set; }
 
         [TempData]
@@ -32,20 +33,25 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [StringLength(30)]
+            [Required]
+            public string Name { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(SystemUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
-
+            
             Input = new InputModel
             {
+                Name = user.Name,
                 PhoneNumber = phoneNumber
             };
         }
@@ -74,6 +80,19 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+
+
+            var name = user.Name;
+            if (Input.Name != name)
+            {
+                user.Name = Input.Name;
+                var setNameResult = await _userManager.UpdateAsync(user);
+                if (!setNameResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occurred changing name for user with ID '{userId}'.");
+                }
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
