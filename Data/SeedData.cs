@@ -23,13 +23,13 @@ namespace LexiconLMS.Data
 
                 foreach (var name in roleNames)
                 {
-                    IdentityResult roleResult;
+                    IdentityResult roleExistsResult;
                     if (!await roleManager.RoleExistsAsync(name))
                     {
-                        roleResult = await roleManager.CreateAsync(new IdentityRole(name));
-                        if(roleResult != IdentityResult.Success)
+                        roleExistsResult = await roleManager.CreateAsync(new IdentityRole(name));
+                        if(roleExistsResult != IdentityResult.Success)
                         {
-                            throw new Exception(string.Join("\n", roleResult.Errors));
+                            throw new Exception(string.Join("\n", roleExistsResult.Errors));
                         }
                     }
                 }
@@ -55,8 +55,16 @@ namespace LexiconLMS.Data
                         throw new Exception(string.Join("\n", addUserResult.Errors));
                     }
                     
+                    var addToRoleResult = await userManager.AddToRoleAsync(admin, roleNames[1]);
+
+                    if(!addToRoleResult.Succeeded)
+                    {
+                        throw new Exception(string.Join("\n", addToRoleResult.Errors));
+                    }
+
                     await context.SaveChangesAsync();
                 }
+
             }
         }
     }
