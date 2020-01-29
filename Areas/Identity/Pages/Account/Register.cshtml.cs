@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using LexiconLMS.Core.Models;
+using LexiconLMS.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,23 +23,32 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<SystemUser> _signInManager;
         private readonly UserManager<SystemUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<SystemUser> userManager,
             SignInManager<SystemUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
+            _context = context;
+            Roles = _roleManager.Roles.Select(x => x.Name).ToList();
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
+        [Required]
+        public List<string> Roles;
 
         public string ReturnUrl { get; set; }
 
@@ -46,6 +56,9 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            public string Role { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -80,6 +93,8 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    var resultAddRole = await _userManager.AddToRoleAsync(user, Input.Role);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
