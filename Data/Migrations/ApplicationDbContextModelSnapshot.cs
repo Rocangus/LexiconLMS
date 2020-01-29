@@ -44,7 +44,6 @@ namespace LexiconLMS.Data.Migrations
                     b.ToTable("Modules");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
             modelBuilder.Entity("LexiconLMS.Core.Models.Course", b =>
                 {
                     b.Property<int>("Id")
