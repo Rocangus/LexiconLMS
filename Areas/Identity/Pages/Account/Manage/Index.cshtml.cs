@@ -57,7 +57,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(SystemUser user)
         {
-            var name = user.Name; ;
+            string name = user.Name, userName = user.UserName, phoneNumber = user.PhoneNumber;
             var email = await _userManager.GetPhoneNumberAsync(user);
 
             List<SelectListItem> selectListItems = new List<SelectListItem>();
@@ -84,7 +84,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 Name = user.Name,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
                 RoleItemList = selectListItems
             };
         }
