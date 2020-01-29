@@ -12,7 +12,5 @@ namespace LexiconLMS.Core.Models
         [StringLength(30)]
         [Required]
         public string Name { get; set; }
-
-        public ICollection<SystemUserCourse> AttendedCourses { get; set; }
     }
 }
