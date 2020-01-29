@@ -15,5 +15,6 @@ namespace LexiconLMS.Data
         }
 
         public DbSet<SystemUser> SystemUsers { get; set; }
+        public DbSet<Module> Modules { get; set; }
     }
 }
