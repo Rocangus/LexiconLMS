@@ -5,6 +5,21 @@
     <UserSecretsId>aspnet-LexiconLMS-5414693D-BAB1-4988-867F-8E94F2F4553D</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129131017_CoursesAndModulesAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129131017_CoursesAndModulesAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129131214_SystemUserCourseNavProperty.cs" />
+    <Compile Remove="Data\Migrations\20200129131214_SystemUserCourseNavProperty.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129133540_FixedDuplicateCourseId.cs" />
+    <Compile Remove="Data\Migrations\20200129133540_FixedDuplicateCourseId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129133631_FixedDuplicateCourseIdAgain.cs" />
+    <Compile Remove="Data\Migrations\20200129133631_FixedDuplicateCourseIdAgain.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129134318_ModuleCourseIdFixed.cs" />
+    <Compile Remove="Data\Migrations\20200129134318_ModuleCourseIdFixed.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
