@@ -149,5 +149,17 @@ namespace LexiconLMS.Controllers
         {
             return _context.Courses.Any(e => e.Id == id);
         }
+
+
+        public async Task<IActionResult> Filter(string courseName)
+        {
+            var model = await _context.Courses.ToListAsync();
+
+            model = string.IsNullOrWhiteSpace(courseName) ?
+                model :
+                model.Where(p => p.Name.ToLower().Contains(courseName.ToLower())).ToList();
+
+            return View(nameof(Index), model);
+        }
     }
 }
