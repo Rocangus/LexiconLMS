@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 
-namespace LexiconLMS
+namespace LexiconLMS.Controllers
 {
     public class CoursesController : Controller
     {
