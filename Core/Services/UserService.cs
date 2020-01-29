@@ -36,18 +36,6 @@ namespace LexiconLMS.Core.Services
                 Id = user.Id,
                 PhoneNumber = user.PhoneNumber
             }).ToListAsync();
-
-            //foreach (var user in users)
-            //{
-            //    var vm = new SystemUserViewModel
-            //    {
-            //        Name = user.Name,
-            //        Email = user.Email,
-            //        Id = user.Id,
-            //        PhoneNumber = user.PhoneNumber
-            //    };
-            //}
         }
-
     }
 }
