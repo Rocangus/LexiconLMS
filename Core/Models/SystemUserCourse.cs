@@ -12,5 +12,7 @@ namespace LexiconLMS.Core.Models
 
         public Course Course { get; set; }
         public SystemUser SystemUser { get; set; }
+
+        public string Discriminator { get; set; }
     }
 }
