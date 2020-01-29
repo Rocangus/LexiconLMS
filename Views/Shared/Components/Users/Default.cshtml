@@ -1,0 +1,9 @@
+﻿@model IEnumerable<LexiconLMS.Core.ViewModels.SystemUserViewModel>
+@foreach (var user in Model)
+{
+    <tr>
+        <td>@user.Name</td>
+        <td>@user.Email</td>
+        <td>@user.PhoneNumber</td>
+    </tr>
+}
