@@ -15,5 +15,8 @@ namespace LexiconLMS.Data
         }
 
         public DbSet<SystemUser> SystemUsers { get; set; }
+
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
     }
 }
