@@ -4,9 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using LexiconLMS.Core.Models;
+using LexiconLMS.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
 {
@@ -14,13 +17,16 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<SystemUser> _userManager;
         private readonly SignInManager<SystemUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<SystemUser> userManager,
-            SignInManager<SystemUser> signInManager)
+            SignInManager<SystemUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
         public string Name { get; set; }
         public string Username { get; set; }
@@ -33,26 +39,53 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Required]
+            public string Role { get; set; }
+            [EmailAddress]
+            public string Email { get; set; }
             [StringLength(30)]
             [Required]
             public string Name { get; set; }
 
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public List<SelectListItem> RoleItemList { get; set; }
         }
 
         private async Task LoadAsync(SystemUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var name = user.Name; ;
+            var email = await _userManager.GetPhoneNumberAsync(user);
 
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            var roles = await _context.Roles.ToListAsync();
+            var currentRoleId = await _context.UserRoles.Where(r => r.UserId.Equals(user.Id)).Select(r => r.RoleId).FirstOrDefaultAsync();
+
+            foreach (var role in roles)
+            {
+
+                if (currentRoleId == null)
+                {
+                    throw new Exception("Failed to find the current user's role.");
+                }
+                var selectItem = new SelectListItem
+                {
+                    Text = role.Name,
+                    Selected = currentRoleId.Equals(role.Id)
+                };
+                selectListItems.Add(selectItem);
+            }
             Username = userName;
             
             Input = new InputModel
             {
                 Name = user.Name,
                 PhoneNumber = phoneNumber
+                RoleItemList = selectListItems
             };
         }
 
@@ -82,7 +115,9 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-
+            var selectedRole = Input.RoleItemList.Where(r => r.Selected).Select(r => r.Text).FirstOrDefault();
+            var currentRoleId = await _context.UserRoles.Where(r => r.UserId == user.Id).Select(r => r.UserId).FirstOrDefaultAsync();
+            var currentRole = await _context.Roles.Where(r => r.Id == currentRoleId).FirstOrDefaultAsync();
             var name = user.Name;
             if (Input.Name != name)
             {
@@ -96,13 +131,19 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            if (!currentRole.Name.Equals(selectedRole))
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var roleAddResult = await _userManager.AddToRoleAsync(user, selectedRole);
+                if (!roleAddResult.Succeeded)
                 {
                     var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                    throw new InvalidOperationException($"Unexpected error occurred adding user with user ID '{userId}' to role '{currentRole.Name}'.");
+                }
+                var roleRemoveResult = await _userManager.RemoveFromRoleAsync(user, currentRole.Name);
+                if (!roleRemoveResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occurred removing user with user ID '{userId}' from role '{currentRole.Name}'.");
                 }
             }
 
