@@ -13,6 +13,7 @@ namespace LexiconLMS.Core.Models
         public string Description { get; set; }
 
 
-        public ICollection<SystemUserCourse> CourseMembers { get; set; }
+        public ICollection<SystemUserCourse> Teachers { get; set; }
+        public ICollection<SystemUserCourse> Students { get; set; }
     }
 }
