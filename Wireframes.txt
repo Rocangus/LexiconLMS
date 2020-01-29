@@ -1,5 +1,6 @@
-https://wireframe.cc/711D14
-https://wireframe.cc/HF8b0B
-https://wireframe.cc/sJUOg8
-https://wireframe.cc/7T4NRQ
-https://wireframe.cc/qB1GPt
+https://wireframe.cc/711D14 //login
+https://wireframe.cc/HF8b0B //Assignments
+https://wireframe.cc/sJUOg8 //Course
+
+https://wireframe.cc/7T4NRQ //Courses
+https://wireframe.cc/qB1GPt //Users
