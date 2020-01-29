@@ -44,6 +44,10 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             [EmailAddress]
             public string Email { get; set; }
 
+            [Phone]
+            [Display(Name = "Phone number")]
+            public string PhoneNumber { get; set; }
+
             public List<SelectListItem> RoleItemList { get; set; }
         }
 
@@ -89,14 +93,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var systemUser = user;
-
-            if (systemUser == null)
-            {
-                throw new InvalidCastException("The IdentityUser could not be cast to a SystemUser.");
-            }
-
-            await LoadAsync(systemUser);
+            await LoadAsync(user);
             return Page();
         }
 
