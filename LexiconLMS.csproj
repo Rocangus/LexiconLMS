@@ -5,6 +5,11 @@
     <UserSecretsId>aspnet-LexiconLMS-5414693D-BAB1-4988-867F-8E94F2F4553D</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200129131943_CourseAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129131943_CourseAdded.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
