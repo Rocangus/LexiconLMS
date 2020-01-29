@@ -5,37 +5,47 @@
     ViewData["Title"] = "Welcome to <School>!";
 }
 
-<h1 style="margin-top: 100px auto">@ViewData["Title"]</h1>
-<div class="row" style="border: 1px solid; margin: 30px 300px 30px 130px auto ">
-    <div class="col-md-10" style="margin-left: 60px auto">
-        <section>
-            <form id="account" method="post">
+<div class="row">
+    <div style="margin: auto">
+        <h1 style="margin-top: 100px auto">@ViewData["Title"]</h1>
+        <section style="border: 1px solid; margin:  auto; padding: 20px  ">
+            <form id="account" method="post" >
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Input.Email">Username</label>
-                    <input asp-for="Input.Email" style="margin-left: 30px auto" />
+                <div class="row form-group">
+                    <div class="ml-auto mr-2 ">
+                        <label  asp-for="Input.Email"></label>
+                    </div>
+                    <div class="ml-2 mr-auto">
+                        <input asp-for="Input.Email"/>
+                    </div>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.Password">Password  </label>
-                        <input asp-for="Input.Password"  />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <div class="form-group text-center row">
+                    <div class="ml-auto mr-2">
+                    <label asp-for="Input.Password"></label>
+
                     </div>
-                    <div class="form-group">
-                        <div >
-                            <label asp-for="Input.RememberMe">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                
-                        <button type="submit" class="btn btn-primary" style="margin-left: 60px">Log in</button>
-                     </div>
+                    <div class="ml-2 mr-auto">
+                    <input asp-for="Input.Password" />
+
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                
+                <div class="form-group">
+                    <div>
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+
+                        <button type="submit" class="btn btn-primary float-right" >Log in</button>
+                    </div>
+                </div>
+
             </form>
-        </section>
+            </section>
     </div>
-    
+
 </div>
 
 @section Scripts {
