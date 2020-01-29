@@ -28,8 +28,8 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
             _context = context;
         }
-
         public string Name { get; set; }
+        public string Username { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -43,6 +43,10 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             public string Role { get; set; }
             [EmailAddress]
             public string Email { get; set; }
+            [StringLength(30)]
+            [Required]
+            public string Name { get; set; }
+
 
             [Phone]
             [Display(Name = "Phone number")]
@@ -75,12 +79,12 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
                 };
                 selectListItems.Add(selectItem);
             }
-
-            Name = name;
-
+            Username = userName;
+            
             Input = new InputModel
             {
-                Email = email,
+                Name = user.Name,
+                PhoneNumber = phoneNumber
                 RoleItemList = selectListItems
             };
         }
@@ -114,6 +118,17 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             var selectedRole = Input.RoleItemList.Where(r => r.Selected).Select(r => r.Text).FirstOrDefault();
             var currentRoleId = await _context.UserRoles.Where(r => r.UserId == user.Id).Select(r => r.UserId).FirstOrDefaultAsync();
             var currentRole = await _context.Roles.Where(r => r.Id == currentRoleId).FirstOrDefaultAsync();
+            var name = user.Name;
+            if (Input.Name != name)
+            {
+                user.Name = Input.Name;
+                var setNameResult = await _userManager.UpdateAsync(user);
+                if (!setNameResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occurred changing name for user with ID '{userId}'.");
+                }
+            }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (!currentRole.Name.Equals(selectedRole))
