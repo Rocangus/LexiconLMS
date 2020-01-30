@@ -22,18 +22,6 @@ namespace LexiconLMS.Data
         public DbSet<ActivityType> ActivityTypes { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<SystemUserCourse> SystemUserCourses { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.Entity<SystemUserCourse>()
-                .HasKey(k => new
-                {
-                    k.SystemUserId,
-                    k.CourseId
-                });
-        }
+        public DbSet<SystemUserCourse> UserCourses { get; set; }
     }
 }

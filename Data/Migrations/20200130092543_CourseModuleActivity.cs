@@ -3,18 +3,68 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LexiconLMS.Data.Migrations
 {
-    public partial class CourseAndModuleAdded : Migration
+    public partial class CourseModuleActivity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "Discriminator",
+                table: "AspNetUsers");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "AspNetUsers",
                 maxLength: 30,
-                nullable: true,
+                nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
                 oldNullable: true);
+
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ActivityTypeId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    ModuleId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActivityTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Modules",
@@ -46,7 +96,8 @@ namespace LexiconLMS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CourseId = table.Column<int>(nullable: false),
-                    SystemUserId = table.Column<string>(nullable: true)
+                    SystemUserId = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,6 +135,12 @@ namespace LexiconLMS.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Activities");
+
+            migrationBuilder.DropTable(
+                name: "ActivityTypes");
+
+            migrationBuilder.DropTable(
                 name: "Modules");
 
             migrationBuilder.DropTable(
@@ -98,8 +155,14 @@ namespace LexiconLMS.Data.Migrations
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldMaxLength: 30,
-                oldNullable: true);
+                oldMaxLength: 30);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Discriminator",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }
