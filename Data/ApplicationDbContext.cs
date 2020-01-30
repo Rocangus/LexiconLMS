@@ -35,8 +35,5 @@ namespace LexiconLMS.Data
                     k.CourseId
                 });
         }
-
-        public DbSet<LexiconLMS.Core.ViewModels.SystemUserViewModel> SystemUserViewModel { get; set; }
-
     }
 }
