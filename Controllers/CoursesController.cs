@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
+using LexiconLMS.Core.Repository;
+using LexiconLMS.Core.ViewModels;
 
 namespace LexiconLMS.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICourseRepository _courseRepository;
 
         public CoursesController(ApplicationDbContext context)
         {
             _context = context;
+            _courseRepository = new CourseRepository(_context);
         }
 
         // GET: Courses
@@ -33,14 +37,7 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            return View(course);
+            return View(await _courseRepository.GetCourseViewModel(id));
         }
 
         // GET: Courses/Create
@@ -73,12 +70,7 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses.FindAsync(id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-            return View(course);
+            return View(await _courseRepository.GetCourseViewModel(id));
         }
 
         // POST: Courses/Edit/5
