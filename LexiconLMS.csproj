@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.cs" />
     <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129124120_CourseClass.cs" />
+    <Compile Remove="Data\Migrations\20200129124120_CourseClass.Designer.cs" />
     <Compile Remove="Data\Migrations\20200129131017_CoursesAndModulesAdded.cs" />
     <Compile Remove="Data\Migrations\20200129131017_CoursesAndModulesAdded.Designer.cs" />
     <Compile Remove="Data\Migrations\20200129131214_SystemUserCourseNavProperty.cs" />
@@ -18,6 +20,12 @@
     <Compile Remove="Data\Migrations\20200129133631_FixedDuplicateCourseIdAgain.Designer.cs" />
     <Compile Remove="Data\Migrations\20200129134318_ModuleCourseIdFixed.cs" />
     <Compile Remove="Data\Migrations\20200129134318_ModuleCourseIdFixed.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129135050_CourseAndModuleAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129135050_CourseAndModuleAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200130092018_Activity.cs" />
+    <Compile Remove="Data\Migrations\20200130092018_Activity.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.cs" />
+    <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.Designer.cs" />
   </ItemGroup>
 
 
