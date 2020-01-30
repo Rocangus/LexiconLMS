@@ -75,7 +75,7 @@ namespace LexiconLMS.Data
                     for (int i = 0; i < 200; i++)
                     {
                         var name = faker.Name.FullName();
-                        var userEmail = faker.Internet.Email($"{name.Split(' ')}");
+                        var userEmail = faker.Internet.Email($"{name}");
                         var user = new SystemUser
                         {
                             Name = name,
