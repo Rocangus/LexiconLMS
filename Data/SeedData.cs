@@ -1,4 +1,5 @@
-﻿using LexiconLMS.Core.Models;
+﻿using Bogus;
+using LexiconLMS.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -63,6 +64,48 @@ namespace LexiconLMS.Data
                     }
 
                     await context.SaveChangesAsync();
+
+                }
+
+
+                if (context.Users.Count() <= 10)
+                {
+                    Faker faker = new Faker("sv");
+                    var bogusPassword = configuration["LMS:AdminPW"];
+                    for (int i = 0; i < 200; i++)
+                    {
+                        var name = faker.Name.FullName();
+                        var userEmail = faker.Internet.Email($"{name.Split(' ')}");
+                        var user = new SystemUser
+                        {
+                            Name = name,
+                            Email = userEmail,
+                            UserName = userEmail
+                        };
+                        var addFakeUserResult = await userManager.CreateAsync(user, bogusPassword);
+
+                        if (!addFakeUserResult.Succeeded)
+                        {
+                            throw new Exception(string.Join("\n", addFakeUserResult.Errors));
+                        }
+
+                        var teacherRandomness = faker.Random.Int(1, 10);
+
+                        IdentityResult addFakeUserToRoleResult;
+
+                        if (teacherRandomness < 10)
+                            addFakeUserToRoleResult = await userManager.AddToRoleAsync(user, roleNames[0]);
+                        else
+                            addFakeUserToRoleResult = await userManager.AddToRoleAsync(user, roleNames[1]);
+
+                        if (!addFakeUserToRoleResult.Succeeded)
+                        {
+                            throw new Exception(string.Join("\n", addFakeUserToRoleResult.Errors));
+                        }
+                    }
+
+                    await context.SaveChangesAsync();
+
                 }
 
             }
