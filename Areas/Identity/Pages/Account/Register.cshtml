@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            
+
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -18,10 +18,15 @@
                 @foreach (var role in Model.Roles)
                 {
                     <label class="radio-inline">
-                        <input type="radio" asp-for="Input.Role" value="@role" checked class="form-control"/>@role <br />
+                        <input type="radio" asp-for="Input.Role" value="@role" checked class="form-control" />@role <br />
                     </label>
                 }
                 <span asp-validation-for="Input.Role" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
