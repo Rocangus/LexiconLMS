@@ -13,6 +13,7 @@ namespace LexiconLMS.Data
 {
     public class SeedData
     {
+        private static Faker faker;
         public static async Task Initialize(IServiceProvider services, IConfiguration configuration,
             UserManager<SystemUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -67,10 +68,25 @@ namespace LexiconLMS.Data
 
                 }
 
+                if (!context.ActivityTypes.Any())
+                {
+                    string[] activityTypeNames = new string[] { "E-learning session", "Lecture", "Exam", "Assignment",
+                        "Practice session" };
+
+                    foreach (var typeName in activityTypeNames)
+                    {
+                        var activityType = new ActivityType
+                        {
+                            Name = typeName
+                        };
+                        context.Add(activityType);
+                    }
+                }
+
 
                 if (context.Users.Count() <= 10)
                 {
-                    Faker faker = new Faker("sv");
+                    Faker faker = GetFaker();
                     var bogusPassword = configuration["LMS:AdminPW"];
                     for (int i = 0; i < 200; i++)
                     {
@@ -108,7 +124,82 @@ namespace LexiconLMS.Data
 
                 }
 
+                if (context.Courses.Count() <= 1)
+                {
+                    var now = DateTime.UtcNow;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var faker = GetFaker();
+                        var course = new Course
+                        {
+                            Name = faker.Company.CatchPhrase(),
+                            StartDate = faker.Date.Future(1, now),
+                            Description = faker.Lorem.Sentences(6)                            
+                        };
+
+                        await context.AddAsync(course);
+                    }
+                    await context.SaveChangesAsync();
+                }
+
+                foreach (var course in context.Courses.ToList())
+                {
+                    if (!context.Modules.Any(m => m.CourseId == course.Id))
+                    {
+                        var faker = GetFaker();
+                        var startDate = course.StartDate.AddDays(faker.Random.Int(0, 90));
+                        for (int i = 0; i < faker.Random.Int(2, 10); i++)
+                        {
+                            var module = new Module
+                            {
+                                CourseId = course.Id,
+                                Name = faker.Company.CatchPhrase(),
+                                Description = faker.Lorem.Sentences(6),
+                                StartDate = startDate,
+                                EndDate = startDate.AddDays(faker.Random.Int(0, 5))
+                            };
+
+                            context.Add(module);
+                        }
+                        context.SaveChanges();
+                    }
+                }
+
+                foreach (var module in context.Modules.ToList())
+                {
+                    if(!context.Activities.Any(a => a.ModuleId == module.Id))
+                    {
+                        var faker = GetFaker();
+                        for (int i = 0; i < faker.Random.Int(0, 5); i++)
+                        {
+                            var activityStartTime = faker.Date.Soon((module.StartDate - module.EndDate).Days, module.StartDate);
+                            var activityTypeCount = context.ActivityTypes.Count();
+                            var activity = new Activity
+                            {
+                                Name = faker.Company.CatchPhrase(),
+                                ActivityTypeId = faker.Random.Int(0, activityTypeCount),
+                                Description = faker.Lorem.Sentences(6),
+                                StartTime = activityStartTime,
+                                EndTime = activityStartTime + faker.Date.Timespan(new TimeSpan(TimeSpan.TicksPerDay)),
+                                ModuleId = module.Id
+                            };
+                            context.Add(activity);
+                        }
+                        context.SaveChanges();
+                    }
+                }
+
+
             }
+        }
+
+        private static Faker GetFaker()
+        {
+            if (faker == null)
+            {
+                faker = new Faker("sv");
+            }
+            return faker;
         }
     }
 }
