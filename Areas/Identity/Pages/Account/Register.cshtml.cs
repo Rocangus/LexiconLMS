@@ -106,6 +106,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
 
                     var resultAddRole = await _userManager.AddToRoleAsync(user, Input.Role);
 
+                    /* INCASE WE NEED CONFIRMATIONS AGAIN
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -116,7 +117,10 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    */
 
+                    return RedirectToAction("Index", "SystemUser");
+                    /* INCASE WE NEED IT AGAIN
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
@@ -126,6 +130,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+                    */
                 }
                 foreach (var error in result.Errors)
                 {
