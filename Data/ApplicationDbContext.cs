@@ -5,6 +5,7 @@ using LexiconLMS.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using LexiconLMS.Core.ViewModels;
 
 namespace LexiconLMS.Data
 {
@@ -34,6 +35,5 @@ namespace LexiconLMS.Data
                     k.CourseId
                 });
         }
-
     }
 }
