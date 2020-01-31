@@ -62,16 +62,17 @@ namespace LexiconLMS.Controllers
             return View(course);
         }
 
+        // POST: Modules/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateModule([Bind("Id, Name, StartDate, EndDate, CourseId")] Module module)
+        public async Task<IActionResult> CreateModule([Bind("Id, Name, Description, StartDate, EndDate")] Module module)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(module);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Edit", module.CourseId);
+            return RedirectToAction("Edit", new { id = module.CourseId });
         }
 
         // GET: Courses/Edit/5

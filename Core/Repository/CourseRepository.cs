@@ -37,10 +37,11 @@ namespace LexiconLMS.Core.Repository
 
         public async Task<CourseViewModel> GetCourseViewModel(int? id)
         {
-            var model = new CourseViewModel();
-
-            model.Course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var model = new CourseViewModel
+            {
+                Course = await _context.Courses
+                .FirstOrDefaultAsync(m => m.Id == id)
+            };
             if (model.Course == null)
             {
                 return NotFound();
@@ -51,7 +52,6 @@ namespace LexiconLMS.Core.Repository
             model.Module = new Module
             {
                 CourseId = model.Course.Id,
-                Course = model.Course,
             };
 
             return model;
@@ -59,9 +59,10 @@ namespace LexiconLMS.Core.Repository
 
         public async Task<ModuleViewModel> GetModuleViewModel(int? id)
         {
-            var model = new ModuleViewModel();
-
-            model.Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id);
+            var model = new ModuleViewModel
+            {
+                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id)
+            };
 
             if (model.Module == null)
             {

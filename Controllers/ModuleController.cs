@@ -36,14 +36,14 @@ namespace LexiconLMS.Controllers
 
          [HttpPost]
          [ValidateAntiForgeryToken]
-         public async Task<IActionResult> CreateActivity([Bind("Id, Name, StartTime, EndTime, CourseId")] Activity activity)
+         public async Task<IActionResult> CreateActivity([Bind("Id, Name, Description, StartTime, EndTime, CourseId")] Activity activity)
          {
              if (ModelState.IsValid)
              {
-                 _context.Add(activity);
+                 _context.Activities.Add(activity);
                  await _context.SaveChangesAsync();
              }
-                 return RedirectToAction("Edit", activity.ModuleId);
+                 return RedirectToAction("Edit", new { id = activity.ModuleId });
          }
          
         // GET: Modules/Edit/5
@@ -62,7 +62,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description")] Module module)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Description,CourseId")] Module module)
         {
             if (id != module.Id)
             {
@@ -87,7 +87,7 @@ namespace LexiconLMS.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", module.Id);
+                return RedirectToAction("Details", new { id = module.Id });
             }
             return View(module);
         }

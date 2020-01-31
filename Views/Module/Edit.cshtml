@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>Course</h4>
+<h4>Module</h4>
 <hr />
 <div class="row">
     <form asp-action="Edit">
@@ -15,6 +15,7 @@
             <div class="col-md-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Module.Id" />
+                <input type="hidden" asp-for="Module.CourseId" />
                 <div class="form-group">
                     <label asp-for="Module.Name" class="control-label"></label>
                     <input asp-for="Module.Name" class="form-control" />
@@ -44,7 +45,7 @@
             <div class="col-md-4">
                 <!--Button trigger modal-->
                 <button type="button" id="activityPopUp" class="btn btn-primary" data-toggle="modal" data-target="activityModalCenter">Add Activity</button>
-                @Html.Partial("_ModulesPartial", Model.Activities)
+                @await Html.PartialAsync("_ActivitiesPartial", Model.Activities)
             </div>
         </div>
 
@@ -52,7 +53,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="@Url.Action("Edit", "Courses", new { id = Model.Module.CourseId })">Back to List</a>
 </div>
 
 <!--Modal-->
@@ -66,7 +67,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @Html.Partial("ActivityModalPopUp", Model.Activity)
+                @await Html.PartialAsync("ActivityModalPopUp", Model.Activity)
             </div>
             
         </div>

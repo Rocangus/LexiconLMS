@@ -32,7 +32,7 @@
             @Html.DisplayNameFor(model => model.Course.Modules)
         </dt>
         <dd class="col-sm-10">
-            @Html.Partial("_ModulesPartial", Model.Modules)
+            @await Html.PartialAsync("_ModulesPartial", Model.Modules)
         </dd>
     </dl>
 </div>

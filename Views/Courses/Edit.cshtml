@@ -39,7 +39,7 @@
             <div class="col-md-4">
                 <!--Button trigger modal-->
                 <button type="button" id="modulePopUp" class="btn btn-primary" data-toggle="modal" data-target="moduleModalCenter">Add Module</button>
-                @Html.Partial("_ModulesPartial", Model.Modules)
+                @await Html.PartialAsync("_ModulesPartial", Model.Modules)
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @Html.Partial("ModuleModalPopUp", Model.Module)
+                @await Html.PartialAsync("ModuleModalPopUp", Model.Module)
             </div>
             
         </div>

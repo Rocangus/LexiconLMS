@@ -186,8 +186,10 @@ namespace LexiconLMS.Data.Migrations
 
             modelBuilder.Entity("LexiconLMS.Core.Models.SystemUserCourse", b =>
                 {
-                    b.Property<string>("SystemUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
@@ -195,33 +197,16 @@ namespace LexiconLMS.Data.Migrations
                     b.Property<string>("Discriminator")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("SystemUserId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("SystemUserCourses");
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.ViewModels.SystemUserViewModel", b =>
-                {
-                    b.Property<string>("Id")
+                    b.Property<string>("SystemUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemUserViewModel");
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("SystemUserId");
+
+                    b.ToTable("UserCourses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -378,9 +363,7 @@ namespace LexiconLMS.Data.Migrations
 
                     b.HasOne("LexiconLMS.Core.Models.SystemUser", "SystemUser")
                         .WithMany()
-                        .HasForeignKey("SystemUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SystemUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

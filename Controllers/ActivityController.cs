@@ -50,7 +50,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description")] Activity activity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,EndTime,Description,ModuleId")] Activity activity)
         {
             if (id != activity.Id)
             {
@@ -75,7 +75,7 @@ namespace LexiconLMS.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", activity.Id);
+                return RedirectToAction("Details", new { id = activity.Id });
             }
             return View(activity);
         }
@@ -104,10 +104,9 @@ namespace LexiconLMS.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activity = await _context.Activities.FindAsync(id);
-            var moduleId = activity.ModuleId;
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Edit", "Module", moduleId);
+            return RedirectToAction("Edit", "Module", new { id = activity.ModuleId });
         }
 
         private bool ActivityExists(int id)
