@@ -37,7 +37,7 @@
 
         <div class="form-group">
             <label asp-for="SystemUsers" class="control-label"></label>
-            @await Html.PartialAsync("_SystemUsersPartial" , @Model.SystemUsers)
+            @await Html.PartialAsync("_UsersForCourseEditPartial" , @Model.SystemUsers)
             @*<partial name="_SystemUsersPartial" />*@
         </div>
 

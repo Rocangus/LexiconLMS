@@ -167,6 +167,23 @@ namespace LexiconLMS.Controllers
             return View(nameof(Index), model);
         }
 
+        public IActionResult UsersForCourseEditPartial(IEnumerable<SystemUser> users)
+        {
+            var result = new List<SystemUserViewModel>();
+
+            foreach (var user in users)
+            {
+                var model = new SystemUserViewModel
+                {
+                    Name = user.Name,
+                    Id = user.Id
+                };
+                result.Add(model);
+            }
+
+            return PartialView(result);
+        }
+
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)
         {
             List<SelectListItem> list = null;
