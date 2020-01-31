@@ -47,6 +47,22 @@ namespace LexiconLMS.Core.Repository
             }
 
             model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
+            var users = await _context.SystemUsers.ToListAsync();
+            List<SystemUserViewModel> suvm = new List<SystemUserViewModel>();
+            foreach(var item in users)
+            {
+                var mv = new SystemUserViewModel
+                {
+                    Email = item.Email,
+                    Id = item.Id,
+                    Name = item.Name,
+                    PhoneNumber = item.PhoneNumber
+                };
+
+                suvm.Add(mv);
+            }
+
+            model.SystemUsers = suvm;
 
             return model;
         }

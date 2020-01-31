@@ -1,4 +1,5 @@
-﻿@model LexiconLMS.Core.ViewModels.CourseViewModel
+﻿@*@model LexiconLMS.Core.Models.Course*@
+@model LexiconLMS.Core.ViewModels.CourseViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,40 +10,111 @@
 <h4>Course</h4>
 <hr />
 <div class="row">
-    <form asp-action="Edit">
-
-        <div class="row">
-            <div class="col-md-4">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Course.Id" />
-                <div class="form-group">
-                    <label asp-for="Course.Name" class="control-label"></label>
-                    <input asp-for="Course.Name" class="form-control" />
-                    <span asp-validation-for="Course.Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Course.StartDate" class="control-label"></label>
-                    <input asp-for="Course.StartDate" class="form-control" />
-                    <span asp-validation-for="Course.StartDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Course.Description" class="control-label"></label>
-                    <input asp-for="Course.Description" class="form-control" />
-                    <span asp-validation-for="Course.Description" class="text-danger"></span>
-                </div>
-
-
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Course.Id" />
+            <div class="form-group">
+                <label asp-for="@Model.Course.Name" class="control-label"></label>
+                <input asp-for="@Model.Course.Name" class="form-control" />
+                <span asp-validation-for="@Model.Course.Name" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
-                @Html.Partial("_ModulesPartial", Model.Modules)
-
+            <div class="form-group">
+                <label asp-for="@Model.Course.StartDate" class="control-label"></label>
+                <input asp-for="@Model.Course.StartDate" class="form-control" />
+                <span asp-validation-for="@Model.Course.StartDate" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="@Model.Course.Description" class="control-label"></label>
+                <input asp-for="@Model.Course.Description" class="form-control" />
+                <span asp-validation-for="@Model.Course.Description" class="text-danger"></span>
+            </div>
+
+            @*<div class="form-group">
+                    <label asp-for="SystemUsersList" class="control-label"></label>
+                    <partial name="SystemUsersSelectedPartial" />
+                </div>*@
+
+        <div class="form-group">
+            <label asp-for="SystemUsers" class="control-label"></label>
+            @await Html.PartialAsync("_SystemUsersPartial" , @Model.SystemUsers)
+            @*<partial name="_SystemUsersPartial" />*@
         </div>
-            
-    </form>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    @*<div class="col-md-4">
+            <form class="text-light bg-info border rounded-lg" asp-action="Filter"
+                  data-ajax="true"
+                  data-ajax-method="GET"
+                  data-ajax-mode="replace"
+                  data-ajax-update="usersupdate">
+                <div class="input-group m-auto">
+                    <input type="text" name="userName" class="form-control" placeholder="Search Student Name" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary "><i class="fa fa-search">&emsp;Search</i></button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Email)</th>
+                        <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody id="usersupdate">
+                    <partial name="_SystemUsersPartial" />
+                </tbody>
+            </table>
+        </div>*@
+
+
+
+  @*<div class="col-md-4">
+    @if (@Model.Course == null)
+    {
+        <tr>
+            <td>
+
+                There are no course matching that name
+            </td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var item in @Model.Course.Members)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SystemUser.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SystemUser.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SystemUser.PhoneNumber)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    }
+
+  </div>*@
+
+
+
+
 </div>
 
 <div>
