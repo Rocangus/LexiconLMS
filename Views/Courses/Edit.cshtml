@@ -8,42 +8,38 @@
 
 <h4>Course</h4>
 <hr />
-<div class="row">
-    <form asp-action="Edit">
+<form asp-action="Edit">
 
-        <div class="row">
-            <div class="col-md-4">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Course.Id" />
-                <div class="form-group">
-                    <label asp-for="Course.Name" class="control-label"></label>
-                    <input asp-for="Course.Name" class="form-control" />
-                    <span asp-validation-for="Course.Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Course.StartDate" class="control-label"></label>
-                    <input asp-for="Course.StartDate" class="form-control" />
-                    <span asp-validation-for="Course.StartDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Course.Description" class="control-label"></label>
-                    <input asp-for="Course.Description" class="form-control" />
-                    <span asp-validation-for="Course.Description" class="text-danger"></span>
-                </div>
-
-
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </div>
-            <div class="col-md-4">
-                @Html.Partial("_ModulesPartial", Model.Modules)
-
-            </div>
+    <div class="col">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Course.Id" />
+        <div class="form-group">
+            <label asp-for="Course.Name" class="control-label"></label>
+            <input asp-for="Course.Name" class="form-control" />
+            <span asp-validation-for="Course.Name" class="text-danger"></span>
         </div>
-            
-    </form>
-</div>
+        <div class="form-group">
+            <label asp-for="Course.StartDate" class="control-label"></label>
+            <input asp-for="Course.StartDate" class="form-control" />
+            <span asp-validation-for="Course.StartDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Course.Description" class="control-label"></label>
+            <textarea asp-for="Course.Description" class="form-control" rows="4" ></textarea>
+            <span asp-validation-for="Course.Description" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Modules" class="control-label"></label>
+            @Html.Partial("_ModulesPartial", Model.Modules)
+        </div>
+    </div>
+
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>
