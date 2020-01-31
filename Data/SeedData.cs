@@ -83,10 +83,10 @@ namespace LexiconLMS.Data
                     }
                 }
 
+                var faker = GetFaker();
 
                 if (context.Users.Count() <= 10)
                 {
-                    Faker faker = GetFaker();
                     var bogusPassword = configuration["LMS:AdminPW"];
                     for (int i = 0; i < 200; i++)
                     {
@@ -129,7 +129,6 @@ namespace LexiconLMS.Data
                     var now = DateTime.UtcNow;
                     for (int i = 0; i < 4; i++)
                     {
-                        var faker = GetFaker();
                         var course = new Course
                         {
                             Name = faker.Company.CatchPhrase(),
@@ -139,14 +138,12 @@ namespace LexiconLMS.Data
 
                         await context.AddAsync(course);
                     }
-                    await context.SaveChangesAsync();
                 }
 
                 foreach (var course in context.Courses.ToList())
                 {
                     if (!context.Modules.Any(m => m.CourseId == course.Id))
                     {
-                        var faker = GetFaker();
                         var startDate = course.StartDate.AddDays(faker.Random.Int(0, 90));
                         for (int i = 0; i < faker.Random.Int(2, 10); i++)
                         {
@@ -161,15 +158,14 @@ namespace LexiconLMS.Data
 
                             context.Add(module);
                         }
-                        context.SaveChanges();
                     }
                 }
 
-                foreach (var module in context.Modules.ToList())
+
+                foreach (var module in await context.Modules.ToListAsync())
                 {
                     if(!context.Activities.Any(a => a.ModuleId == module.Id))
                     {
-                        var faker = GetFaker();
                         for (int i = 0; i < faker.Random.Int(0, 5); i++)
                         {
                             var activityStartTime = faker.Date.Soon((module.StartDate - module.EndDate).Days, module.StartDate);
@@ -185,9 +181,40 @@ namespace LexiconLMS.Data
                             };
                             context.Add(activity);
                         }
-                        context.SaveChanges();
                     }
                 }
+
+                var teacherRole = context.Roles.Where(r => r.Name.Equals(roleNames[1])).FirstOrDefault();
+                var courseCount = context.Courses.Count();
+
+                foreach (var user in context.Users)
+                {
+                    if (!context.UserCourses.Any(uc => uc.SystemUserId.Equals(user.Id)))
+                    {
+                        SystemUserCourse userCourse;
+                        if (context.UserRoles.Any(ur => ur.UserId.Equals(user.Id) && ur.RoleId.Equals(teacherRole.Id)))
+                        {
+                            userCourse = new SystemUserCourse
+                            {
+                                CourseId = faker.Random.Int(1, courseCount),
+                                SystemUserId = user.Id,
+                                Discriminator = "Teacher"
+                            };
+                        }
+                        else
+                        {
+                            userCourse = new SystemUserCourse
+                            {
+                                CourseId = faker.Random.Int(1, courseCount),
+                                SystemUserId = user.Id,
+                                Discriminator = "Student"
+                            };
+                        };
+
+                        context.Add(userCourse);
+                    }
+                }
+                await context.SaveChangesAsync();
 
 
             }
