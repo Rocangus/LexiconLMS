@@ -1,0 +1,96 @@
+﻿@model LexiconLMS.Core.ViewModels.ModuleViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Course</h4>
+<hr />
+<div class="row">
+    <form asp-action="Edit">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Module.Id" />
+                <div class="form-group">
+                    <label asp-for="Module.Name" class="control-label"></label>
+                    <input asp-for="Module.Name" class="form-control" />
+                    <span asp-validation-for="Module.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module.StartDate" class="control-label"></label>
+                    <input asp-for="Module.StartDate" class="form-control" />
+                    <span asp-validation-for="Module.StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module.EndDate" class="control-label"></label>
+                    <input asp-for="Module.EndDate" class="form-control" />
+                    <span asp-validation-for="Module.EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module.Description" class="control-label"></label>
+                    <input asp-for="Module.Description" class="form-control" />
+                    <span asp-validation-for="Module.Description" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!--Button trigger modal-->
+                <button type="button" id="activityPopUp" class="btn btn-primary" data-toggle="modal" data-target="activityModalCenter">Add Activity</button>
+                @Html.Partial("_ModulesPartial", Model.Activities)
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="activityModalCenter" tabindex="-1" role="dialog" aria-labelledby="activityModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Activity for @Model.Module.Name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("ActivityModalPopUp", Model.Activity)
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+
+</script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $("#activityPopUp").click(function () {
+        $("#activityModalCenter").modal('show');
+    });
+
+    $("#btnHideModal").click(function () {
+        $("#activityModalCenter").modal('hide');
+    });
+</script>
+

@@ -62,6 +62,18 @@ namespace LexiconLMS.Controllers
             return View(course);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModule([Bind("Id, Name, StartDate, EndDate, CourseId")] Module module)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(module);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Edit", module.CourseId);
+        }
+
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -152,6 +164,11 @@ namespace LexiconLMS.Controllers
                 model.Where(p => p.Name.ToLower().Contains(courseName.ToLower())).ToList();
 
             return View(nameof(Index), model);
+        }
+
+        public ActionResult ModalPopUp()
+        {
+            return View();
         }
     }
 }

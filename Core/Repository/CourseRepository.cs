@@ -48,12 +48,50 @@ namespace LexiconLMS.Core.Repository
 
             model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
 
+            model.Module = new Module
+            {
+                CourseId = model.Course.Id,
+                Course = model.Course,
+            };
+
             return model;
         }
 
+        public async Task<ModuleViewModel> GetModuleViewModel(int? id)
+        {
+            var model = new ModuleViewModel();
+
+            model.Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (model.Module == null)
+            {
+                return NotFoundModule();
+            }
+
+            model.Activities = await _context.Activities.Where(m => m.ModuleId == id).ToListAsync();
+
+            model.Activity = new Activity
+            {
+                ModuleId = model.Module.Id
+            };
+
+            return model;
+        }
+
+        public async Task<Activity> GetActivity(int? id)
+        {
+            return await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        private ModuleViewModel NotFoundModule()
+        {
+            throw new NotImplementedException();
+        }
         private CourseViewModel NotFound()
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }
