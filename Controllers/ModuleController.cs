@@ -111,7 +111,7 @@ namespace LexiconLMS.Controllers
             var module = await _context.Modules.FindAsync(id);
             _context.Modules.Remove(module);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Edit", "Courses", module.CourseId);
+            return RedirectToAction("Edit", "Courses", new { id = module.CourseId });
         }
 
         private bool ModuleExists(int id)
