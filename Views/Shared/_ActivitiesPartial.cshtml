@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LexiconLMS.Core.Models.Module>
+﻿@model IEnumerable<LexiconLMS.Core.Models.Activity>
 
 <table class="table">
     <thead>
@@ -10,10 +10,10 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayNameFor(model => model.StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                @Html.DisplayNameFor(model => model.StartTime)
             </th>
             <th></th>
         </tr>
@@ -28,15 +28,15 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Html.DisplayFor(modelItem => item.StartTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                @Html.DisplayFor(modelItem => item.StartTime)
             </td>
             <td>
-                <a asp-controller="Module" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Module" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-controller="Activity" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-controller="Activity" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-controller="Activity" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

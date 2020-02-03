@@ -25,23 +25,17 @@ namespace LexiconLMS.Areas.Identity.Pages.Account
         private readonly UserManager<SystemUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
-        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<SystemUser> userManager,
             SignInManager<SystemUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager,
-            ApplicationDbContext context)
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
             _roleManager = roleManager;
-            _context = context;
             Roles = _roleManager.Roles.Select(x => x.Name).ToList();
         }
 
