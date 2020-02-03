@@ -65,7 +65,7 @@ namespace LexiconLMS.Controllers
         // POST: Modules/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateModule([Bind("Id, Name, Description, StartDate, EndDate")] Module module)
+        public async Task<IActionResult> CreateModule([Bind("Id, CourseId, Name, Description, StartDate, EndDate")] Module module)
         {
             if (ModelState.IsValid)
             {

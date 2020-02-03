@@ -36,14 +36,14 @@ namespace LexiconLMS.Controllers
 
          [HttpPost]
          [ValidateAntiForgeryToken]
-         public async Task<IActionResult> CreateActivity([Bind("Id, Name, Description, StartTime, EndTime, CourseId")] Activity activity)
+         public async Task<IActionResult> CreateActivity([Bind("Id, Name, Description, StartTime, EndTime, ModuleId")] Activity activity)
          {
              if (ModelState.IsValid)
              {
                  _context.Activities.Add(activity);
                  await _context.SaveChangesAsync();
              }
-                 return RedirectToAction("Edit", new { id = activity.ModuleId });
+             return RedirectToAction("Edit", new { id = activity.ModuleId });
          }
          
         // GET: Modules/Edit/5
