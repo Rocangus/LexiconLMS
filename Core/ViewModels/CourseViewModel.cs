@@ -12,5 +12,6 @@ namespace LexiconLMS.Core.ViewModels
         public List<Module> Modules { get; set; }
         public Module Module { get; set; }
 
+        public IEnumerable<SystemUserViewModel> SystemUsers { get; set; }
     }
 }
