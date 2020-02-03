@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.ViewModels
 {
-    public class CourseViewModel
+    public class ModuleViewModel
     {
-        public Course Course { get; set; }
-        public List<Module> Modules { get; set; }
         public Module Module { get; set; }
+        public List<Activity> Activities { get; set; }
+        public Activity Activity { get; set; }
 
-        public IEnumerable<SystemUserViewModel> SystemUsers { get; set; }
     }
 }

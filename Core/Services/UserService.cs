@@ -29,7 +29,6 @@ namespace LexiconLMS.Core.Services
 
         public async Task<IEnumerable<SystemUserViewModel>> GetUsersViewModelAsync()
         {
-
             return await _context.SystemUsers.Select(user => new SystemUserViewModel
             {
                 Name = user.Name,

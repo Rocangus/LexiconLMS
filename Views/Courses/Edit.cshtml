@@ -9,26 +9,26 @@
 
 <h4>Course</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="@Model.Course.Id" />
-            <div class="form-group">
-                <label asp-for="@Model.Course.Name" class="control-label"></label>
-                <input asp-for="@Model.Course.Name" class="form-control" />
-                <span asp-validation-for="@Model.Course.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Course.StartDate" class="control-label"></label>
-                <input asp-for="@Model.Course.StartDate" class="form-control" />
-                <span asp-validation-for="@Model.Course.StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Course.Description" class="control-label"></label>
-                <input asp-for="@Model.Course.Description" class="form-control" />
-                <span asp-validation-for="@Model.Course.Description" class="text-danger"></span>
-            </div>
+<form asp-action="Edit">
+
+    <div class="col">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Course.Id" />
+        <div class="form-group">
+            <label asp-for="Course.Name" class="control-label"></label>
+            <input asp-for="Course.Name" class="form-control" />
+            <span asp-validation-for="Course.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Course.StartDate" class="control-label"></label>
+            <input asp-for="Course.StartDate" class="form-control" />
+            <span asp-validation-for="Course.StartDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Course.Description" class="control-label"></label>
+            <textarea asp-for="Course.Description" class="form-control" rows="4" ></textarea>
+            <span asp-validation-for="Course.Description" class="text-danger"></span>
+        </div>
 
             @*<div class="form-group">
                     <label asp-for="SystemUsersList" class="control-label"></label>
@@ -116,11 +116,59 @@
 
 
 </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+        <div class="form-group">
+            <!--Button trigger modal-->
+            <button type="button" id="modulePopUp" class="btn btn-primary" data-toggle="modal" data-target="moduleModalCenter">Add Module</button>
+            <label asp-for="Modules" class="control-label"></label>
+            @Html.Partial("_ModulesPartial", Model.Modules)
+        </div>
+    </div>
+
+</form>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+<!--Modal-->
+<div class="modal fade" id="moduleModalCenter" tabindex="-1" role="dialog" aria-labelledby="moduleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Module for @Model.Course.Name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("ModuleModalPopUp", Model.Module)
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+
+</script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $("#modulePopUp").click(function () {
+        $("#moduleModalCenter").modal('show');
+    });
+
+    $("#btnHideModal").click(function () {
+        $("#moduleModalCenter").modal('hide');
+    });
+</script>
+
