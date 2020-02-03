@@ -1,0 +1,8 @@
+﻿@model IEnumerable<SystemUserViewModel>
+
+<ul class="list-unstyled">
+    @foreach (var user in Model)
+    {
+        <li ><a class="hidden-link" asp-controller="SystemUser" asp-action="Details" asp-route-id="@user.Id">@user.Name</a></li>
+    }
+</ul>

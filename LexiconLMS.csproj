@@ -1,17 +1,49 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>aspnet-LexiconLMS-5414693D-BAB1-4988-867F-8E94F2F4553D</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129124120_CourseClass.cs" />
+    <Compile Remove="Data\Migrations\20200129124120_CourseClass.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129131017_CoursesAndModulesAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129131017_CoursesAndModulesAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129131214_SystemUserCourseNavProperty.cs" />
+    <Compile Remove="Data\Migrations\20200129131214_SystemUserCourseNavProperty.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129133540_FixedDuplicateCourseId.cs" />
+    <Compile Remove="Data\Migrations\20200129133540_FixedDuplicateCourseId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129133631_FixedDuplicateCourseIdAgain.cs" />
+    <Compile Remove="Data\Migrations\20200129133631_FixedDuplicateCourseIdAgain.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129134318_ModuleCourseIdFixed.cs" />
+    <Compile Remove="Data\Migrations\20200129134318_ModuleCourseIdFixed.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200129135050_CourseAndModuleAdded.cs" />
+    <Compile Remove="Data\Migrations\20200129135050_CourseAndModuleAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200130092018_Activity.cs" />
+    <Compile Remove="Data\Migrations\20200130092018_Activity.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.cs" />
+    <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200131131824_OliverTest.cs" />
+    <Compile Remove="Data\Migrations\20200131131824_OliverTest.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="28.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
 </Project>
