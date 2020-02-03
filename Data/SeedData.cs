@@ -138,12 +138,14 @@ namespace LexiconLMS.Data
 
                         await context.AddAsync(course);
                     }
+                    await context.SaveChangesAsync();
                 }
 
                 foreach (var course in context.Courses.ToList())
                 {
                     if (!context.Modules.Any(m => m.CourseId == course.Id))
                     {
+                        var faker = GetFaker();
                         var startDate = course.StartDate.AddDays(faker.Random.Int(0, 90));
                         for (int i = 0; i < faker.Random.Int(2, 10); i++)
                         {
@@ -158,6 +160,7 @@ namespace LexiconLMS.Data
 
                             context.Add(module);
                         }
+                        context.SaveChanges();
                     }
                 }
 
