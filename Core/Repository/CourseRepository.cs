@@ -37,10 +37,11 @@ namespace LexiconLMS.Core.Repository
 
         public async Task<CourseViewModel> GetCourseViewModel(int? id)
         {
-            var model = new CourseViewModel();
-
-            model.Course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var model = new CourseViewModel
+            {
+                Course = await _context.Courses
+                .FirstOrDefaultAsync(m => m.Id == id)
+            };
             if (model.Course == null)
             {
                 return NotFound();
@@ -48,12 +49,50 @@ namespace LexiconLMS.Core.Repository
 
             model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
 
+            model.Module = new Module
+            {
+                CourseId = model.Course.Id,
+            };
+
             return model;
         }
 
+        public async Task<ModuleViewModel> GetModuleViewModel(int? id)
+        {
+            var model = new ModuleViewModel
+            {
+                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id)
+            };
+
+            if (model.Module == null)
+            {
+                return NotFoundModule();
+            }
+
+            model.Activities = await _context.Activities.Where(m => m.ModuleId == id).ToListAsync();
+
+            model.Activity = new Activity
+            {
+                ModuleId = model.Module.Id
+            };
+
+            return model;
+        }
+
+        public async Task<Activity> GetActivity(int? id)
+        {
+            return await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        private ModuleViewModel NotFoundModule()
+        {
+            throw new NotImplementedException();
+        }
         private CourseViewModel NotFound()
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }
