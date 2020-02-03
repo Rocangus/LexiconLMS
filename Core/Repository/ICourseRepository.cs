@@ -14,6 +14,8 @@ namespace LexiconLMS.Core.Repository
         void RemoveModule(Module module);
 
         Task<CourseViewModel> GetCourseViewModel(int? id);
+        Task<ModuleViewModel> GetModuleViewModel(int? id);
+        Task<Activity> GetActivity(int? id);
 
     }
 }

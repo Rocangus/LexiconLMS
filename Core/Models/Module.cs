@@ -15,6 +15,5 @@ namespace LexiconLMS.Core.Models
         //public List<Activity> Activities { get; set; }
         //public List<Document> Documents { get; set; }
         public int CourseId { get; set; }
-        public Course Course { get; set; }
     }
 }

@@ -26,6 +26,8 @@
     <Compile Remove="Data\Migrations\20200130092018_Activity.Designer.cs" />
     <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.cs" />
     <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200131131824_OliverTest.cs" />
+    <Compile Remove="Data\Migrations\20200131131824_OliverTest.Designer.cs" />
   </ItemGroup>
 
 
