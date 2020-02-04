@@ -155,9 +155,9 @@ namespace LexiconLMS.Controllers
 
         public async Task<IActionResult> Filter(string userName)
         {
-            if(userName == null || userName == "")
+            if(String.IsNullOrEmpty(userName))
             {
-                return View(nameof(Index));
+                return View(nameof(Index), await _userService.GetUsersViewModelAsync());
             }
             return View(nameof(Index), await _userService.Filter(userName));
         }

@@ -21,6 +21,7 @@
     <a asp-area="Identity" asp-page="/Account/Register">Register</a>
 </p>
 
+<div style="height: 55vh; overflow:auto;">
 <table class="table">
     <thead>
         <tr>
@@ -31,6 +32,7 @@
         </tr>
     </thead>
     <tbody id="usersupdate">
-        <partial name="_SystemUsersPartial" />
+        @await Html.PartialAsync("_SystemUsersPartial", Model)
     </tbody>
 </table>
+</div>
