@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
 {
+    [Authorize]
     public class SystemUserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -155,9 +157,9 @@ namespace LexiconLMS.Controllers
 
         public async Task<IActionResult> Filter(string userName)
         {
-            if(userName == null || userName == "")
+            if(String.IsNullOrEmpty(userName))
             {
-                return View(nameof(Index));
+                return View(nameof(Index), await _userService.GetUsersViewModelAsync());
             }
             return View(nameof(Index), await _userService.Filter(userName));
         }
