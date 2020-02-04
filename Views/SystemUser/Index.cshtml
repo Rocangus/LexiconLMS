@@ -17,8 +17,10 @@
     </div>
 </form>
 
-<p>
-    <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+<p>@if (User.IsInRole("Teacher"))
+{
+       <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+}
 </p>
 
 <div style="height: 55vh; overflow:auto;">
