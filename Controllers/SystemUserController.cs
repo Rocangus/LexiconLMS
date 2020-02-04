@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
 {
+    [Authorize]
     public class SystemUserController : Controller
     {
         private readonly ApplicationDbContext _context;
