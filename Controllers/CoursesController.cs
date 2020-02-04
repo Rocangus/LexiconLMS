@@ -62,15 +62,41 @@ namespace LexiconLMS.Controllers
             return View(course);
         }
 
+        // POST: Modules/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateModule([Bind("Id, CourseId, Name, Description, StartDate, EndDate")] Module module)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(module);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Edit", new { id = module.CourseId });
+        }
+
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+           
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            return View(await _courseRepository.GetCourseViewModel(id));
+            var course = await _courseRepository.GetCourseViewModel(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            //var model = new CourseEditViewModel()
+            //{
+            //    course = course,
+            //    SystemUsersList = GetSelectedSystemUser(_context.SystemUsers)
+            //};
+            return View(course);
+            //return View(model);
         }
 
         // POST: Courses/Edit/5
@@ -78,7 +104,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsersList")] Course course)
         {
             if (id != course.Id)
             {
@@ -152,6 +178,39 @@ namespace LexiconLMS.Controllers
                 model.Where(p => p.Name.ToLower().Contains(courseName.ToLower())).ToList();
 
             return View(nameof(Index), model);
+        }
+
+        public IActionResult UsersForCourseEditPartial(IEnumerable<SystemUser> users)
+        {
+            var result = new List<SystemUserViewModel>();
+
+            foreach (var user in users)
+            {
+                var model = new SystemUserViewModel
+                {
+                    Name = user.Name,
+                    Id = user.Id
+                };
+                result.Add(model);
+            }
+
+            return PartialView(result);
+        }
+
+        public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)
+        {
+            List<SelectListItem> list = null;
+                var query = (from ca in SystemUsers
+                             //where ca.AccountID == AccountID
+                             orderby ca.Name
+                             select new SelectListItem { Text = ca.Name, Value = ca.Id }).Distinct();
+                list = query.ToList();
+            return list;
+        }
+
+        public ActionResult ModalPopUp()
+        {
+            return View();
         }
     }
 }

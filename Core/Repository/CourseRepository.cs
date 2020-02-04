@@ -37,23 +37,80 @@ namespace LexiconLMS.Core.Repository
 
         public async Task<CourseViewModel> GetCourseViewModel(int? id)
         {
-            var model = new CourseViewModel();
-
-            model.Course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var model = new CourseViewModel
+            {
+                Course = await _context.Courses
+                .FirstOrDefaultAsync(m => m.Id == id)
+            };
             if (model.Course == null)
             {
                 return NotFound();
             }
 
             model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
+            var userCourses = await _context.UserCourses.Include(uc => uc.SystemUser).Where(uc => uc.CourseId == id).ToListAsync();
+            
+            List<SystemUserViewModel> userViewModels = new List<SystemUserViewModel>();
+            foreach(var item in userCourses)
+            {
+                var user = item.SystemUser;
+                var mv = new SystemUserViewModel
+                {
+                    Email = user.Email,
+                    Id = user.Id,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber
+                };
+
+                userViewModels.Add(mv);
+            }
+
+            model.SystemUsers = userViewModels;
+
+            model.Module = new Module
+            {
+                CourseId = model.Course.Id,
+            };
 
             return model;
         }
 
+        public async Task<ModuleViewModel> GetModuleViewModel(int? id)
+        {
+            var model = new ModuleViewModel
+            {
+                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == id)
+            };
+
+            if (model.Module == null)
+            {
+                return NotFoundModule();
+            }
+
+            model.Activities = await _context.Activities.Where(m => m.ModuleId == id).ToListAsync();
+
+            model.Activity = new Activity
+            {
+                ModuleId = model.Module.Id
+            };
+
+            return model;
+        }
+
+        public async Task<Activity> GetActivity(int? id)
+        {
+            return await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        private ModuleViewModel NotFoundModule()
+        {
+            throw new NotImplementedException();
+        }
         private CourseViewModel NotFound()
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

@@ -138,6 +138,7 @@ namespace LexiconLMS.Data
 
                         await context.AddAsync(course);
                     }
+                    await context.SaveChangesAsync();
                 }
 
                 foreach (var course in context.Courses.ToList())
@@ -158,6 +159,7 @@ namespace LexiconLMS.Data
 
                             context.Add(module);
                         }
+                        context.SaveChanges();
                     }
                 }
 

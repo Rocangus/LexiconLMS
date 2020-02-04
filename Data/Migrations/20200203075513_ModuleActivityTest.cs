@@ -2,7 +2,7 @@
 
 namespace LexiconLMS.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class ModuleActivityTest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -12,5 +12,7 @@ namespace LexiconLMS.Core.Models
         public DateTime StartDate { get; set; }
         public string Description { get; set; }
         public List<Module> Modules { get; set; }
+
+        public ICollection<SystemUserCourse> Members { get; set; }
     }
 }

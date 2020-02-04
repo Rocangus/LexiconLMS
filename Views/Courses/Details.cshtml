@@ -33,8 +33,8 @@
         @Html.DisplayNameFor(model => model.Course.Modules)
     </h4>
     <div style="width: 17%;">
-        <p >
-            @Html.Partial("_ModulesPartial", Model.Modules)
+        <p>
+            @await Html.PartialAsync("_ModulesPartial", Model.Modules)
         </p>
     </div>
 </div>
