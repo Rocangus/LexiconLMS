@@ -47,7 +47,7 @@
             <!--Button trigger modal-->
             <button type="button" id="modulePopUp" class="btn btn-primary" data-toggle="modal" data-target="moduleModalCenter">Add Module</button>
             <label asp-for="Modules" class="control-label"></label>
-            @Html.Partial("_ModulesPartial", Model.Modules)
+            @await Html.PartialAsync("_ModulesPartial", Model.Modules)
         </div>
     </div>
 </form>
