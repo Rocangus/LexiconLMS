@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LexiconLMS.Core.Models.Documents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace LexiconLMS.Core.Models
         public DateTime StartDate { get; set; }
         public string Description { get; set; }
         public List<Module> Modules { get; set; }
+
+        public List<Document> Documents { get; set; }
 
         public ICollection<SystemUserCourse> Members { get; set; }
     }
