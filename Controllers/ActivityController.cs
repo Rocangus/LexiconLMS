@@ -35,7 +35,7 @@ namespace LexiconLMS.Controllers
 
             return View(await _courseRepository.GetActivity(id));
         }
-
+        
         // GET: Activities/Edit/5
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Edit(int? id)
