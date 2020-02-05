@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Core\Models\Documents\DocumentsCourses.cs" />
     <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.cs" />
     <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.Designer.cs" />
     <Compile Remove="Data\Migrations\20200129124120_CourseClass.cs" />
