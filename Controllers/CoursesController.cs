@@ -9,6 +9,7 @@ using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
+using LexiconLMS.Core.Services;
 
 namespace LexiconLMS.Controllers
 {
@@ -16,11 +17,14 @@ namespace LexiconLMS.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
+        private readonly IUserService _userService;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
-            _courseRepository = new CourseRepository(_context);
+            _userService = userService;
+
+            _courseRepository = new CourseRepository(_context, _userService);
         }
 
         // GET: Courses
@@ -195,6 +199,16 @@ namespace LexiconLMS.Controllers
             }
 
             return PartialView(result);
+        }
+
+        public async Task<IActionResult> RemoveUserFromCourse(string userId, int courseId)
+        {
+            var userCourse = await _context.UserCourses
+                .FirstOrDefaultAsync(m => m.SystemUserId == userId);
+            _context.UserCourses.Remove(userCourse);
+            await _context.SaveChangesAsync();
+            var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
+            return PartialView("_UsersForCourseEditPartial", SystemUserViewModel);
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)

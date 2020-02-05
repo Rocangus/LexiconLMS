@@ -48,5 +48,28 @@ namespace LexiconLMS.Core.Services
                 PhoneNumber = user.PhoneNumber
             }).ToListAsync();
         }
+
+
+        public List<SystemUserViewModel> GetSystemUserViewModels(int? courseId)
+        {
+            var userCourses = _context.UserCourses.Include(uc => uc.SystemUser).Where(uc => uc.CourseId == courseId).ToList();
+            List<SystemUserViewModel> userViewModels = new List<SystemUserViewModel>();
+            foreach (var item in userCourses)
+            {
+                var user = item.SystemUser;
+                var mv = new SystemUserViewModel
+                {
+                    Email = user.Email,
+                    Id = user.Id,
+                    Name = user.Name,
+                    PhoneNumber = user.PhoneNumber,
+                    CourseId = (int)courseId
+                };
+
+                userViewModels.Add(mv);
+            }
+
+            return userViewModels;
+        }
     }
 }

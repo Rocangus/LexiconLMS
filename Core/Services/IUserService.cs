@@ -13,5 +13,6 @@ namespace LexiconLMS.Core.Services
         Task<IEnumerable<SystemUser>> GetUsersAsync();
         Task<IEnumerable<SystemUserViewModel>> GetUsersViewModelAsync();
         Task<IEnumerable<SystemUserViewModel>> Filter(string name);
+        List<SystemUserViewModel> GetSystemUserViewModels(int? courseId);
     }
 }

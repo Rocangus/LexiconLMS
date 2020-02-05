@@ -1,8 +1,16 @@
-﻿@model IEnumerable<SystemUserViewModel>
-
-<ul class="list-unstyled">
-    @foreach (var user in Model)
-    {
-        <li ><a class="hidden-link" asp-controller="SystemUser" asp-action="Details" asp-route-id="@user.Id">@user.Name</a></li>
-    }
-</ul>
+﻿@model IEnumerable<SystemUserViewModel>   
+        <ul class="list-unstyled">
+            @foreach (var user in Model)
+            {
+                <li>
+                    <a class="hidden-link" asp-controller="SystemUser" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
+                    <a asp-controller="Courses" asp-action="RemoveUserFromCourse" 
+                       asp-route-userId="@user.Id"
+                       asp-route-courseId="@user.CourseId"
+                       data-ajax="true"
+                       data-ajax-method="POST"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#systemusersupdate">Remove</a>
+                </li>
+            }
+        </ul>

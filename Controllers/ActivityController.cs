@@ -9,6 +9,7 @@ using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
+using LexiconLMS.Core.Services;
 
 namespace LexiconLMS.Controllers
 {
@@ -16,11 +17,12 @@ namespace LexiconLMS.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
+        private readonly IUserService _userService;
 
         public ActivityController(ApplicationDbContext context)
         {
             _context = context;
-            _courseRepository = new CourseRepository(_context);
+            _courseRepository = new CourseRepository(_context, _userService);
         }
 
         // GET: Activities/Details/5
