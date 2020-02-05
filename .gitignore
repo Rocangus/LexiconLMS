@@ -341,3 +341,5 @@ healthchecksdb
 /Core/Repository
 /Core/ViewModels
 /Views/Shared
+/Core/Services/IDocumentService.cs
+/Core/Services/DocumentService.cs
