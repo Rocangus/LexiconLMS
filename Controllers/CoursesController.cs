@@ -219,15 +219,14 @@ namespace LexiconLMS.Controllers
 
         public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
         {
-            /*Todo: Make a new SystemUserCourse where you put the UserId and the CourseId into the initializer. 
-             *Then add the new SystemUserCourse to the _context and SaveChangesAsync().*/
-            var userCourse = await _context.UserCourses
-                .FirstOrDefaultAsync(m => m.SystemUserId == userId);
+            var userCourse = new SystemUserCourse 
+            {
+                SystemUserId = userId,
+                CourseId = courseId
+            };
             _context.UserCourses.Add(userCourse);
             await _context.SaveChangesAsync();
-            //var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
             return RedirectToAction("Edit", "Courses", new { id = courseId });
-            //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)
