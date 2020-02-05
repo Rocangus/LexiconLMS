@@ -47,9 +47,11 @@
             <!--Button trigger modal-->
             <button type="button" id="modulePopUp" class="btn btn-primary" data-toggle="modal" data-target="moduleModalCenter">Add Module</button>
             <label asp-for="Modules" class="control-label"></label>
-            @await Html.PartialAsync("_ModulesPartial", Model.Modules)
+            <div style="height: 55vh; overflow:auto;">
+                @await Html.PartialAsync("_ModulesPartial", Model.Modules)
+                </div>
+            </div>
         </div>
-    </div>
 </form>
 @*<div class="col-md-4">
         <form class="text-light bg-info border rounded-lg" asp-action="Filter"

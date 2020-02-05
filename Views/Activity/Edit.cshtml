@@ -8,11 +8,10 @@
 
 <h4>Activity</h4>
 <hr />
-<div class="row">
     <form asp-action="Edit">
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ModuleId" />
                 <input type="hidden" asp-for="Id" />
@@ -43,8 +42,6 @@
         </div>
 
     </form>
-</div>
-
 <div>
     <a href="@Url.Action("Details", "Module", new { id = Model.ModuleId })">Back to List</a>
 </div>

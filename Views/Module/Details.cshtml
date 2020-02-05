@@ -34,13 +34,16 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Module.Description)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Activity)
-        </dt>
-        <dd class="col-sm-10">
-            @await Html.PartialAsync("_ActivitiesPartial", Model.Activities)
-        </dd>
+
     </dl>
+
+    <h4>
+        @Html.DisplayNameFor(model => model.Module.Activities)
+    </h4>
+    <div style="height: 55vh; overflow:auto;">
+        @await Html.PartialAsync("_ActivitiesPartial", Model.Activities)
+
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Module.Id">Edit</a> |
