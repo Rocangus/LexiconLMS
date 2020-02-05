@@ -14,8 +14,10 @@
     </div>
 </form>
 
-<p>
+<p>@if (User.IsInRole("Teacher"))
+{
     <a asp-action="Create">Create New</a>
+}
 </p>
 <table class="table">
     <thead>
