@@ -108,7 +108,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsersList")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsers")] Course course)
         {
             if (id != course.Id)
             {
@@ -167,6 +167,11 @@ namespace LexiconLMS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> GetUsersNotInCourse(int id)
+        {
+            return PartialView("_SystemUserAddForEditCoursePartial", await _userService.GetSystemUsersNotInCourse(id));
+        }
+
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.Id == id);
@@ -208,7 +213,21 @@ namespace LexiconLMS.Controllers
             _context.UserCourses.Remove(userCourse);
             await _context.SaveChangesAsync();
             var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
-            return PartialView("_UsersForCourseEditPartial", SystemUserViewModel);
+            return RedirectToAction("Edit", "Courses", new { id = courseId });
+            //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
+        }
+
+        public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
+        {
+            /*Todo: Make a new SystemUserCourse where you put the UserId and the CourseId into the initializer. 
+             *Then add the new SystemUserCourse to the _context and SaveChangesAsync().*/
+            var userCourse = await _context.UserCourses
+                .FirstOrDefaultAsync(m => m.SystemUserId == userId);
+            _context.UserCourses.Add(userCourse);
+            await _context.SaveChangesAsync();
+            //var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
+            return RedirectToAction("Edit", "Courses", new { id = courseId });
+            //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)

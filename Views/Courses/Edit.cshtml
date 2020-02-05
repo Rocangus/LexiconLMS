@@ -37,9 +37,10 @@
 
         <div class="form-group">
             <button type="button" id="systemUsersPopUp" class="btn btn-primary" data-toggle="modal" data-target="systemUsersModalCenter">Add Member</button>
-            <br />
-            <label asp-for="SystemUsers" class="control-label"></label>
+            <br /><br />
+            <h5><label asp-for="SystemUsers" class="control-label"></label></h5>
             <div id="systemusersupdate">
+                @*<partial name="_SystemUsersPartialForCourse" for="@Model.SystemUsers'"/>*@
                 @await Html.PartialAsync("_UsersForCourseEditPartial", @Model.SystemUsers)
             </div>
             
@@ -156,7 +157,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @await Html.PartialAsync("_UsersForCourseEditPartial", Model.SystemUsers)
+                @await Component.InvokeAsync("GetUsersNotInCourse", new { courseId = Model.Course.Id })
             </div>
 
         </div>
