@@ -10,9 +10,11 @@ using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
 {
+    [Authorize]
     public class ActivityController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -35,8 +37,9 @@ namespace LexiconLMS.Controllers
 
             return View(await _courseRepository.GetActivity(id));
         }
-         
+        
         // GET: Activities/Edit/5
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -52,6 +55,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,EndTime,Description,ModuleId")] Activity activity)
         {
             if (id != activity.Id)
@@ -83,6 +87,7 @@ namespace LexiconLMS.Controllers
         }
 
         // GET: Activities/Delete/5
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -103,6 +108,7 @@ namespace LexiconLMS.Controllers
         // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activity = await _context.Activities.FindAsync(id);

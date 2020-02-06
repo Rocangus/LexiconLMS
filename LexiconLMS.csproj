@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\Models\Documents\DocumentsCourses.cs" />
     <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.cs" />
     <Compile Remove="Data\Migrations\20200129100835_ModuleAdded.Designer.cs" />
     <Compile Remove="Data\Migrations\20200129124120_CourseClass.cs" />
@@ -28,6 +29,10 @@
     <Compile Remove="Data\Migrations\20200130092405_CourseModuleActivity.Designer.cs" />
     <Compile Remove="Data\Migrations\20200131131824_OliverTest.cs" />
     <Compile Remove="Data\Migrations\20200131131824_OliverTest.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200204123628_DocumentTest.cs" />
+    <Compile Remove="Data\Migrations\20200204123628_DocumentTest.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200204143551_AddedDocument.cs" />
+    <Compile Remove="Data\Migrations\20200204143551_AddedDocument.Designer.cs" />
   </ItemGroup>
 
 
