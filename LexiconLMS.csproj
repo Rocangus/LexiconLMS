@@ -32,6 +32,10 @@
     <Compile Remove="Data\Migrations\20200204123628_DocumentTest.Designer.cs" />
     <Compile Remove="Data\Migrations\20200204143551_AddedDocument.cs" />
     <Compile Remove="Data\Migrations\20200204143551_AddedDocument.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200206092038_ResolveUserEditConcurrencyProblem.cs" />
+    <Compile Remove="Data\Migrations\20200206092038_ResolveUserEditConcurrencyProblem.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200206092843_SolveUserRoleProblem.cs" />
+    <Compile Remove="Data\Migrations\20200206092843_SolveUserRoleProblem.Designer.cs" />
   </ItemGroup>
 
 

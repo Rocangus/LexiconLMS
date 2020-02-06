@@ -11,9 +11,9 @@ namespace LexiconLMS.Core.Services
 {
     public class DocumentIOService : IDocumentIOService
     {
-        private ILogger _logger;
+        private ILogger<DocumentIOService> _logger;
 
-        public DocumentIOService(ILogger logger)
+        public DocumentIOService(ILogger<DocumentIOService> logger)
         {
             _logger = logger;
         }

@@ -98,7 +98,7 @@ namespace LexiconLMS.Controllers
                 try
                 {
                     _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -111,6 +111,7 @@ namespace LexiconLMS.Controllers
                         throw;
                     }
                 }
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
