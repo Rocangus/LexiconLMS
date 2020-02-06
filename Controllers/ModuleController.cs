@@ -10,9 +10,11 @@ using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
 {
+    [Authorize]
     public class ModuleController : Controller
     {
         private readonly ApplicationDbContext _context;
