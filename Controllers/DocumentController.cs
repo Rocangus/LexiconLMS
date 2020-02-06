@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using LexiconLMS.Core.Services;
+using LexiconLMS.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,12 +24,17 @@ namespace LexiconLMS.Controllers
         }
 
 
-      
+        [HttpGet]
+        public IActionResult UploadUserDocument(string userId)
+        {
+            return View(new UserDocumentUploadViewModel { UserId = userId });
+        }
 
-        public async Task<string> DocumentUpload(IFormFile formFile, string userId)
+
+        public async Task<IActionResult> UploadUserDocument(IFormFile formFile, string userId)
         {
             var result = await _documentService.SaveUserDocumentToFile(formFile, userId);
-            return string.Empty;
+            return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
         }
     }
 }

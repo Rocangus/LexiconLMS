@@ -56,20 +56,7 @@
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
 
-        <form enctype="multipart/form-data" asp-controller="Document" asp-action="DocumentUpload" >
-
-            <dl>
-                <dt>
-                    <label asp-for="Input.FormFile"></label>
-                </dt>
-                <dd>
-                    <input asp-for="Input.FormFile" type="file">
-                    <span asp-validation-for="Input.FormFile"></span>
-                </dd>
-            </dl>
-            <input class="btn btn-primary" type="submit" value="DocumentUpload" />
-
-        </form>
+        @await Component.InvokeAsync("UserDocumentUpload", Model.Id)
 
     </div>
 </div>

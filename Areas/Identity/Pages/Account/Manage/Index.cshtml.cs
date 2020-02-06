@@ -35,6 +35,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
         }
         public string Name { get; set; }
         public string Username { get; set; }
+        public string Id { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -64,6 +65,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
         private async Task LoadAsync(SystemUser user)
         {
             string name = user.Name, userName = user.UserName, phoneNumber = user.PhoneNumber;
+            Id = user.Id;
             var email = await _userManager.GetPhoneNumberAsync(user);
 
             List<SelectListItem> selectListItems = new List<SelectListItem>();

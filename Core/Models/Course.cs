@@ -20,7 +20,7 @@ namespace LexiconLMS.Core.Models
         public string Description { get; set; }
         public List<Module> Modules { get; set; }
 
-        public List<Document> Documents { get; set; }
+        public List<DocumentsCourses> Documents { get; set; }
 
         public ICollection<SystemUserCourse> Members { get; set; }
     }
