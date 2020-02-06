@@ -1,10 +1,13 @@
 ﻿using LexiconLMS.Core.Models;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,5 +51,6 @@ namespace LexiconLMS.Core.Services
                 PhoneNumber = user.PhoneNumber
             }).ToListAsync();
         }
+
     }
 }

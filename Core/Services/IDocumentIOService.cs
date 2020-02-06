@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.Services
 {
-    interface IDocumentIOService
+    public interface IDocumentIOService
     {
         Task<bool> SaveCourseDocument(IFormFile formFile, int courseId);
+
+        Task<string> SaveUserDocumentAsync(IFormFile formFile, string userId);
     }
 }
