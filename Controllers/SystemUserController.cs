@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Services;
+using LexiconLMS.Core.Repository;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
@@ -164,5 +165,7 @@ namespace LexiconLMS.Controllers
             }
             return View(nameof(Index), await _userService.Filter(userName));
         }
+        
+        
     }
 }

@@ -48,5 +48,59 @@ namespace LexiconLMS.Core.Services
                 PhoneNumber = user.PhoneNumber
             }).ToListAsync();
         }
+
+
+        public List<SystemUserViewModel> GetSystemUserViewModels(int? courseId)
+        {
+            var userCourses = _context.UserCourses.Include(uc => uc.SystemUser).Where(uc => uc.CourseId == courseId).ToList();
+            return GetSystemUserViewModels(courseId, userCourses);
+        }
+
+        public async Task<List<SystemUserViewModel>> GetSystemUsersNotInCourse(int courseId)
+        {
+            var userIdsInCourse = await _context.UserCourses.Where(uc => uc.CourseId == courseId).Select(uc => uc.SystemUserId).ToListAsync();
+            var usersNotInCourse = await _context.Users.Where(u => !userIdsInCourse.Contains(u.Id)).ToListAsync();
+            return GetSystemUserViewModels(courseId, usersNotInCourse);
+
+        }
+
+        private static List<SystemUserViewModel> GetSystemUserViewModels(int? courseId, List<SystemUserCourse> userCourses)
+        {
+            List<SystemUserViewModel> userViewModels = new List<SystemUserViewModel>();
+            foreach (var item in userCourses)
+            {
+                var user = item.SystemUser;
+                SystemUserViewModel mv = PopulateSystemUserViewModel((int)courseId, user);
+
+                userViewModels.Add(mv);
+            }
+
+            return userViewModels;
+        }
+        
+        private static List<SystemUserViewModel> GetSystemUserViewModels(int courseId, List<SystemUser> users)
+        {
+            List<SystemUserViewModel> userViewModels = new List<SystemUserViewModel>();
+            foreach (var user in users)
+            {
+                SystemUserViewModel mv = PopulateSystemUserViewModel(courseId, user);
+
+                userViewModels.Add(mv);
+            }
+
+            return userViewModels;
+        }
+
+        private static SystemUserViewModel PopulateSystemUserViewModel(int courseId, SystemUser user)
+        {
+            return new SystemUserViewModel
+            {
+                Email = user.Email,
+                Id = user.Id,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber,
+                CourseId = (int)courseId
+            };
+        }
     }
 }

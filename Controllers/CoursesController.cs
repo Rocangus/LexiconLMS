@@ -9,6 +9,7 @@ using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
+using LexiconLMS.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
@@ -18,11 +19,14 @@ namespace LexiconLMS.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
+        private readonly IUserService _userService;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
-            _courseRepository = new CourseRepository(_context);
+            _userService = userService;
+
+            _courseRepository = new CourseRepository(_context, _userService);
         }
 
         // GET: Courses
@@ -111,7 +115,7 @@ namespace LexiconLMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsersList")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsers")] Course course)
         {
             if (id != course.Id)
             {
@@ -172,6 +176,11 @@ namespace LexiconLMS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> GetUsersNotInCourse(int id)
+        {
+            return PartialView("_SystemUserAddForEditCoursePartial", await _userService.GetSystemUsersNotInCourse(id));
+        }
+
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.Id == id);
@@ -204,6 +213,29 @@ namespace LexiconLMS.Controllers
             }
 
             return PartialView(result);
+        }
+
+        public async Task<IActionResult> RemoveUserFromCourse(string userId, int courseId)
+        {
+            var userCourse = await _context.UserCourses
+                .FirstOrDefaultAsync(m => m.SystemUserId == userId);
+            _context.UserCourses.Remove(userCourse);
+            await _context.SaveChangesAsync();
+            var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
+            return RedirectToAction("Edit", "Courses", new { id = courseId });
+            //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
+        }
+
+        public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
+        {
+            var userCourse = new SystemUserCourse 
+            {
+                SystemUserId = userId,
+                CourseId = courseId
+            };
+            _context.UserCourses.Add(userCourse);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Edit", "Courses", new { id = courseId });
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)
