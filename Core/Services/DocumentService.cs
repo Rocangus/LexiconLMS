@@ -2,6 +2,7 @@
 using LexiconLMS.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,15 @@ namespace LexiconLMS.Core.Services
         private readonly ApplicationDbContext _context;
 
         private readonly IDocumentIOService _documentIOService;
+        private readonly ILogger<DocumentService> _logger;
 
         public DocumentService(ApplicationDbContext context,
-            IDocumentIOService documentIOService)
+            IDocumentIOService documentIOService,
+            ILogger<DocumentService> logger)
         {
             _context = context;
             _documentIOService = documentIOService;
+            _logger = logger;
         }
 
 
@@ -51,10 +55,31 @@ namespace LexiconLMS.Core.Services
         public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
         {
      
-            string fileSave= await _documentIOService.SaveUserDocumentAsync(formFile, userId);
-            //if()
-            return true;
+            string path = await _documentIOService.SaveUserDocumentAsync(formFile, userId);
+            
+            if(path.Equals(string.Empty))
+                return false;
 
+            var document = new Document
+            {
+                Path = path,
+                Name = formFile.FileName,
+                SystemUserId = userId,
+                UploadTime = DateTime.UtcNow
+            };
+
+            _context.Add(document);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogWarning("Failed to save document to database: " + due.Message);
+                _logger.LogTrace(due.StackTrace);
+                return false;
+            }
+            return true;
         }
     }
 }

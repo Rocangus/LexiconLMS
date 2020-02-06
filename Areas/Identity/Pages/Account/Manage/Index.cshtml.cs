@@ -158,10 +158,10 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> DocumentUpload()
-        {
-            StatusMessage = "Document successfully uploaded.";
-            return RedirectToPage(nameof(OnPostAsync));
-        }
+        //public async Task<IActionResult> DocumentUpload()
+        //{
+        //    StatusMessage = "Document successfully uploaded.";
+        //    return RedirectToPage(nameof(OnPostAsync));
+        //}
     }
 }
