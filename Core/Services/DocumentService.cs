@@ -71,6 +71,20 @@ namespace LexiconLMS.Core.Services
         {
             throw new NotImplementedException();
         }
+        public async Task<bool> SaveActivityDocumentToFile(IFormFile formFile, string activityId)
+        {
+            string path = await _documentIOService.SaveActivityDocumentAsync(formFile, activityId);
+
+            if (path.Equals(string.Empty))
+                return false;
+
+            var document = new Document
+            {
+                Path = path,
+                Name = formFile.FileName,
+                SystemUserId = User
+            };
+        }
 
         public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
         {

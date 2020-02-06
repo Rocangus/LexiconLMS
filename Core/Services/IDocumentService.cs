@@ -13,6 +13,7 @@ namespace LexiconLMS.Core.Services
         Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id);
         Task<Document> GetUserAssignmenDocumentAsync(string id);
 
+        Task<bool> SaveActivityDocumentToFile(IFormFile formFile, string id);
         Task<bool> SaveUserDocumentToFile(IFormFile formFile, string id);
 
     }
