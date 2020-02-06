@@ -33,6 +33,8 @@
     <Compile Remove="Data\Migrations\20200204123628_DocumentTest.Designer.cs" />
     <Compile Remove="Data\Migrations\20200204143551_AddedDocument.cs" />
     <Compile Remove="Data\Migrations\20200204143551_AddedDocument.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200206090456_Changes.cs" />
+    <Compile Remove="Data\Migrations\20200206090456_Changes.Designer.cs" />
   </ItemGroup>
 
 

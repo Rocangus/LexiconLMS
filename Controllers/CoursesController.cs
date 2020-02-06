@@ -114,9 +114,8 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsers")] Course course)
         [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsersList")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,Description, SystemUsers")] Course course)
         {
             if (id != course.Id)
             {
