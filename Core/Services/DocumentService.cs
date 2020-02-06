@@ -1,5 +1,6 @@
 ﻿using LexiconLMS.Core.Models.Documents;
 using LexiconLMS.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,15 @@ namespace LexiconLMS.Core.Services
 {
     public class DocumentService: IDocumentService
     {
-        private ApplicationDbContext _context { get; }
-        public DocumentService(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+
+        private readonly IDocumentIOService _documentIOService;
+
+        public DocumentService(ApplicationDbContext context,
+            IDocumentIOService documentIOService)
         {
             _context = context;
+            _documentIOService = documentIOService;
         }
 
 
@@ -40,6 +46,15 @@ namespace LexiconLMS.Core.Services
         public Task<Document> GetUserAssignmenDocumentAsync(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
+        {
+     
+            string fileSave= await _documentIOService.SaveUserDocumentAsync(formFile, userId);
+            //if()
+            return true;
+
         }
     }
 }

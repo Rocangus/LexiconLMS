@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Models.Documents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace LexiconLMS.Core.ViewModels
     public class CourseViewModel
     {
         public Course Course { get; set; }
+        public  Document Document { get; set; }
         public List<Module> Modules { get; set; }
         public Module Module { get; set; }
 

@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Services;
 using LexiconLMS.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,15 +20,18 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<SystemUser> _userManager;
         private readonly SignInManager<SystemUser> _signInManager;
         private readonly ApplicationDbContext _context;
+        private readonly IDocumentService _documentService;
 
         public IndexModel(
             UserManager<SystemUser> userManager,
             SignInManager<SystemUser> signInManager,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IDocumentService documentService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _documentService = documentService;
         }
         public string Name { get; set; }
         public string Username { get; set; }
@@ -53,6 +58,7 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
 
             public List<SelectListItem> RoleItemList { get; set; }
+            public IFormFile FormFile { get; set; }
         }
 
         private async Task LoadAsync(SystemUser user)
@@ -150,6 +156,12 @@ namespace LexiconLMS.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
+        }
+
+        public async Task<IActionResult> DocumentUpload()
+        {
+            StatusMessage = "Document successfully uploaded.";
+            return RedirectToPage(nameof(OnPostAsync));
         }
     }
 }
