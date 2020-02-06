@@ -32,10 +32,8 @@
     <h4>
         @Html.DisplayNameFor(model => model.Course.Modules)
     </h4>
-    <div style="width: 17%;">
-        <p>
-            @await Html.PartialAsync("_ModulesPartial", Model.Modules)
-        </p>
+    <div style="height: 55vh; overflow:auto;">
+        @await Html.PartialAsync("_ModulesPartial", Model.Modules)
     </div>
 </div>
 <div>
