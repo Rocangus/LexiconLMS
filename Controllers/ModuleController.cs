@@ -9,8 +9,8 @@ using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using LexiconLMS.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
 {
