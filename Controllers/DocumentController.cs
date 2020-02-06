@@ -27,7 +27,7 @@ namespace LexiconLMS.Controllers
 
         public async Task<string> DocumentUpload(IFormFile formFile, string userId)
         {
-            //var result = await _documentService.SaveUserDocumentToFile(formFile, userId);
+            var result = await _documentService.SaveUserDocumentToFile(formFile, userId);
             return string.Empty;
         }
     }
