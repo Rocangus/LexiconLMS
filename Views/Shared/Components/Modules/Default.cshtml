@@ -5,8 +5,8 @@
 @{ int i = 1; }
 @foreach (var item in Model)
 {
-        <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id">
-            @i.  <a asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
+        <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id" id="mainmoduleslist">
+            @i.  <a asp-controller="Module" asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
             @await Component.InvokeAsync("Activities", new { moduleId = item.Id })
         </p>
     i++;
