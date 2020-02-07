@@ -137,10 +137,10 @@ namespace LexiconLMS.Core.Services
 
 
         
-        public async Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string  userId)
+        public async Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string userId, int courseId)
         {
 
-            string path = await _documentIOService.SaveCourseDocumentAsync(formFile, userId);
+            string path = await _documentIOService.SaveCourseDocumentAsync(formFile, courseId);
 
             if (path.Equals(string.Empty))
                 return false;
