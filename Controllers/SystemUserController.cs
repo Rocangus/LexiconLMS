@@ -54,7 +54,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Id,Name,StartDate,Description, PhoneNumber")] SystemUser user)
+        public async Task<IActionResult> Register([Bind("Id,Name, PhoneNumber")] SystemUser user)
         {
 
             if (ModelState.IsValid)
@@ -87,7 +87,7 @@ namespace LexiconLMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,StartDate,Description,PhoneNumber")] SystemUser user)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,PhoneNumber")] SystemUser user)
         {
             if (id != user.Id)
             {

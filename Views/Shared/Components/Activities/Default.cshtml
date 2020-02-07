@@ -1,0 +1,10 @@
+﻿@model IEnumerable<LexiconLMS.Core.Models.Activity>
+
+<p>Activities</p>
+        @{ int i = 1; }
+@foreach (var item in Model) {
+            <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id">
+                @i.  <a asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
+            </p>
+    i++;
+}
