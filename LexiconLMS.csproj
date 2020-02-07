@@ -71,6 +71,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Views\Courses\Components\DocumentUpload\" />
     <Folder Include="Views\Shared\Components\UserDocumentUpload\" />
   </ItemGroup>
 
