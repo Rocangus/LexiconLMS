@@ -17,11 +17,9 @@ namespace LexiconLMS.Core.Services
     public class UserService : IUserService
     {
         private ApplicationDbContext _context { get; }
-        private ICourseRepository _courseRepository { get;  }
-        public UserService(ApplicationDbContext context, ICourseRepository courseRepository)
+        public UserService(ApplicationDbContext context)
         {
             _context = context;
-            _courseRepository = courseRepository;
         }
         public async Task<SystemUser> GetUserAsync(string id)
         {
@@ -55,9 +53,16 @@ namespace LexiconLMS.Core.Services
             }).ToListAsync();
         }
 
+        //Used for ViewComponent
+        public async Task<Course> GetUserCourse(string id)
+        {
+            SystemUserCourse course = await _context.UserCourses.Where(u => u.SystemUserId.Equals(id)).FirstOrDefaultAsync();
+            return await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync();
+        }
+
         public async Task<MainViewModel> GetUserMainViewModel(string id)
         {
-            Course course = await _courseRepository.GetUserCourse(id);
+            Course course = await GetUserCourse(id);
 
             return await _context.SystemUsers.Where(user => user.Id == id).Select(user => new MainViewModel
             {

@@ -30,15 +30,6 @@ namespace LexiconLMS.Core.Repository
             throw new NotImplementedException();
         }
 
-        //Used for ViewComponent
-        public async Task<Course> GetUserCourse(string id)
-        {
-            SystemUserCourse course = await _context.UserCourses.Where(u => u.SystemUserId.Equals(id)).FirstOrDefaultAsync();
-
-            //model.Where(p => p.Name.ToLower().Contains(courseName.ToLower())).ToList();
-            return await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync();
-        }
-
         public async Task<CourseViewModel> GetCourseViewModel(int? id)
         {
             var model = new CourseViewModel
