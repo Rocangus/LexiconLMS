@@ -1,8 +1,26 @@
-﻿@{
+﻿@model LexiconLMS.Core.ViewModels.MainViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row text-center" id="mainbackgroundcolor">
+    <div class="col-md-12">
+        <h2>
+            @Model.Course.Name
+        </h2>
+    </div>
+</div>
+
+
+<div class="row"  id="mainbackgroundcolor">
+    <div class="col-md-2" style="height: 68vh; overflow:auto;">
+        @await Component.InvokeAsync("Modules", new { courseId = Model.Course.Id })
+    </div>
+    <div class="col-md-8">
+        @await Component.InvokeAsync("Course", new { course = Model.Course })
+    </div>
+    <div class="col-md-2" style="height: 68vh; overflow:auto; padding-right: 10px;">
+        @await Component.InvokeAsync("Users", new { courseId = Model.Course.Id })
+    </div>
 </div>

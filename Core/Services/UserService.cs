@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
 using Microsoft.AspNetCore.Http;
@@ -52,6 +53,29 @@ namespace LexiconLMS.Core.Services
             }).ToListAsync();
         }
 
+        //Used for ViewComponent
+        public async Task<Course> GetUserCourse(string id)
+        {
+            SystemUserCourse course = await _context.UserCourses.Where(u => u.SystemUserId.Equals(id)).FirstOrDefaultAsync();
+            return await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync();
+        }
+
+        public async Task<MainViewModel> GetUserMainViewModel(string id)
+        {
+            Course course = await GetUserCourse(id);
+
+            return await _context.SystemUsers.Where(user => user.Id == id).Select(user => new MainViewModel
+            {
+                SystemUser = new SystemUserViewModel
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Id = user.Id,
+                    PhoneNumber = user.PhoneNumber
+                },
+                Course = course
+            }).SingleOrDefaultAsync();
+        }
 
         public List<SystemUserViewModel> GetSystemUserViewModels(int? courseId)
         {
