@@ -56,9 +56,9 @@ namespace LexiconLMS.Controllers
         }
 
 
-        public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId)
+        public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
         {
-            var result = await _documentService.SaveCourseDocumentToFile(formFile, userId);
+            var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
             return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
         }
     }
