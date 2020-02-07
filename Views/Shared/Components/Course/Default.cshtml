@@ -3,11 +3,8 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Details</h1>
-
 <div>
-    <h4>Course</h4>
+    <h4>Course information</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -29,11 +26,10 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
-    <h4>
-        @Html.DisplayNameFor(model => model.Modules)
-    </h4>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (User.IsInRole("Teacher"))
+    {
+        <a asp-controller="Courses" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    }
 </div>

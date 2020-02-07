@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<LexiconLMS.Core.Models.Course>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Courses";
 }
 
-<h1 class="text-light bg-info border rounded-lg p-3">Index</h1>
-<form class="text-light bg-info border rounded-lg" asp-action="Filter">
+<h1 class="text-light border rounded-lg p-3" id="searchindex">@ViewData["Title"]</h1>
+<form class="text-light border rounded-lg"  asp-action="Filter">
     <div class="input-group m-auto">
         <input type="text" name="courseName" class="form-control" placeholder="Search on Course Name." />
         <div class="input-group-append">
