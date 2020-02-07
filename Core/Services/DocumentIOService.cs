@@ -18,7 +18,7 @@ namespace LexiconLMS.Core.Services
             _logger = logger;
         }
 
-        public async Task<string> SaveActivityDocument(IFormFile formFile, int activityId)
+        public async Task<string> SaveActivityDocumentAsync(IFormFile formFile, int activityId)
         {
             string path = Environment.CurrentDirectory + @"\Data\Activity\" + activityId + @"\" + Path.GetRandomFileName();
 
