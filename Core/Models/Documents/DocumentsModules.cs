@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.Models.Documents
 {
-    public class DocumentsCourses
+    public class DocumentsModules
     {
         public int DocumentId { get; set; }
         public Document Document { get; set; }
-        public int CourseId { get; set; }
-        public Course Course { get; set; }
+        public int ModuleId { get; set; }
+        public Module Module { get; set; }
+
     }
 }

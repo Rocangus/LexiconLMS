@@ -22,7 +22,7 @@ namespace LexiconLMS.Core.Models
         [DateRange(first: new int[] { 2020, 1, 1 }, last: new int[] { 2100, 1, 1 })]
         public DateTime EndDate { get; set; }
         public List<Activity> Activities { get; set; }
-        public List<Document> Documents { get; set; }
+        public List<DocumentsModules> Documents { get; set; }
         public int CourseId { get; set; }
     }
 }

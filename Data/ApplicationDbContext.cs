@@ -17,6 +17,14 @@ namespace LexiconLMS.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<DocumentsActivities>().HasKey("DocumentId", "ActivityId");
+            builder.Entity<DocumentsModules>().HasKey("DocumentId", "ModuleId");
+            builder.Entity<DocumentsCourses>().HasKey("DocumentId", "CourseId");
+        }
+
         public DbSet<SystemUser> SystemUsers { get; set; }
 
         public DbSet<Activity> Activities { get; set; }

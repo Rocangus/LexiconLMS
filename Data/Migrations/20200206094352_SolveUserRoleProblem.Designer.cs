@@ -4,14 +4,16 @@ using LexiconLMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LexiconLMS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200206094352_SolveUserRoleProblem")]
+    partial class SolveUserRoleProblem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,10 +100,19 @@ namespace LexiconLMS.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -120,54 +131,15 @@ namespace LexiconLMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SystemUserId");
-
-                    b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsActivities", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentId", "ActivityId");
-
                     b.HasIndex("ActivityId");
-
-                    b.ToTable("DocumentsActivities");
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsCourses", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentId", "CourseId");
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("DocumentsCourses");
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsModules", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentId", "ModuleId");
-
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("DocumentsModules");
+                    b.HasIndex("SystemUserId");
+
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("LexiconLMS.Core.Models.Module", b =>
@@ -442,54 +414,27 @@ namespace LexiconLMS.Data.Migrations
 
             modelBuilder.Entity("LexiconLMS.Core.Models.Documents.Document", b =>
                 {
-                    b.HasOne("LexiconLMS.Core.Models.SystemUser", null)
-                        .WithMany("Documents")
-                        .HasForeignKey("SystemUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsActivities", b =>
-                {
-                    b.HasOne("LexiconLMS.Core.Models.Activity", "Activity")
+                    b.HasOne("LexiconLMS.Core.Models.Activity", null)
                         .WithMany("Documents")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsCourses", b =>
-                {
-                    b.HasOne("LexiconLMS.Core.Models.Course", "Course")
+                    b.HasOne("LexiconLMS.Core.Models.Course", null)
                         .WithMany("Documents")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsModules", b =>
-                {
-                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
-                        .WithMany()
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LexiconLMS.Core.Models.Module", "Module")
+                    b.HasOne("LexiconLMS.Core.Models.Module", null)
                         .WithMany("Documents")
                         .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Core.Models.SystemUser", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("SystemUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

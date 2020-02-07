@@ -99,6 +99,7 @@ namespace LexiconLMS.Controllers
                 try
                 {
                     _context.Update(user);
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -112,7 +113,6 @@ namespace LexiconLMS.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
             return View(user);

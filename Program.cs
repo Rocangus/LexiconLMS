@@ -17,7 +17,12 @@ namespace LexiconLMS
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            var host = CreateHostBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                }).Build();
 
             using (var scope = host.Services.CreateScope())
             {
@@ -28,6 +33,7 @@ namespace LexiconLMS
                     SeedData.Initialize(services, services.GetRequiredService<IConfiguration>(),
                            services.GetRequiredService<UserManager<SystemUser>>(),
                            services.GetRequiredService<RoleManager<IdentityRole>>()).Wait();
+                    services.GetRequiredService<ILogger<Program>>();
                 }
                 catch (Exception e)
                 {
