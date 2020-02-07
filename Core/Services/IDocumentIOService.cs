@@ -9,8 +9,9 @@ namespace LexiconLMS.Core.Services
     public interface IDocumentIOService
     {
         Task<string> SaveActivityDocumentAsync(IFormFile formFile, int activityId);
-        Task<bool> SaveCourseDocument(IFormFile formFile, int courseId);
 
         Task<string> SaveUserDocumentAsync(IFormFile formFile, string userId);
+
+        Task<string> SaveCourseDocumentAsync(IFormFile formFile, string UserId);
     }
 }

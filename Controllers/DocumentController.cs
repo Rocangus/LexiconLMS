@@ -47,5 +47,37 @@ namespace LexiconLMS.Controllers
             else
                 return RedirectToAction("Error", "Home");
         }
+
+
+        [HttpGet]
+        public IActionResult UploadCourseDocument(string userId)
+        {
+            return View(new UserDocumentUploadViewModel { UserId = userId });
+        }
+
+
+        public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId)
+        {
+            var result = await _documentService.SaveCourseDocumentToFile(formFile, userId);
+            return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+        }
+
+
+        [HttpGet]
+        public IActionResult UploadCourseDocument(string userId)
+        {
+            return View(new UserDocumentUploadViewModel { UserId = userId });
+        }
+
+
+        public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId)
+        {
+            var result = await _documentService.SaveCourseDocumentToFile(formFile, userId);
+            return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+        }
+
+
+
+
     }
 }

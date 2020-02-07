@@ -16,6 +16,7 @@ namespace LexiconLMS.Core.Services
 
         Task<bool> SaveActivityDocumentToFile(ActivityDocumentUploadViewModel model);
         Task<bool> SaveUserDocumentToFile(IFormFile formFile, string id);
+        Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string id);
 
     }
 }

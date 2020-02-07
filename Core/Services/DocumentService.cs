@@ -93,7 +93,7 @@ namespace LexiconLMS.Core.Services
             _logger.LogWarning("Failed to save document to database: " + due.InnerException);
             _logger.LogTrace(due.StackTrace);
         }
-
+        
         public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
         {
 
@@ -133,5 +133,40 @@ namespace LexiconLMS.Core.Services
             }
             return true;
         }
+
+
+
+        
+        public async Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string  userId)
+        {
+
+            string path = await _documentIOService.SaveCourseDocumentAsync(formFile, userId);
+
+            if (path.Equals(string.Empty))
+                return false;
+            var document = new Document
+            {
+                Path = path,
+                Name = formFile.FileName,
+                SystemUserId = userId,
+                UploadTime = DateTime.UtcNow,
+                Description = string.Empty
+            };
+
+            _context.Add(document);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogWarning("Failed to save document to database: " + due.InnerException);
+                _logger.LogTrace(due.StackTrace);
+                return false;
+            }
+            return true;
+        }
+
+
     }
 }

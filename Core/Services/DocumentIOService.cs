@@ -51,18 +51,18 @@ namespace LexiconLMS.Core.Services
                 {
                     await formFile.CopyToAsync(stream);
                     _logger.LogInformation($"Successfully wrote file to disk at {path}");
-                    return true;
+                    return path;
                 }
             }
             catch(Exception e)
             {
                 _logger.LogWarning($"Failed to write file to disk: " + e.Message);
                 _logger.LogTrace(e.StackTrace);
-                return false;
+                return string.Empty;
             }
         }
 
-        public async Task<string> SaveUserDocumentAsync(IFormFile formFile, string userId)
+        public async Task<string> SaveCourseDocumentAsync(IFormFile formFile, string userId)
         {
             string path = Environment.CurrentDirectory + @"\Data\User\" + userId + @"\" + Path.GetRandomFileName();
 
@@ -84,5 +84,10 @@ namespace LexiconLMS.Core.Services
                 return string.Empty;
             }
         }
+
+
+  
+
+
     }
 }
