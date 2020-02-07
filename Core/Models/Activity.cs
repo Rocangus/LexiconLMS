@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LexiconLMS.Core.Models.Documents;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using LexiconLMS.Services.Validation;
@@ -21,7 +22,7 @@ namespace LexiconLMS.Core.Models
         [Display(Name = "End Time")]
         [DateRange(first: new int[] { 2020, 1, 1 }, last: new int[] { 2100, 1, 1 })]
         public DateTime EndTime { get; set; }
-        //public List<Document> Documents { get; set; }
+        public List<DocumentsActivities> Documents { get; set; }
         public int ModuleId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LexiconLMS.Core.Models.Documents;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,5 +13,6 @@ namespace LexiconLMS.Core.Models
         [StringLength(30)]
         [Required]
         public string Name { get; set; }
+        public List<Document> Documents { get; set; }
     }
 }

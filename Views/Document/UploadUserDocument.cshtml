@@ -1,0 +1,15 @@
+﻿@model UserDocumentUploadViewModel
+
+    <form enctype="multipart/form-data" asp-controller="Document" asp-action="DocumentUpload">
+
+        <dl>
+            <dt>
+                <label id="uploadLabel" for="upload"></label>
+            </dt>
+            <dd>
+                <input asp-for="FormFile" type="file">
+            </dd>
+        </dl>
+        <input class="btn btn-primary" type="submit" value="DocumentUpload" asp-route-userId="@Model.UserId"/>
+
+    </form>

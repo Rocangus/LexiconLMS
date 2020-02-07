@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Services;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace LexiconLMS.Core.Repository
     public class CourseRepository : ICourseRepository
     {
         private ApplicationDbContext _context { get; }
+        private IUserService _userService;
 
-        public CourseRepository(ApplicationDbContext context)
+        public CourseRepository(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
         public void AddModule(Module module)
         {
@@ -48,23 +51,9 @@ namespace LexiconLMS.Core.Repository
                 return NotFound();
             }
 
-            model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
-            var userCourses = await _context.UserCourses.Include(uc => uc.SystemUser).Where(uc => uc.CourseId == id).ToListAsync();
-            
-            List<SystemUserViewModel> userViewModels = new List<SystemUserViewModel>();
-            foreach(var item in userCourses)
-            {
-                var user = item.SystemUser;
-                var mv = new SystemUserViewModel
-                {
-                    Email = user.Email,
-                    Id = user.Id,
-                    Name = user.Name,
-                    PhoneNumber = user.PhoneNumber
-                };
+            model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();            
 
-                userViewModels.Add(mv);
-            }
+            List<SystemUserViewModel> userViewModels = _userService.GetSystemUserViewModels(id);
 
             model.SystemUsers = userViewModels;
 

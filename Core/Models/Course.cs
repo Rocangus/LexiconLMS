@@ -1,3 +1,4 @@
+﻿using LexiconLMS.Core.Models.Documents;
 ﻿using LexiconLMS.Services.Validation;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace LexiconLMS.Core.Models
         [MaxLength(350)]
         public string Description { get; set; }
         public List<Module> Modules { get; set; }
+
+        public List<DocumentsCourses> Documents { get; set; }
 
         public ICollection<SystemUserCourse> Members { get; set; }
     }

@@ -9,7 +9,7 @@
 <h4>Course</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" id="form">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -33,6 +33,9 @@
             </div>
         </form>
     </div>
+</div>
+<div>
+    <a asp-action="UploadUserDocument" asp-controller="Document" asp-route-userId="@Model.Id">Click here to upload a document</a>.
 </div>
 
 <div>
