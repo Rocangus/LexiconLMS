@@ -7,22 +7,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using LexiconLMS.Models;
 using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Data;
+using LexiconLMS.Core.Models;
+using Microsoft.AspNetCore.Identity;
+using LexiconLMS.Core.Services;
+using LexiconLMS.Core.ViewModels;
 
 namespace LexiconLMS.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<SystemUser> _userManager;
+        private readonly IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<SystemUser> userManager, IUserService userService)
         {
             _logger = logger;
+            _context = context;
+            _userManager = userManager;
+            _userService = userService;
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            SystemUser systemUser = await _userManager.GetUserAsync(User);
+            return View(await _userService.GetUserMainViewModel(systemUser.Id));
         }
 
         public IActionResult Privacy()
@@ -30,15 +42,10 @@ namespace LexiconLMS.Controllers
             return View();
         }
 
-        public IActionResult Users()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

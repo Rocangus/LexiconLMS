@@ -30,6 +30,12 @@
     <Compile Remove="Data\Migrations\20200131131824_OliverTest.Designer.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Shared\Components\Activities\Default.cshtml" />
+    <None Include="Views\Shared\Components\Course\Default.cshtml" />
+    <None Include="Views\Shared\Components\Modules\Default.cshtml" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="28.4.4" />

@@ -21,18 +21,19 @@ namespace LexiconLMS.Core.Repository
         {
             throw new NotImplementedException();
         }
-        
-        /*
-        public async Task<List<Module>> GetAllCourseModulesAsync(int courseid)
-        {
-            return await _context.Courses
-                .Where(c => c.Id == courseid)
-                .Select(m => m.Modules);
-        }
-        */
+
         public void RemoveModule(Module module)
         {
             throw new NotImplementedException();
+        }
+
+        //Used for ViewComponent
+        public async Task<Course> GetUserCourse(string id)
+        {
+            SystemUserCourse course = await _context.UserCourses.Where(u => u.SystemUserId.Equals(id)).FirstOrDefaultAsync();
+
+            //model.Where(p => p.Name.ToLower().Contains(courseName.ToLower())).ToList();
+            return await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync();
         }
 
         public async Task<CourseViewModel> GetCourseViewModel(int? id)
@@ -75,6 +76,12 @@ namespace LexiconLMS.Core.Repository
             return model;
         }
 
+        //Used for ViewComponent
+        public async Task<IEnumerable<Module>> GetAllCourseModulesAsync(int courseId)
+        {
+            return await _context.Modules.Where(m => m.CourseId == courseId).ToListAsync();
+        }
+
         public async Task<ModuleViewModel> GetModuleViewModel(int? id)
         {
             var model = new ModuleViewModel
@@ -95,6 +102,12 @@ namespace LexiconLMS.Core.Repository
             };
 
             return model;
+        }
+
+        //Used for ViewComponent
+        public async Task<IEnumerable<Activity>> GetAllModuleActivitiesAsync(int moduleId)
+        {
+            return await _context.Activities.Where(a => a.ModuleId == moduleId).ToListAsync();
         }
 
         public async Task<Activity> GetActivity(int? id)

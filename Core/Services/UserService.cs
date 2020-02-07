@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,11 @@ namespace LexiconLMS.Core.Services
     public class UserService : IUserService
     {
         private ApplicationDbContext _context { get; }
-        public UserService(ApplicationDbContext context)
+        private ICourseRepository _courseRepository { get;  }
+        public UserService(ApplicationDbContext context, ICourseRepository courseRepository)
         {
             _context = context;
+            _courseRepository = courseRepository;
         }
         public async Task<SystemUser> GetUserAsync(string id)
         {
@@ -47,6 +50,23 @@ namespace LexiconLMS.Core.Services
                 Id = user.Id,
                 PhoneNumber = user.PhoneNumber
             }).ToListAsync();
+        }
+
+        public async Task<MainViewModel> GetUserMainViewModel(string id)
+        {
+            Course course = await _courseRepository.GetUserCourse(id);
+
+            return await _context.SystemUsers.Where(user => user.Id == id).Select(user => new MainViewModel
+            {
+                SystemUser = new SystemUserViewModel
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    Id = user.Id,
+                    PhoneNumber = user.PhoneNumber
+                },
+                Course = course
+            }).SingleOrDefaultAsync();
         }
     }
 }

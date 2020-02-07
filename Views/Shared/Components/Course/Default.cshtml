@@ -11,32 +11,29 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Course.Name)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Course.Name)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Course.StartDate)
+            @Html.DisplayNameFor(model => model.StartDate)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Course.StartDate)
+            @Html.DisplayFor(model => model.StartDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Course.Description)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Course.Description)
+            @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
     <h4>
-        @Html.DisplayNameFor(model => model.Course.Modules)
+        @Html.DisplayNameFor(model => model.Modules)
     </h4>
-    <div style="height: 55vh; overflow:auto;">
-        @await Html.PartialAsync("_ModulesPartial", Model.Modules)
-    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
