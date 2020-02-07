@@ -1,15 +1,23 @@
 ﻿@model IEnumerable<LexiconLMS.Core.ViewModels.SystemUserViewModel>
 
-<h5>Modules</h5>
+<h5>Students</h5>
 <hr />
 @{ int i = 1; }
-    @foreach (var item in Model)
-    {
-            @Html.DisplayFor(modelItem => item.Name)
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        i++;
-    }
+@foreach (var user in Model)
+{
+    <ul id="mainuserlist">
+            @i.
+            <a class="hidden-link" asp-controller="SystemUser" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
+        @if (User.IsInRole("Teacher"))
+        {
+            <a asp-controller="Courses" asp-action="RemoveUserFromCourse"
+               asp-route-userId="@user.Id"
+               asp-route-courseId="@user.CourseId"
+               data-ajax="true"
+               data-ajax-method="POST"
+               data-ajax-mode="replace"
+               data-ajax-update="#systemusersupdate">Remove</a>
+        }
+    </ul>
+    i++;
+}
