@@ -17,6 +17,30 @@ namespace LexiconLMS.Core.Services
         {
             _logger = logger;
         }
+
+        public async Task<string> SaveActivityDocumentAsync(IFormFile formFile, int activityId)
+        {
+            string path = Environment.CurrentDirectory + @"\Data\Activity\" + activityId + @"\" + Path.GetRandomFileName();
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            try
+            {
+                using (var stream = File.Create(path))
+                {
+                    await formFile.CopyToAsync(stream);
+                    _logger.LogInformation($"Successfully wrote file to disk at {path}");
+                    return path;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning($"Failed to write file to disk: " + e.Message);
+                _logger.LogTrace(e.StackTrace);
+                return string.Empty;
+            }
+        }
+
         public async Task<bool> SaveCourseDocument(IFormFile formFile, int courseId)
         {
             string path = Environment.CurrentDirectory + @"Data\Course\" + courseId + @"\" + Path.GetRandomFileName();
