@@ -70,6 +70,7 @@ namespace LexiconLMS.Core.Services
                 },
                 Course = course
             }).SingleOrDefaultAsync();
+        }
 
         public List<SystemUserViewModel> GetSystemUserViewModels(int? courseId)
         {
