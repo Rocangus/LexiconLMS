@@ -26,7 +26,7 @@ namespace LexiconLMS.Controllers
             _context = context;
             _userService = userService;
 
-            _courseRepository = new CourseRepository(_context, _userService);
+            _courseRepository = new CourseRepository(_context, userService);
         }
 
         // GET: Courses
