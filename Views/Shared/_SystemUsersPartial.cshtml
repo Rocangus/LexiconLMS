@@ -1,17 +1,6 @@
 ﻿@model IEnumerable<LexiconLMS.Core.ViewModels.SystemUserViewModel>
 
 <tbody>
-    @if (Model == null)
-    {
-        <tr>
-            <td>
-
-                There are no users matching that name
-            </td>
-        </tr>
-    }
-    else
-    {
         @foreach (var item in Model)
         {
             <tr>
@@ -31,6 +20,4 @@
                 </td>
             </tr>
         }
-    }
-
 </tbody>

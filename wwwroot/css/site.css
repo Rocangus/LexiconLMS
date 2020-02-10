@@ -81,3 +81,54 @@ body {
     text-decoration: none;
     color: black;
 }
+#navbar {
+    background-color: black;
+}
+
+#navbarlogo {
+    background-color: rgba(255, 0, 0, 0.8);
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 50px;
+    font-weight: 800;
+}
+#footer {
+    background-color: whitesmoke;
+}
+#footerlogo {
+    color: darkred;
+}
+
+#searchindex {
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+}
+thead > tr {
+    background-color:white;
+}
+tr:nth-child(2n){
+    background-color:beige;
+}
+#userlistul:nth-child(2n+1) {
+    background-color: lightgrey;
+}
+#mainuserlist {
+    font-size: 11px;
+    padding: 0;
+    margin: 0;
+}
+#mainmoduleslist {
+    font-size: 12px;
+    padding: 0;
+    margin: 3px;
+}
+#mainactivitieslist {
+    font-size: 10px;
+    padding: 0;
+    padding-left: 10px;
+    margin: 3px;
+}
+#mainbackgroundcolor {
+    background-color: whitesmoke;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

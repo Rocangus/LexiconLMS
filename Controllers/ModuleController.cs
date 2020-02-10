@@ -9,18 +9,21 @@ using LexiconLMS.Core.Models;
 using LexiconLMS.Data;
 using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
+using LexiconLMS.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LexiconLMS.Controllers
 {
+    [Authorize]
     public class ModuleController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
 
-        public ModuleController(ApplicationDbContext context)
+        public ModuleController(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
-            _courseRepository = new CourseRepository(_context);
+            _courseRepository = new CourseRepository(_context, userService);
         }
 
         // GET: Modules/Details/5

@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LexiconLMS.Core.Models;
 using LexiconLMS.Core.Services;
+using LexiconLMS.Core.Repository;
 
 namespace LexiconLMS
 {
@@ -38,6 +39,9 @@ namespace LexiconLMS
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<IDocumentService, DocumentService>();
+            services.AddTransient<IDocumentIOService, DocumentIOService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

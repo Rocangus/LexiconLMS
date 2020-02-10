@@ -30,7 +30,8 @@ namespace LexiconLMS.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(350)")
+                        .HasMaxLength(350);
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -39,12 +40,15 @@ namespace LexiconLMS.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
 
                     b.ToTable("Activities");
                 });
@@ -72,10 +76,12 @@ namespace LexiconLMS.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(350)")
+                        .HasMaxLength(350);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -83,6 +89,85 @@ namespace LexiconLMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.Document", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UploadTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SystemUserId");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsActivities", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentId", "ActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("DocumentsActivities");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsCourses", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentId", "CourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("DocumentsCourses");
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsModules", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentId", "ModuleId");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("DocumentsModules");
                 });
 
             modelBuilder.Entity("LexiconLMS.Core.Models.Module", b =>
@@ -96,13 +181,15 @@ namespace LexiconLMS.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(350)")
+                        .HasMaxLength(350);
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -344,6 +431,69 @@ namespace LexiconLMS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("LexiconLMS.Core.Models.Activity", b =>
+                {
+                    b.HasOne("LexiconLMS.Core.Models.Module", null)
+                        .WithMany("Activities")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.Document", b =>
+                {
+                    b.HasOne("LexiconLMS.Core.Models.SystemUser", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("SystemUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsActivities", b =>
+                {
+                    b.HasOne("LexiconLMS.Core.Models.Activity", "Activity")
+                        .WithMany("Documents")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsCourses", b =>
+                {
+                    b.HasOne("LexiconLMS.Core.Models.Course", "Course")
+                        .WithMany("Documents")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsModules", b =>
+                {
+                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Core.Models.Module", "Module")
+                        .WithMany("Documents")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LexiconLMS.Core.Models.Module", b =>
                 {
                     b.HasOne("LexiconLMS.Core.Models.Course", null)
@@ -356,7 +506,7 @@ namespace LexiconLMS.Data.Migrations
             modelBuilder.Entity("LexiconLMS.Core.Models.SystemUserCourse", b =>
                 {
                     b.HasOne("LexiconLMS.Core.Models.Course", "Course")
-                        .WithMany()
+                        .WithMany("Members")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

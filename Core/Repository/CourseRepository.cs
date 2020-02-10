@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Services;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
 using Microsoft.EntityFrameworkCore;
@@ -12,24 +13,18 @@ namespace LexiconLMS.Core.Repository
     public class CourseRepository : ICourseRepository
     {
         private ApplicationDbContext _context { get; }
+        private IUserService _userService;
 
-        public CourseRepository(ApplicationDbContext context)
+        public CourseRepository(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
         public void AddModule(Module module)
         {
             throw new NotImplementedException();
         }
-        
-        /*
-        public async Task<List<Module>> GetAllCourseModulesAsync(int courseid)
-        {
-            return await _context.Courses
-                .Where(c => c.Id == courseid)
-                .Select(m => m.Modules);
-        }
-        */
+
         public void RemoveModule(Module module)
         {
             throw new NotImplementedException();
@@ -47,23 +42,9 @@ namespace LexiconLMS.Core.Repository
                 return NotFound();
             }
 
-            model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();
-            var userCourses = await _context.UserCourses.Include(uc => uc.SystemUser).Where(uc => uc.CourseId == id).ToListAsync();
-            
-            List<SystemUserViewModel> userViewModels = new List<SystemUserViewModel>();
-            foreach(var item in userCourses)
-            {
-                var user = item.SystemUser;
-                var mv = new SystemUserViewModel
-                {
-                    Email = user.Email,
-                    Id = user.Id,
-                    Name = user.Name,
-                    PhoneNumber = user.PhoneNumber
-                };
+            model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();            
 
-                userViewModels.Add(mv);
-            }
+            List<SystemUserViewModel> userViewModels = _userService.GetSystemUserViewModels(id);
 
             model.SystemUsers = userViewModels;
 
@@ -73,6 +54,12 @@ namespace LexiconLMS.Core.Repository
             };
 
             return model;
+        }
+
+        //Used for ViewComponent
+        public async Task<IEnumerable<Module>> GetAllCourseModulesAsync(int courseId)
+        {
+            return await _context.Modules.Where(m => m.CourseId == courseId).ToListAsync();
         }
 
         public async Task<ModuleViewModel> GetModuleViewModel(int? id)
@@ -97,9 +84,27 @@ namespace LexiconLMS.Core.Repository
             return model;
         }
 
+        //Used for ViewComponent
+        public async Task<IEnumerable<Activity>> GetAllModuleActivitiesAsync(int moduleId)
+        {
+            return await _context.Activities.Where(a => a.ModuleId == moduleId).ToListAsync();
+        }
+
         public async Task<Activity> GetActivity(int? id)
         {
-            return await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+            var activity = await _context.Activities.Include(a => a.Documents).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            foreach (var documentActivity in activity.Documents)
+            {
+                documentActivity.Document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == documentActivity.DocumentId);
+            }
+
+            /* Alternate solution:
+             * var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+
+            activity.Documents = await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == activity.Id).ToListAsync();*/
+
+            return activity;
         }
 
         private ModuleViewModel NotFoundModule()
