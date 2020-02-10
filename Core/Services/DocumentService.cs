@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models.Documents;
+using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -46,41 +47,69 @@ namespace LexiconLMS.Core.Services
             throw new NotImplementedException();
         }
 
-
-        //public async Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id)
-        //{
-        //    return await _context.Documents.Where(c => c.CourseId == id).ToListAsync();
-        //}
-
-        //public async Task<IEnumerable<Document>> GetModuleDocumentsAsync(int id)
-        //{
-        //    return await _context.Documents.Where(c => c.ModuleId == id).ToListAsync();
-        //}
-
-        //public async Task<IEnumerable<Document>> GetActivityDocumentsAsync(int id)
-        //{
-        //    return await _context.Documents.Where(c => c.ActivityId == id).ToListAsync();
-        //}
-
-        //public Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id)
-        //{
-        //    return GetActivityDocumentsAsync(id);
-        //}
-
         public Task<Document> GetUserAssignmenDocumentAsync(string id)
         {
             throw new NotImplementedException();
         }
+        public async Task<bool> SaveActivityDocumentToFile(ActivityDocumentUploadViewModel model)
+        {
+            string path = await _documentIOService.SaveActivityDocumentAsync(model.FormFile, model.ActivityId);
+
+            if (path.Equals(string.Empty))
+                return false;
+
+            var document = CreateDocument(model.FormFile, model.UserId, path);
+
+            if (!await SaveDocument(document))
+                return false;
+
+            var documentId = await _context.Documents.Where(d => d.Path.Equals(path)).Select(d => d.Id).FirstOrDefaultAsync();
+
+            DocumentsActivities documentsActivities = new DocumentsActivities
+            {
+                ActivityId = model.ActivityId,
+                DocumentId = documentId
+            };
+            return await SaveDocumentActivity(documentsActivities);
+        }
+
+        private async Task<bool> SaveDocumentActivity(DocumentsActivities documentsActivities)
+        {
+            _context.DocumentsActivities.Add(documentsActivities);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                LogException(due);
+                return false;
+            }
+            return true;
+        }
+
+        private void LogException(DbUpdateException due)
+        {
+            _logger.LogWarning("Failed to save document to database: " + due.InnerException);
+            _logger.LogTrace(due.StackTrace);
+        }
 
         public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
         {
-     
+
             string path = await _documentIOService.SaveUserDocumentAsync(formFile, userId);
-            
-            if(path.Equals(string.Empty))
+
+            if (path.Equals(string.Empty))
                 return false;
 
-            var document = new Document
+            var document = CreateDocument(formFile, userId, path);
+
+            return await SaveDocument(document);
+        }
+
+        private static Document CreateDocument(IFormFile formFile, string userId, string path)
+        {
+            return new Document
             {
                 Path = path,
                 Name = formFile.FileName,
@@ -88,7 +117,10 @@ namespace LexiconLMS.Core.Services
                 UploadTime = DateTime.UtcNow,
                 Description = string.Empty
             };
+        }
 
+        private async Task<bool> SaveDocument(Document document)
+        {
             _context.Add(document);
             try
             {
@@ -96,8 +128,7 @@ namespace LexiconLMS.Core.Services
             }
             catch (DbUpdateException due)
             {
-                _logger.LogWarning("Failed to save document to database: " + due.InnerException);
-                _logger.LogTrace(due.StackTrace);
+                LogException(due);
                 return false;
             }
             return true;

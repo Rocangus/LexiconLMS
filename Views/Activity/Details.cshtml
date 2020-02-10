@@ -37,6 +37,15 @@
     </dl>
 </div>
 <div>
+    @foreach (var documentActivty in Model.Documents)
+    {
+        <span>@documentActivty.Document.Name</span><br />
+    }
+</div>
+<div>
+    @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Id.ToString(), user = User, entityType = "Activity" })
+</div>
+<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a href="@Url.Action("Details", "Module", new { id = Model.ModuleId })">Back to List</a>
 </div>

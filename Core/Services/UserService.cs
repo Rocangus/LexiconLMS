@@ -3,6 +3,7 @@ using LexiconLMS.Core.Repository;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.Services
@@ -17,9 +19,13 @@ namespace LexiconLMS.Core.Services
     public class UserService : IUserService
     {
         private ApplicationDbContext _context { get; }
-        public UserService(ApplicationDbContext context)
+
+        private readonly UserManager<SystemUser> _userManager;
+
+        public UserService(ApplicationDbContext context, UserManager<SystemUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public async Task<SystemUser> GetUserAsync(string id)
         {
@@ -116,6 +122,11 @@ namespace LexiconLMS.Core.Services
             }
 
             return userViewModels;
+        }
+
+        public string GetUserId(ClaimsPrincipal user)
+        {
+            return _userManager.GetUserId(user);
         }
 
         private static SystemUserViewModel PopulateSystemUserViewModel(int courseId, SystemUser user)
