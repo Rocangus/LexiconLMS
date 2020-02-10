@@ -14,13 +14,13 @@
 
 
 <div class="row"  id="mainbackgroundcolor">
-    <div class="col-md-2" style="height: 68vh; overflow:auto;">
+    <div class="col-md-2" id="mainmoduleactivityelement" height: 68vh; overflow:auto;">
         @await Component.InvokeAsync("Modules", new { courseId = Model.Course.Id })
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8" id="maincourseelement">
         @await Component.InvokeAsync("Course", new { course = Model.Course })
     </div>
-    <div class="col-md-2" style="height: 68vh; overflow:auto; padding-right: 10px;">
+    <div class="col-md-2" id="mainsystemuserselement"style="height: 68vh; overflow:auto; padding-right: 10px;">
         @await Component.InvokeAsync("Users", new { courseId = Model.Course.Id })
     </div>
 </div>
