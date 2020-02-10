@@ -13,5 +13,7 @@ namespace LexiconLMS.Core.Services
         Task<string> SaveUserDocumentAsync(IFormFile formFile, string userId);
 
         Task<string> SaveCourseDocumentAsync(IFormFile formFile, int courseId);
+
+        bool RemoveDocument(string path);
     }
 }

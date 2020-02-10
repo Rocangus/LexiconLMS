@@ -28,15 +28,13 @@ namespace LexiconLMS.Core.Services
             {
                 using (var stream = File.Create(path))
                 {
-                    await formFile.CopyToAsync(stream);
-                    _logger.LogInformation($"Successfully wrote file to disk at {path}");
+                    await SaveFileToDisk(formFile, path, stream);
                     return path;
                 }
             }
             catch (Exception e)
             {
-                _logger.LogWarning($"Failed to write file to disk: " + e.Message);
-                _logger.LogTrace(e.StackTrace);
+                LogError(e);
                 return string.Empty;
             }
         }
@@ -49,15 +47,13 @@ namespace LexiconLMS.Core.Services
             {
                 using (var stream = File.Create(path))
                 {
-                    await formFile.CopyToAsync(stream);
-                    _logger.LogInformation($"Successfully wrote file to disk at {path}");
+                    await SaveFileToDisk(formFile, path, stream);
                     return path;
                 }
             }
             catch(Exception e)
             {
-                _logger.LogWarning($"Failed to write file to disk: " + e.Message);
-                _logger.LogTrace(e.StackTrace);
+                LogError(e);
                 return string.Empty;
             }
         }
@@ -72,20 +68,42 @@ namespace LexiconLMS.Core.Services
             {
                 using (var stream = File.Create(path))
                 {
-                    await formFile.CopyToAsync(stream);
-                    _logger.LogInformation($"Successfully wrote file to disk at {path}");
+                    await SaveFileToDisk(formFile, path, stream);
                     return path;
                 }
             }
             catch (Exception e)
             {
-                _logger.LogWarning($"Failed to write file to disk: " + e.Message);
-                _logger.LogTrace(e.StackTrace);
+                LogError(e);
                 return string.Empty;
             }
         }
 
+        private async Task SaveFileToDisk(IFormFile formFile, string path, FileStream stream)
+        {
+            await formFile.CopyToAsync(stream);
+            _logger.LogInformation($"Successfully wrote file to disk at {path}");
+        }
 
+        private void LogError(Exception e)
+        {
+            _logger.LogWarning($"Failed to write file to disk: " + e.Message);
+            _logger.LogTrace(e.StackTrace);
+        }
+
+        public bool RemoveDocument(string path)
+        {
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+                return false;
+            }
+        }
   
 
 

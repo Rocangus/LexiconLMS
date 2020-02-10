@@ -18,7 +18,7 @@ namespace LexiconLMS.Controllers
         {
             _documentService = documentService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
@@ -60,6 +60,36 @@ namespace LexiconLMS.Controllers
         {
             var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
             return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveDocument(int documentId, int entityId)
+        {
+            var document = await _documentService.GetDocumentByIdAsync(documentId);
+
+            if (document == null)
+                return NotFound();
+
+            string adjustedPath = Path.GetDirectoryName(document.Path) + document.Name;
+
+            var viewModel = new DocumentViewModel
+            {
+                EntityId = entityId,
+                DocumentId = document.Id,
+                ModelPath = adjustedPath,
+                UploadDate = document.UploadTime
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveDocument(DocumentViewModel viewModel)
+        {
+            await _documentService.RemoveDocument(viewModel);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
