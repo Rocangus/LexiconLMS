@@ -69,7 +69,7 @@ namespace LexiconLMS.Core.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(int courseId)
         {
             //TODO Make get Parvin's function for getting users in a course.
-            return View(await _userService.GetUsersViewModelAsync());
+            return View(_userService.GetSystemUserViewModels(courseId));
         }
     }
 }

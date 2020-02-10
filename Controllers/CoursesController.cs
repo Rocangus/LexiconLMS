@@ -222,7 +222,7 @@ namespace LexiconLMS.Controllers
             _context.UserCourses.Remove(userCourse);
             await _context.SaveChangesAsync();
             var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
-            return RedirectToAction("Edit", "Courses", new { id = courseId });
+            return RedirectToAction("Index", "Home");
             //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
