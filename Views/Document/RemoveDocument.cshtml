@@ -1,0 +1,31 @@
+﻿@model DocumentViewModel
+
+@{
+    ViewData["Title"] = "Remove Document";
+}
+
+<h1>Remove Document</h1>
+
+<h3>Are you sure you want to remove this document?</h3>
+<div>
+    <h4>Document Details</h4>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.ModelPath)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ModelPath)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UploadDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UploadDate)
+        </dd>
+    </dl>
+    <form asp-action="RemoveDocument">
+        <input type="hidden" asp-for="DocumentId" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </form>
+</div>

@@ -51,6 +51,50 @@ namespace LexiconLMS.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Document> GetDocumentByIdAsync(int id)
+        {
+            return await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
+        }
+
+        public async Task<bool> RemoveDocument(DocumentViewModel model)
+        {
+            var document = await _context.Documents.Where(d => d.Id == model.DocumentId).FirstOrDefaultAsync();
+            if (document == null)
+            {
+                throw new ArgumentException($"No document with Id {model.DocumentId} could be found.");
+            }
+
+            var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
+            if (documentActivity != null) 
+            {
+                return await RemoveActivityDocument(document, documentActivity);
+            }
+
+            _context.Documents.Remove(document);
+            var fileResult = _documentIOService.RemoveDocument(document.Path);
+            if (fileResult)
+            {
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            return false;
+        }
+
+        private async Task<bool> RemoveActivityDocument(Document document, DocumentsActivities documentsActivities)
+        {
+            var success = _documentIOService.RemoveDocument(document.Path);
+
+            if (success)
+            {
+                var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == document.Id);
+                _context.DocumentsActivities.Remove(documentActivity);
+                _context.Documents.Remove(document);
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> SaveActivityDocumentToFile(ActivityDocumentUploadViewModel model)
         {
             string path = await _documentIOService.SaveActivityDocumentAsync(model.FormFile, model.ActivityId);
@@ -93,7 +137,7 @@ namespace LexiconLMS.Core.Services
             _logger.LogWarning("Failed to save document to database: " + due.InnerException);
             _logger.LogTrace(due.StackTrace);
         }
-
+        
         public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
         {
 
@@ -133,5 +177,40 @@ namespace LexiconLMS.Core.Services
             }
             return true;
         }
+
+
+
+        
+        public async Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string userId, int courseId)
+        {
+
+            string path = await _documentIOService.SaveCourseDocumentAsync(formFile, courseId);
+
+            if (path.Equals(string.Empty))
+                return false;
+            var document = new Document
+            {
+                Path = path,
+                Name = formFile.FileName,
+                SystemUserId = userId,
+                UploadTime = DateTime.UtcNow,
+                Description = string.Empty
+            };
+
+            _context.Add(document);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogWarning("Failed to save document to database: " + due.InnerException);
+                _logger.LogTrace(due.StackTrace);
+                return false;
+            }
+            return true;
+        }
+
+
     }
 }

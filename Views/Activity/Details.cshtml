@@ -39,7 +39,7 @@
 <div>
     @foreach (var documentActivty in Model.Documents)
     {
-        <span>@documentActivty.Document.Name</span><br />
+        <span>@documentActivty.Document.Name</span> <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
     }
 </div>
 <div>
