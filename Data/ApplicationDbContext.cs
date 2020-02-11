@@ -33,6 +33,7 @@ namespace LexiconLMS.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<SystemUserCourse> UserCourses { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentsActivities> DocumentsActivities { get; set; }
 
     }
 }
