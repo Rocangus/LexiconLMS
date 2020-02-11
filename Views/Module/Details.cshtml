@@ -50,7 +50,9 @@
 <div>
     @foreach (var documentModule in Model.Documents)
     {
-        <span>@documentModule.Document.Name</span> <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentModule.DocumentId">Download</a> <text>|</text> <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentModule.DocumentId" asp-route-entityId="@documentModule.ModuleId">Remove</a><br />
+        <span>@documentModule.Document.Name</span> 
+        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentModule.DocumentId">Download</a> <text>|</text>
+        <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentModule.DocumentId" asp-route-entityId="@documentModule.ModuleId">Remove</a><br />
     }
 </div>
 }
