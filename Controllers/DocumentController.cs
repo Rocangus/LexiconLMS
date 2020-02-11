@@ -47,6 +47,42 @@ namespace LexiconLMS.Controllers
             return View(new UserDocumentUploadViewModel { UserId = userId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DownloadDocument(int documentId)
+        {
+            var document = await _documentService.GetDocumentByIdAsync(documentId);
+            if (document != null)
+            {
+                using (FileStream stream = new FileStream(document.Path, FileMode.Open))
+                {
+                    var memory = new MemoryStream();
+                    await stream.CopyToAsync(memory);
+                    memory.Position = 0;
+                    var ext = Path.GetExtension(document.Name).ToLowerInvariant();
+                    return File(memory, GetMimeTypes()[ext], document.Name);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // Keeps track of some common expected file types.
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".rtf", "application/rtf" },
+                {".zip", "application/zip" }
+            };
+        }
 
         public async Task<IActionResult> UploadUserDocument(IFormFile formFile, string userId)
         {
