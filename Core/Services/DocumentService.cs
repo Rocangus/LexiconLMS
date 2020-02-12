@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.Services
 {
-    public class DocumentService: IDocumentService
+    public class DocumentService : IDocumentService
     {
         private readonly ApplicationDbContext _context;
 
@@ -52,6 +52,13 @@ namespace LexiconLMS.Core.Services
             throw new NotImplementedException();
         }
 
+        public async Task<List<Document>> GetUserDocumentsAsync(string userId)
+        {
+            var documents = await _context.Documents.Where(d => d.SystemUserId.Equals(userId)).ToListAsync();
+
+            return documents != null ? documents : new List<Document>();
+        }
+
         public async Task<Document> GetDocumentByIdAsync(int id)
         {
             return await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
@@ -66,11 +73,18 @@ namespace LexiconLMS.Core.Services
             }
 
             var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
-            if (documentActivity != null) 
+            if (documentActivity != null)
             {
-                return await RemoveActivityDocument(document, documentActivity);
+                return RemoveActivityDocument(document, documentActivity);
             }
-
+            else
+            {
+                var documentModule = await _context.DocumentsModules.FirstOrDefaultAsync(dm => dm.DocumentId == model.DocumentId && dm.ModuleId == model.EntityId);
+                if (documentModule != null)
+                {
+                    return RemoveModuleDocument(document, documentModule);
+                }
+            }
             _context.Documents.Remove(document);
             var fileResult = _documentIOService.RemoveDocument(document.Path);
             if (fileResult)
@@ -80,15 +94,26 @@ namespace LexiconLMS.Core.Services
             }
             return false;
         }
-
-        private async Task<bool> RemoveActivityDocument(Document document, DocumentsActivities documentsActivities)
+        private bool RemoveActivityDocument(Document document, DocumentsActivities documentActivity)
         {
             var success = _documentIOService.RemoveDocument(document.Path);
 
             if (success)
             {
-                var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == document.Id);
                 _context.DocumentsActivities.Remove(documentActivity);
+                _context.Documents.Remove(document);
+                return true;
+            }
+            return false;
+        }
+
+        private bool RemoveModuleDocument(Document document, DocumentsModules documentModule)
+        {
+            var success = _documentIOService.RemoveDocument(document.Path);
+
+            if (success)
+            {
+                _context.DocumentsModules.Remove(documentModule);
                 _context.Documents.Remove(document);
                 return true;
             }
@@ -217,7 +242,7 @@ namespace LexiconLMS.Core.Services
 
 
 
-        
+
         public async Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string userId, int courseId)
         {
 
