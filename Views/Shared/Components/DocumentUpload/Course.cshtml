@@ -1,0 +1,19 @@
+﻿@model ActivityDocumentUploadViewModel
+
+    <form enctype="multipart/form-data" asp-controller="Document" asp-action="ActivityDocumentUpload">
+
+        <dl>
+            <dt>
+                <input asp-for="UserId" type="hidden" />
+                <input asp-for="ActivityId" type="hidden" />
+            </dt>
+            <dt>
+                <label asp-for="FormFile"></label>
+            </dt>
+            <dd>
+                <input asp-for="FormFile" type="file">
+            </dd>
+        </dl>
+        <input class="btn btn-primary" type="submit" value="Upload" />
+
+    </form>
