@@ -1,0 +1,52 @@
+﻿@model LexiconLMS.Core.ViewModels.ModuleViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Module</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Module.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Module.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Module.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Module.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Module.EndDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Module.EndDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Module.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Module.Description)
+        </dd>
+
+    </dl>
+
+    <h4>
+        @Html.DisplayNameFor(model => model.Module.Activities)
+    </h4>
+    <div style="height: 55vh; overflow:auto;">
+        @await Html.PartialAsync("_ActivitiesPartial", Model.Activities)
+
+    </div>
+</div>
+@if (User.IsInRole("Teacher")) {
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Module.Id">Edit</a> |
+    </div>
+}
