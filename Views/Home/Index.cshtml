@@ -9,20 +9,22 @@
 <div class="row text-center" id="mainbackgroundcolor">
     <div class="col-md-12">
         <h2>
-            @Model.Course.Name
+            <a asp-controller="Home" asp-action="Index" style="color: black;">
+                @Model.Course.Name
+            </a>
         </h2>
     </div>
 </div>
 
 
 <div class="row"  id="mainbackgroundcolor">
-    <div class="col-md-2" id="mainmoduleactivityelement" height: 68vh; overflow:auto;">
+    <div class="col-md-2" id="mainmoduleactivityelement" style="height: 68vh; overflow:auto;">
         @await Component.InvokeAsync("Modules", new { courseId = Model.Course.Id })
     </div>
-    <div class="col-md-8" id="maincourseelement">
+    <div class="col-md-8" id="maincourseelement" style="height: 68vh; overflow:auto;">
         @await Component.InvokeAsync("Course", new { course = Model.Course })
     </div>
-    <div class="col-md-2" id="mainsystemuserselement"style="height: 68vh; overflow:auto; padding-right: 10px;">
+    <div class="col-md-2" id="mainsystemuserselement" style="height: 68vh; overflow:auto; padding-right: 10px;">
         @await Component.InvokeAsync("Users", new { courseId = Model.Course.Id })
     </div>
 </div>

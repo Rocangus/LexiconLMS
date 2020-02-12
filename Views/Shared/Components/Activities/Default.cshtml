@@ -4,7 +4,7 @@
         @{ int i = 1; }
 @foreach (var item in Model) {
             <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id" id="mainactivitieslist">
-                @i.  <a asp-controller="Activity" asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
+                @i.  <a asp-controller="Home" class="showactivity" data-activityid="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
             </p>
     i++;
 }
