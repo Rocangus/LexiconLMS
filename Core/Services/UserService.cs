@@ -63,7 +63,7 @@ namespace LexiconLMS.Core.Services
         public async Task<Course> GetUserCourse(string id)
         {
             SystemUserCourse course = await _context.UserCourses.Where(u => u.SystemUserId.Equals(id)).FirstOrDefaultAsync();
-            return await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync();
+            return course != null? await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync() : null;
         }
 
         public async Task<MainViewModel> GetUserMainViewModel(string id)
@@ -79,7 +79,7 @@ namespace LexiconLMS.Core.Services
                     Id = user.Id,
                     PhoneNumber = user.PhoneNumber
                 },
-                Course = course
+                Course = course != null ? course : null
             }).SingleOrDefaultAsync();
         }
 

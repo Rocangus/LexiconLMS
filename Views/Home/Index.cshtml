@@ -4,6 +4,8 @@
     ViewData["Title"] = "Home Page";
 }
 
+@if (Model.Course != null)
+{
 <div class="row text-center" id="mainbackgroundcolor">
     <div class="col-md-12">
         <h2>
@@ -24,3 +26,9 @@
         @await Component.InvokeAsync("Users", new { courseId = Model.Course.Id })
     </div>
 </div>
+}
+else
+{
+    <h1>No course</h1>
+    <p>This user is not registered on a course.</p>
+}
