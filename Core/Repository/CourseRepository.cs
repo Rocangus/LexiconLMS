@@ -74,6 +74,8 @@ namespace LexiconLMS.Core.Repository
                 return NotFoundModule();
             }
 
+            model.Documents = await _context.DocumentsModules.Include(dm => dm.Document).Where(dm => dm.ModuleId == id).ToListAsync();
+
             model.Activities = await _context.Activities.Where(m => m.ModuleId == id).ToListAsync();
 
             model.Activity = new Activity

@@ -32,18 +32,63 @@ namespace LexiconLMS.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        public async Task<IActionResult> ModuleDocumentUpload(ModuleDocumentUploadViewModel model)
+        {
+            var success = await _documentService.SaveModuleDocumentToFile(model);
+            if (success)
+                return RedirectToAction(@"Details", "Module", new { Id = model.ModuleId });
+            else
+                return RedirectToAction("Error", "Home");
+        }
+
         [HttpGet]
         public IActionResult UploadUserDocument(string userId)
         {
             return View(new UserDocumentUploadViewModel { UserId = userId });
         }
 
-
-        public async Task<IActionResult> UploadUserDocument(IFormFile formFile, string userId)
+        [HttpGet]
+        public async Task<IActionResult> DownloadDocument(int documentId)
         {
-            var success = await _documentService.SaveUserDocumentToFile(formFile, userId);
+            var document = await _documentService.GetDocumentByIdAsync(documentId);
+            if (document != null)
+            {
+                using (FileStream stream = new FileStream(document.Path, FileMode.Open))
+                {
+                    var memory = new MemoryStream();
+                    await stream.CopyToAsync(memory);
+                    memory.Position = 0;
+                    var ext = Path.GetExtension(document.Name).ToLowerInvariant();
+                    return File(memory, GetMimeTypes()[ext], document.Name);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // Keeps track of some common expected file types.
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".rtf", "application/rtf" },
+                {".zip", "application/zip" }
+            };
+        }
+
+        public async Task<IActionResult> UploadUserDocument(UserDocumentUploadViewModel model)
+        {
+            var success = await _documentService.SaveUserDocumentToFile(model.FormFile, model.UserId);
             if (success)
-                return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+                return RedirectToAction(@"Details", "SystemUser", new { Id = model.UserId });
             else
                 return RedirectToAction("Error", "Home");
         }
@@ -59,7 +104,7 @@ namespace LexiconLMS.Controllers
         public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
         {
             var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
-            return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+            return RedirectToAction(@"Details", "Courses", new { Id = courseId });
         }
 
         [HttpGet]
