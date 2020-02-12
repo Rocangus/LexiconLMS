@@ -141,10 +141,47 @@ namespace LexiconLMS.Core.Services
             };
             return await SaveDocumentActivity(documentsActivities);
         }
+        
+        public async Task<bool> SaveAssignmentDocumentToFile(AssignmentDocumentUploadViewModel model)
+        {
+            string path = await _documentIOService.SaveAssignmentDocumentAsync(model.FormFile, model.ActivityId);
+
+            if (path.Equals(string.Empty))
+                return false;
+
+            var document = CreateDocument(model.FormFile, model.UserId, path);
+
+            if (!await SaveDocument(document))
+                return false;
+
+            var documentId = await _context.Documents.Where(d => d.Path.Equals(path)).Select(d => d.Id).FirstOrDefaultAsync();
+
+            DocumentsAssignments documentsAssignment = new DocumentsAssignments
+            {
+                ActivityId = model.ActivityId,
+                DocumentId = documentId
+            };
+            return await SaveDocumentAssignment(documentsAssignment);
+        }
 
         private async Task<bool> SaveDocumentActivity(DocumentsActivities documentsActivities)
         {
             _context.DocumentsActivities.Add(documentsActivities);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                LogException(due);
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> SaveDocumentAssignment(DocumentsAssignments documentsAssignment)
+        {
+            _context.DocumentsAssignments.Add(documentsAssignment);
             try
             {
                 await _context.SaveChangesAsync();
