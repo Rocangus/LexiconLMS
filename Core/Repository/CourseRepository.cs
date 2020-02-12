@@ -92,17 +92,25 @@ namespace LexiconLMS.Core.Repository
 
         public async Task<Activity> GetActivity(int? id)
         {
-            var activity = await _context.Activities.Include(a => a.Documents).Where(m => m.Id == id).FirstOrDefaultAsync();
+            //var activity = await _context.Activities.Include(a => a.Documents).Where(m => m.Id == id).FirstOrDefaultAsync();
 
-            foreach (var documentActivity in activity.Documents)
+            //foreach (var documentActivity in activity.Documents)
+            //{
+             //   documentActivity.Document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == documentActivity.DocumentId);
+            //}
+
+            // Alternate solution:
+            var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+            try
             {
-                documentActivity.Document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == documentActivity.DocumentId);
+                var documents = await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == activity.Id).ToListAsync();
+                activity.Documents = documents;
             }
-
-            /* Alternate solution:
-             * var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
-
-            activity.Documents = await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == activity.Id).ToListAsync();*/
+            catch (Exception e)
+            {
+                activity.Documents = new List<Models.Documents.DocumentsActivities>();
+                throw (e);
+            }
 
             return activity;
         }

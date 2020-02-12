@@ -47,5 +47,14 @@ namespace LexiconLMS.Controllers
         {
             return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult ModuleDetails(int id)
+        {
+            return ViewComponent("ModuleDetails", new { moduleId = id });
+        }
+        public IActionResult ActivityDetails(int id)
+        {
+            return ViewComponent("ActivityDetails", new { activityId = id });
+        }
     }
 }

@@ -4,18 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Activity</h1>
-
 <div>
-    <h4>Course</h4>
+    <h4>@Model.Name</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StartTime)
         </dt>
@@ -37,14 +29,20 @@
     </dl>
 </div>
 <div>
-    @foreach (var documentActivty in Model.Documents)
+    @if(Model.Documents != null)
     {
-        <span>@documentActivty.Document.Name</span>
-        @if (User.IsInRole("Teacher"))
+        @foreach (var documentActivty in Model.Documents)
         {
-            <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
+            <span>@documentActivty.Document.Name</span>
+            @if (User.IsInRole("Teacher"))
+            {
+                <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
+            }
         }
     }
+      
+    <!-- TODO : Need to make it so that it only shows up when documents are null, don't seem to work with an "else"-->
+    <p>No documents found...</p>
 </div>
 
 @if (User.IsInRole("Teacher"))
@@ -53,7 +51,7 @@
         @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Id.ToString(), user = User, entityType = "Activity" })
     </div>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-controller="Activity" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     </div>
 }
 
