@@ -12,6 +12,7 @@ namespace LexiconLMS.Core.Services
         Task<IEnumerable<Document>> GetModuleDocumentsAsync(int id);
         Task<IEnumerable<Document>> GetActivityDocumentsAsync(int id);
         Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id);
+        Task<List<Document>> GetUserDocumentsAsync(string id);
         Task<Document> GetUserAssignmenDocumentAsync(string id);
         Task<Document> GetDocumentByIdAsync(int id);
         Task<bool> RemoveDocument(DocumentViewModel model);

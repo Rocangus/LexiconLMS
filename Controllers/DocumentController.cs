@@ -84,11 +84,11 @@ namespace LexiconLMS.Controllers
             };
         }
 
-        public async Task<IActionResult> UploadUserDocument(IFormFile formFile, string userId)
+        public async Task<IActionResult> UploadUserDocument(UserDocumentUploadViewModel model)
         {
-            var success = await _documentService.SaveUserDocumentToFile(formFile, userId);
+            var success = await _documentService.SaveUserDocumentToFile(model.FormFile, model.UserId);
             if (success)
-                return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+                return RedirectToAction(@"Details", "SystemUser", new { Id = model.UserId });
             else
                 return RedirectToAction("Error", "Home");
         }
@@ -104,7 +104,7 @@ namespace LexiconLMS.Controllers
         public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
         {
             var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
-            return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+            return RedirectToAction(@"Details", "Courses", new { Id = courseId });
         }
 
         [HttpGet]
