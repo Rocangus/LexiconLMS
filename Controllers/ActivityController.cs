@@ -43,8 +43,13 @@ namespace LexiconLMS.Controllers
                 isAssignment = true;
             }
 
+            var model = new ActivityViewModel
+            {
+                Activity = activity,
+                IsAssignment = isAssignment
+            };
 
-            return View();
+            return View(model);
         }
         
         // GET: Activities/Edit/5

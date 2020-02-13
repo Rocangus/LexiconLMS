@@ -44,18 +44,18 @@
         <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
     }
 </div>
-<div>
-    @if (User.IsInRole("Teacher"))
-    {
-        await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Activity" });
-    }
-</div>
-<div>
-    @if (Model.IsAssignment)
-    {
-        await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Assignment" });
-    }
-</div>
+@if (User.IsInRole("Teacher"))
+{
+    <div>
+        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Activity" })
+    </div>
+}
+@if (Model.IsAssignment)
+{
+    <div>
+        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Assignment" })
+    </div>
+}
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Activity.Id">Edit</a> |
     <a href="@Url.Action("Details", "Module", new { id = Model.Activity.ModuleId })">Back to List</a>
