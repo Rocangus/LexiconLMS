@@ -43,7 +43,9 @@ namespace LexiconLMS.Core.Services
 
         public async Task<string> SaveCourseDocumentAsync(IFormFile formFile, int courseId)
         {
-            string path = Environment.CurrentDirectory + @"Data\Course\" + courseId + @"\" + Path.GetRandomFileName();
+            string path = Environment.CurrentDirectory + @"\Data\Course\" + courseId + @"\" + Path.GetRandomFileName();
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
 
             try
             {

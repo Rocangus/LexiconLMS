@@ -1,4 +1,4 @@
-﻿@model LexiconLMS.Core.Models.Course
+﻿@*@model LexiconLMS.Core.Models.Course
 
 @{
     ViewData["Title"] = "Details";
@@ -32,4 +32,17 @@
     {
         <a asp-controller="Courses" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
     }
-</div>
+</div>*@
+
+
+@model IEnumerable<LexiconLMS.Core.Models.Course>
+
+@*<p style="padding-left: 10px; font-size: 12px; font-weight: 500; margin: 3px;">Courses</p>
+@{ int i = 1; }
+@foreach (var item in Model)
+{
+    <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id" id="mainactivitieslist">
+        @i.  <a asp-controller="Course" asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
+    </p>
+    i++;
+}*@

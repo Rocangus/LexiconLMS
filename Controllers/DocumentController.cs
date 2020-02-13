@@ -25,12 +25,39 @@ namespace LexiconLMS.Controllers
 
         public async Task<IActionResult> ActivityDocumentUpload(ActivityDocumentUploadViewModel model)
         {
+            if (model.FormFile==null)
+            {
+                return RedirectToAction("Error", "Home");
+
+            }
+
             var success = await _documentService.SaveActivityDocumentToFile(model);
             if (success)
                 return RedirectToAction(@"Details", "Activity", new { Id = model.ActivityId });
             else
                 return RedirectToAction("Error", "Home");
         }
+
+
+
+        public async Task<IActionResult> CourseDocumentUpload(CourseDocumentUploadViewModel model)
+        {
+            if (model.FormFile == null)
+            {
+                return RedirectToAction("Error", "Home");
+
+            }
+
+            //var success = await _documentService.SaveCourseDocumentToFile(model.FormFile,model.UserId,model.CourseId);
+            var success = await _documentService.SaveCourseDocumentToFile(model);
+            if (success)
+                return RedirectToAction(@"Details", "Courses", new { Id = model.CourseId });
+            else
+                return RedirectToAction("Error", "Home");
+        }
+
+
+
 
         [HttpGet]
         public IActionResult UploadUserDocument(string userId)
@@ -56,10 +83,16 @@ namespace LexiconLMS.Controllers
         }
 
 
-        public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
-        {
-            var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
-            return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
-        }
+        //public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
+        //{
+        //    //if (formFile!="")
+        //    {
+        //        var result = await _documentService.SaveCourseDocumentToFile(CourseDocumentUploadViewModel model);
+
+        //       // var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
+        //        return RedirectToAction(@"Details", "SystemUser", new { Id = userId });
+        //    }
+
+        //}
     }
 }
