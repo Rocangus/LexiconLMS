@@ -32,9 +32,11 @@ namespace LexiconLMS.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id)
+        public async Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id)
         {
-            throw new NotImplementedException();
+            var documents = await _context.DocumentsAssignments.Include(da => da.Document).Where(da => da.ActivityId == id).Select(da => da.Document).ToListAsync();
+
+            return documents != null ? documents : new List<Document>();
         }
 
         public Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id)
@@ -72,17 +74,25 @@ namespace LexiconLMS.Core.Services
                 throw new ArgumentException($"No document with Id {model.DocumentId} could be found.");
             }
 
-            var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
-            if (documentActivity != null)
+            var documentAssignment = await _context.DocumentsAssignments.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
+            if (documentAssignment != null)
             {
-                return RemoveActivityDocument(document, documentActivity);
+                return RemoveAssignmentDocument(document, documentAssignment);
             }
             else
             {
-                var documentModule = await _context.DocumentsModules.FirstOrDefaultAsync(dm => dm.DocumentId == model.DocumentId && dm.ModuleId == model.EntityId);
-                if (documentModule != null)
+                var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
+                if (documentActivity != null)
                 {
-                    return RemoveModuleDocument(document, documentModule);
+                    return RemoveActivityDocument(document, documentActivity);
+                }
+                else
+                {
+                    var documentModule = await _context.DocumentsModules.FirstOrDefaultAsync(dm => dm.DocumentId == model.DocumentId && dm.ModuleId == model.EntityId);
+                    if (documentModule != null)
+                    {
+                        return RemoveModuleDocument(document, documentModule);
+                    }
                 }
             }
             _context.Documents.Remove(document);
@@ -94,6 +104,20 @@ namespace LexiconLMS.Core.Services
             }
             return false;
         }
+
+        private bool RemoveAssignmentDocument(Document document, DocumentsAssignments documentAssignment)
+        {
+            var success = _documentIOService.RemoveDocument(document.Path);
+
+            if (success)
+            {
+                _context.DocumentsAssignments.Remove(documentAssignment);
+                _context.Documents.Remove(document);
+                return true;
+            }
+            return false;
+        }
+
         private bool RemoveActivityDocument(Document document, DocumentsActivities documentActivity)
         {
             var success = _documentIOService.RemoveDocument(document.Path);

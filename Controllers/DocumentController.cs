@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using LexiconLMS.Core.Services;
 using LexiconLMS.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace LexiconLMS.Controllers
 {
+    [Authorize]
     public class DocumentController : Controller
     {
         private IDocumentService _documentService;
@@ -18,11 +20,13 @@ namespace LexiconLMS.Controllers
         {
             _documentService = documentService;
         }
+
         public async Task<IActionResult> Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> ActivityDocumentUpload(ActivityDocumentUploadViewModel model)
         {
             var success = await _documentService.SaveActivityDocumentToFile(model);
@@ -32,6 +36,7 @@ namespace LexiconLMS.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> AssignmentDocumentUpload(AssignmentDocumentUploadViewModel model)
         {
             var success = await _documentService.SaveAssignmentDocumentToFile(model);
@@ -41,6 +46,7 @@ namespace LexiconLMS.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> ModuleDocumentUpload(ModuleDocumentUploadViewModel model)
         {
             var success = await _documentService.SaveModuleDocumentToFile(model);
@@ -93,6 +99,7 @@ namespace LexiconLMS.Controllers
             };
         }
 
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> UploadUserDocument(UserDocumentUploadViewModel model)
         {
             var success = await _documentService.SaveUserDocumentToFile(model.FormFile, model.UserId);
@@ -102,20 +109,21 @@ namespace LexiconLMS.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
-
+        [Authorize(Roles = "Teacher")]
         [HttpGet]
         public IActionResult UploadCourseDocument(string userId)
         {
             return View(new UserDocumentUploadViewModel { UserId = userId });
         }
 
-
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
         {
             var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
             return RedirectToAction(@"Details", "Courses", new { Id = courseId });
         }
 
+        // Should be accessible by everyone, but only from own documents unless teacher.
         [HttpGet]
         public async Task<IActionResult> RemoveDocument(int documentId, int entityId)
         {
@@ -137,6 +145,7 @@ namespace LexiconLMS.Controllers
             return View(viewModel);
         }
 
+        // Should be accessible by everyone, but only from own documents unless teacher.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveDocument(DocumentViewModel viewModel)
