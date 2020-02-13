@@ -17,6 +17,7 @@ namespace LexiconLMS.Core.Repository
         Task<CourseViewModel> GetCourseViewModel(int? id);
         Task<ModuleViewModel> GetModuleViewModel(int? id);
         Task<Activity> GetActivity(int? id);
+        Task<ActivityViewModel> GetActivityViewModel(int? id);
 
     }
 }

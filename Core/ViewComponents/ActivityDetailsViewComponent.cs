@@ -17,7 +17,7 @@ namespace LexiconLMS.Core.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(int activityId)
         {
-            return View(await _courseRepository.GetActivity(activityId));
+            return View(await _courseRepository.GetActivityViewModel(activityId));
         }
     }
 }
