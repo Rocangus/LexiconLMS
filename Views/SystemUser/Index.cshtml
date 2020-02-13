@@ -2,39 +2,42 @@
 @{
     ViewData["Title"] = "Users";
 }
-<h1 class="border rounded-lg p-3" id="searchindex">@ViewData["Title"]</h1>
+    <div id="mainbackgroundcolor" class="rounded-lg">
+        <h1 class="rounded-top p-3" id="searchindex">@ViewData["Title"]</h1>
 
-<form class="text-light border rounded-lg" asp-action="Filter"
-      data-ajax="true"
-      data-ajax-method="GET"
-      data-ajax-mode="replace"
-      data-ajax-update="usersupdate">
-    <div class="input-group m-auto" id="searchindex">
-        <input type="text" name="userName" class="form-control" placeholder="Search Student Name" />
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-primary "><i class="fa fa-search">&emsp;Search</i></button>
+        <form class="text-light" asp-action="Filter"
+              data-ajax="true"
+              data-ajax-method="GET"
+              data-ajax-mode="replace"
+              data-ajax-update="usersupdate">
+            <div class="input-group m-auto" id="searchindex">
+                <input type="text" name="userName" class="form-control" placeholder="Search Student Name" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary "><i class="fa fa-search">&emsp;Search</i></button>
+                </div>
+            </div>
+        </form>
+
+        @if (User.IsInRole("Teacher"))
+        {
+            <div class="container pb-1">
+                <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </div>
+        }
+
+        <div style="height: 55vh; overflow:auto;">
+            <table class="table" id="mainbackgroundcolor">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Email)</th>
+                        <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody id="usersupdate">
+                    @await Html.PartialAsync("_SystemUsersPartial", Model)
+                </tbody>
+            </table>
         </div>
     </div>
-</form>
-
-<p>@if (User.IsInRole("Teacher"))
-{
-       <a asp-area="Identity" asp-page="/Account/Register">Register</a>
-}
-</p>
-
-<div style="height: 55vh; overflow:auto;">
-<table class="table" id="mainbackgroundcolor">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tbody id="usersupdate">
-        @await Html.PartialAsync("_SystemUsersPartial", Model)
-    </tbody>
-</table>
-</div>

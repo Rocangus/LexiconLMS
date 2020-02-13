@@ -16,6 +16,7 @@ $(".showmodule").click(function (event) {
     showModule(moduleId);
 });
 
+
 $(".showactivity").click(function (event) {
     event.preventDefault();
     var activityId = $(this).data("activityid");

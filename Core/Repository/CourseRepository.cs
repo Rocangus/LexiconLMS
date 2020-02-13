@@ -117,6 +117,26 @@ namespace LexiconLMS.Core.Repository
             return activity;
         }
 
+        public async Task<ActivityViewModel> GetActivityViewModel(int? id)
+        {
+            var activity = await GetActivity(id);
+            bool isAssignment = false;
+
+            if (activity.ActivityTypeId ==
+                await _context.ActivityTypes.Where(a => a.Name.Equals("Assignment")).Select(a => a.Id).FirstOrDefaultAsync())
+            {
+                isAssignment = true;
+            }
+
+            var model = new ActivityViewModel
+            {
+                Activity = activity,
+                IsAssignment = isAssignment
+            };
+
+            return model;
+        }
+
         private ModuleViewModel NotFoundModule()
         {
             throw new NotImplementedException();
@@ -126,6 +146,6 @@ namespace LexiconLMS.Core.Repository
             throw new NotImplementedException();
         }
 
-        
+
     }
 }
