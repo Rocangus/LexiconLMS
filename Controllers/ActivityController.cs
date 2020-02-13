@@ -34,7 +34,22 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            return View(await _courseRepository.GetActivity(id));
+            var activity = await _courseRepository.GetActivity(id);
+            bool isAssignment = false;
+
+            if (activity.ActivityTypeId == 
+                await _context.ActivityTypes.Where(a => a.Name.Equals("Assignment")).Select(a => a.Id).FirstOrDefaultAsync())
+            {
+                isAssignment = true;
+            }
+
+            var model = new ActivityViewModel
+            {
+                Activity = activity,
+                IsAssignment = isAssignment
+            };
+
+            return View(model);
         }
         
         // GET: Activities/Edit/5

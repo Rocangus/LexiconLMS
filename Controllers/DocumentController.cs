@@ -32,6 +32,15 @@ namespace LexiconLMS.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        public async Task<IActionResult> AssignmentDocumentUpload(AssignmentDocumentUploadViewModel model)
+        {
+            var success = await _documentService.SaveAssignmentDocumentToFile(model);
+            if (success)
+                return RedirectToAction(@"Details", "Activity", new { Id = model.ActivityId });
+            else
+                return RedirectToAction("Error", "Home");
+        }
+
         public async Task<IActionResult> ModuleDocumentUpload(ModuleDocumentUploadViewModel model)
         {
             var success = await _documentService.SaveModuleDocumentToFile(model);
