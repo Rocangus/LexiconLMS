@@ -36,14 +36,17 @@
         </dd>
     </dl>
 </div>
-<div>
-    @foreach (var documentActivty in Model.Activity.Documents)
-    {
-        <span>@documentActivty.Document.Name</span>
-        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
-        <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
-    }
-</div>
+@if (Model.Activity.Documents.Count > 0)
+{
+    <div>
+        @foreach (var documentActivty in Model.Activity.Documents)
+        {
+            <span>@documentActivty.Document.Name</span>
+            <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
+            <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
+        }
+    </div>
+}
 @if (User.IsInRole("Teacher"))
 {
     <div>
