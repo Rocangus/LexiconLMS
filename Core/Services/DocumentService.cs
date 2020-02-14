@@ -27,26 +27,34 @@ namespace LexiconLMS.Core.Services
             _logger = logger;
         }
 
-        public Task<IEnumerable<Document>> GetActivityDocumentsAsync(int id)
+        public async Task<List<Document>> GetActivityDocumentsAsync(int id)
         {
-            throw new NotImplementedException();
+            var documents = await _context.DocumentsActivities.Include(da => da.Document)
+                .Where(da => da.ActivityId == id).Select(da => da.Document).ToListAsync();
+
+            if (documents == null)
+                return new List<Document>();
+
+            return await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == id).Select(da => da.Document).ToListAsync();
         }
 
-        public async Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id)
+        public async Task<List<Document>> GetAssignmentDocumentsAsync(int id)
         {
             var documents = await _context.DocumentsAssignments.Include(da => da.Document).Where(da => da.ActivityId == id).Select(da => da.Document).ToListAsync();
 
             return documents != null ? documents : new List<Document>();
         }
 
-        public Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id)
+        public Task<List<Document>> GetCourseDocumentsAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Document>> GetModuleDocumentsAsync(int id)
+        public async Task<List<Document>> GetModuleDocumentsAsync(int id)
         {
-            throw new NotImplementedException();
+            var documents = await _context.DocumentsModules.Include(dm => dm.Document).Where(dm => dm.ModuleId == id).Select(dm => dm.Document).ToListAsync();
+
+            return documents != null ? documents : new List<Document>();
         }
 
         public Task<Document> GetUserAssignmenDocumentAsync(string id)

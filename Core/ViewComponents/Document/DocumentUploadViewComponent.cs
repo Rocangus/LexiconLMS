@@ -22,18 +22,18 @@ namespace LexiconLMS.Core.ViewComponents.Document
             _context = applicationDbContext;
             _userService = userService;
         }
-        public async Task<IViewComponentResult> InvokeAsync(ClaimsPrincipal user, string entityId, string entityType)
+        public async Task<IViewComponentResult> InvokeAsync(List<Models.Documents.Document> documents, ClaimsPrincipal user, string entityId, string entityType)
         {
             var userId = _userService.GetUserId(user);
 
             switch (entityType)
             {
                 case "Activity":
-                    return ActivityDocumentUpload(userId, int.Parse(entityId));
+                    return ActivityDocumentUpload(documents, userId, int.Parse(entityId));
                 case "Assignment":
                     return AssignmentDocumentUpload(userId, int.Parse(entityId));
                 case "Module":
-                    return ModuleDocumentUpload(userId, int.Parse(entityId));
+                    return ModuleDocumentUpload(documents, userId, int.Parse(entityId));
                 default:
                     break;
             }
@@ -46,9 +46,10 @@ namespace LexiconLMS.Core.ViewComponents.Document
             return View("User", new UserDocumentUploadViewModel { UserId = userId });
         }
 
-        private IViewComponentResult ActivityDocumentUpload(string userId, int entityId)
+        private IViewComponentResult ActivityDocumentUpload(List<Models.Documents.Document> documents, string userId, int entityId)
         {
-            return View("Activity", new ActivityDocumentUploadViewModel { ActivityId = entityId, UserId = userId });
+            var user = UserClaimsPrincipal;
+            return View("Activity", new ActivityDocumentUploadViewModel {User = user, Documents = documents, ActivityId = entityId, UserId = userId });
         }
 
         private IViewComponentResult AssignmentDocumentUpload(string userId, int entityId)
@@ -56,9 +57,10 @@ namespace LexiconLMS.Core.ViewComponents.Document
             return View("Assignment", new AssignmentDocumentUploadViewModel { ActivityId = entityId, UserId = userId });
         }
 
-        private IViewComponentResult ModuleDocumentUpload(string userId, int entityId)
+        private IViewComponentResult ModuleDocumentUpload(List<Models.Documents.Document> documents, string userId, int entityId)
         {
-            return View("Module", new ModuleDocumentUploadViewModel { ModuleId = entityId, UserId = userId });
+            var user = UserClaimsPrincipal;
+            return View("Module", new ModuleDocumentUploadViewModel { User = user, Documents = documents, ModuleId = entityId, UserId = userId });
         }
     }
 }

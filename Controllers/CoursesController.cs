@@ -21,12 +21,12 @@ namespace LexiconLMS.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly IUserService _userService;
 
-        public CoursesController(ApplicationDbContext context, IUserService userService)
+        public CoursesController(ApplicationDbContext context, IUserService userService, ICourseRepository courseRepository)
         {
             _context = context;
             _userService = userService;
 
-            _courseRepository = new CourseRepository(_context, userService);
+            _courseRepository = courseRepository;
         }
 
         // GET: Courses

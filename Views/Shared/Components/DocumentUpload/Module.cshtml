@@ -1,19 +1,38 @@
 ﻿@model ModuleDocumentUploadViewModel
 
-<form enctype="multipart/form-data" asp-controller="Document" asp-action="ModuleDocumentUpload">
+@if (Model.Documents.Count > 0)
+{
+    <div>
+        @foreach (var document in Model.Documents)
+        {
+            <span>@document.Name</span>
+            <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@document.Id">Download</a>
+            @if (User.IsInRole("Teacher"))
+            {
+                <text>|</text>
+                <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@document.Id" asp-route-entityId="@Model.ModuleId">Remove</a><br />
+            }
+        }
+    </div>
+}
 
-    <dl>
-        <dt>
-            <input asp-for="UserId" type="hidden" />
-            <input asp-for="ModuleId" type="hidden" />
-        </dt>
-        <dt>
-            <label asp-for="FormFile"></label>
-        </dt>
-        <dd>
-            <input asp-for="FormFile" type="file">
-        </dd>
-    </dl>
-    <input class="btn btn-primary" type="submit" value="Upload" />
+@if (User.IsInRole("Teacher"))
+{
+    <form enctype="multipart/form-data" asp-controller="Document" asp-action="ModuleDocumentUpload">
 
-</form>
+        <dl>
+            <dt>
+                <input asp-for="UserId" type="hidden" />
+                <input asp-for="ModuleId" type="hidden" />
+            </dt>
+            <dt>
+                <label asp-for="FormFile"></label>
+            </dt>
+            <dd>
+                <input asp-for="FormFile" type="file">
+            </dd>
+        </dl>
+        <input class="btn btn-primary" type="submit" value="Upload" />
+
+    </form>
+}

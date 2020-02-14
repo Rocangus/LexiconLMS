@@ -14,11 +14,13 @@ namespace LexiconLMS.Core.Repository
     {
         private ApplicationDbContext _context { get; }
         private IUserService _userService;
+        private readonly IDocumentService _documentService;
 
-        public CourseRepository(ApplicationDbContext context, IUserService userService)
+        public CourseRepository(ApplicationDbContext context, IUserService userService, IDocumentService documentService)
         {
             _context = context;
             _userService = userService;
+            _documentService = documentService;
         }
         public void AddModule(Module module)
         {
@@ -74,7 +76,7 @@ namespace LexiconLMS.Core.Repository
                 return NotFoundModule();
             }
 
-            model.Documents = await _context.DocumentsModules.Include(dm => dm.Document).Where(dm => dm.ModuleId == id).ToListAsync();
+            model.Documents = await _documentService.GetModuleDocumentsAsync((int)id);
 
             model.Activities = await _context.Activities.Where(m => m.ModuleId == id).ToListAsync();
 
@@ -130,6 +132,7 @@ namespace LexiconLMS.Core.Repository
 
             var model = new ActivityViewModel
             {
+                Documents = await _documentService.GetActivityDocumentsAsync((int)id),
                 Activity = activity,
                 IsAssignment = isAssignment
             };
