@@ -4,15 +4,7 @@
     {
         <li>
             @user.Name
-            <a asp-controller="Courses" asp-action="AddUserToCourse"
-               asp-route-userId="@user.Id"
-               asp-route-courseId="@user.CourseId"
-               asp-route-action="Index"
-               asp-route-controller="Home"
-               data-ajax="true"
-               data-ajax-method="POST"
-               data-ajax-mode="replace"
-               data-ajax-update="#systemusersupdate">Add</a>
+            <button class="btn btn-success float-right adduserbutton" data-userid="@user.Id" data-courseid="@user.CourseId">Add</button>
         </li>
     }
 </ul>
