@@ -37,6 +37,10 @@
     </div>
 </div>
 <div>
+  
+    @await Component.InvokeAsync("DocumentUpload", new { entityId =Model.Course.Id.ToString(), user = User, entityType = "Course" })
+</div>
+<div>
     <a asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

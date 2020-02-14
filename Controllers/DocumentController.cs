@@ -29,12 +29,39 @@ namespace LexiconLMS.Controllers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> ActivityDocumentUpload(ActivityDocumentUploadViewModel model)
         {
+            if (model.FormFile==null)
+            {
+                return RedirectToAction("Error", "Home");
+
+            }
+
             var success = await _documentService.SaveActivityDocumentToFile(model);
             if (success)
                 return RedirectToAction(@"Details", "Activity", new { Id = model.ActivityId });
             else
                 return RedirectToAction("Error", "Home");
         }
+
+
+
+        public async Task<IActionResult> CourseDocumentUpload(CourseDocumentUploadViewModel model)
+        {
+            if (model.FormFile == null)
+            {
+                return RedirectToAction("Error", "Home");
+
+            }
+
+            //var success = await _documentService.SaveCourseDocumentToFile(model.FormFile,model.UserId,model.CourseId);
+            var success = await _documentService.SaveCourseDocumentToFile(model);
+            if (success)
+                return RedirectToAction(@"Details", "Courses", new { Id = model.CourseId });
+            else
+                return RedirectToAction("Error", "Home");
+        }
+
+
+
 
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> AssignmentDocumentUpload(AssignmentDocumentUploadViewModel model)

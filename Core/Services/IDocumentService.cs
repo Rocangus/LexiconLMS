@@ -20,7 +20,8 @@ namespace LexiconLMS.Core.Services
         Task<bool> SaveAssignmentDocumentToFile(AssignmentDocumentUploadViewModel model);
         Task<bool> SaveModuleDocumentToFile(ModuleDocumentUploadViewModel model);
         Task<bool> SaveUserDocumentToFile(IFormFile formFile, string id);
-        Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string userId, int courseId);
+        //Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string userId, int courseId);
+        Task<bool> SaveCourseDocumentToFile(CourseDocumentUploadViewModel model);
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LexiconLMS.Core.Models;
+using LexiconLMS.Core.Models.Documents;
 using LexiconLMS.Core.Services;
 using LexiconLMS.Core.ViewModels;
 using LexiconLMS.Data;
@@ -45,10 +46,8 @@ namespace LexiconLMS.Core.Repository
             }
 
             model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();            
-
-            List<SystemUserViewModel> userViewModels = _userService.GetSystemUserViewModels(id);
-
-            model.SystemUsers = userViewModels;
+            model.SystemUsers = _userService.GetSystemUserViewModels(id);
+            model.Documents = await _documentService.GetCourseDocumentsAsync((int)id);
 
             model.Module = new Module
             {
@@ -139,6 +138,25 @@ namespace LexiconLMS.Core.Repository
 
             return model;
         }
+
+
+        public async Task<Course> GetCourse(int? id)
+        {
+            var course = await _context.Courses.Include(a => a.Documents).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            foreach (var documentCourse in course.Documents)
+            {
+                documentCourse.Document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == documentCourse.DocumentId);
+            }
+
+            /* Alternate solution:
+             * var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+
+            activity.Documents = await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == activity.Id).ToListAsync();*/
+
+            return course;
+        }
+
 
         private ModuleViewModel NotFoundModule()
         {

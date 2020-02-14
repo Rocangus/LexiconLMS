@@ -25,7 +25,6 @@ namespace LexiconLMS.Controllers
         {
             _context = context;
             _userService = userService;
-
             _courseRepository = courseRepository;
         }
 
@@ -43,8 +42,11 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            return View(await _courseRepository.GetCourseViewModel(id));
+            //return View(await _courseRepository.GetCourseViewModel(id));
+            return View(await _courseRepository.GetCourse(id));
         }
+
+
 
         // GET: Courses/Create
         [Authorize(Roles = "Teacher")]
@@ -96,6 +98,8 @@ namespace LexiconLMS.Controllers
             }
 
             var course = await _courseRepository.GetCourseViewModel(id);
+
+
             if (course == null)
             {
                 return NotFound();
