@@ -3,10 +3,12 @@
     @foreach (var user in Model)
     {
         <li>
-            <a class="hidden-link" asp-controller="SystemUser" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
+            @user.Name
             <a asp-controller="Courses" asp-action="AddUserToCourse"
                asp-route-userId="@user.Id"
                asp-route-courseId="@user.CourseId"
+               asp-route-action="Index"
+               asp-route-controller="Home"
                data-ajax="true"
                data-ajax-method="POST"
                data-ajax-mode="replace"
