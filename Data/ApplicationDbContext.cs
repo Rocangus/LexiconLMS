@@ -21,6 +21,7 @@ namespace LexiconLMS.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<DocumentsActivities>().HasKey("DocumentId", "ActivityId");
+            builder.Entity<DocumentsAssignments>().HasKey("DocumentId", "ActivityId");
             builder.Entity<DocumentsModules>().HasKey("DocumentId", "ModuleId");
             builder.Entity<DocumentsCourses>().HasKey("DocumentId", "CourseId");
         }
@@ -33,8 +34,9 @@ namespace LexiconLMS.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<SystemUserCourse> UserCourses { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentsAssignments> DocumentsAssignments { get; set; }
         public DbSet<DocumentsActivities> DocumentsActivities { get; set; }
         public DbSet<DocumentsCourses> DocumentsCourses { get; set; }
-
+        public DbSet<DocumentsModules> DocumentsModules { get; set; }
     }
 }

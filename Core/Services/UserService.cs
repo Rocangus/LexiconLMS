@@ -63,7 +63,7 @@ namespace LexiconLMS.Core.Services
         public async Task<Course> GetUserCourse(string id)
         {
             SystemUserCourse course = await _context.UserCourses.Where(u => u.SystemUserId.Equals(id)).FirstOrDefaultAsync();
-            return await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync();
+            return course != null? await _context.Courses.Where(u => u.Id.Equals(course.CourseId)).FirstOrDefaultAsync() : null;
         }
 
         public async Task<MainViewModel> GetUserMainViewModel(string id)
@@ -79,7 +79,7 @@ namespace LexiconLMS.Core.Services
                     Id = user.Id,
                     PhoneNumber = user.PhoneNumber
                 },
-                Course = course
+                Course = course != null ? course : null
             }).SingleOrDefaultAsync();
         }
 
@@ -87,6 +87,20 @@ namespace LexiconLMS.Core.Services
         {
             var userCourses = _context.UserCourses.Include(uc => uc.SystemUser).Where(uc => uc.CourseId == courseId).ToList();
             return GetSystemUserViewModels(courseId, userCourses);
+        }
+
+        public async Task<SystemUserViewModel> GetSystemUserViewModelAsync(string userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(userId));
+            if (user != null)
+            {
+                return new SystemUserViewModel
+                {
+                    Id = user.Id,
+                    Name = user.Name
+                };
+            }
+            return null;
         }
 
         public async Task<List<SystemUserViewModel>> GetSystemUsersNotInCourse(int courseId)

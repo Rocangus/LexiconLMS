@@ -10,6 +10,7 @@ using LexiconLMS.Data;
 using LexiconLMS.Core.Services;
 using LexiconLMS.Core.Repository;
 using Microsoft.AspNetCore.Authorization;
+using LexiconLMS.Core.ViewModels;
 
 namespace LexiconLMS.Controllers
 {
@@ -18,11 +19,14 @@ namespace LexiconLMS.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
+        private readonly IDocumentService _documentService;
 
-        public SystemUserController(ApplicationDbContext context, IUserService userService)
+        public SystemUserController(ApplicationDbContext context, IUserService userService,
+            IDocumentService documentService)
         {
             _context = context;
             _userService = userService;
+            _documentService = documentService;
         }
 
         // GET: SystemUsers/Details/5
@@ -39,8 +43,11 @@ namespace LexiconLMS.Controllers
             {
                 return NotFound();
             }
+            user.Documents = await _documentService.GetUserDocumentsAsync(user.Id);
 
-            return View(user);
+            var viewModel = new SystemUserDetailsViewModel { SystemUser = user, SignedInUserId = _userService.GetUserId(User) };
+
+            return View(viewModel);
         }
 
         // GET: SystemUsers/Create

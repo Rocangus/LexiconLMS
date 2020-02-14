@@ -59,8 +59,8 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
 .footer {
   position: absolute;
@@ -86,7 +86,7 @@ body {
 }
 
 #navbarlogo {
-    background-color: rgba(255, 0, 0, 0.8);
+    background-color: rgb(214, 0, 0);
     padding-left: 10px;
     padding-right: 10px;
     font-size: 50px;
@@ -96,11 +96,11 @@ body {
     background-color: whitesmoke;
 }
 #footerlogo {
-    color: darkred;
+    color: rgb(214, 0, 0);
 }
 
 #searchindex {
-    background-color: rgba(255, 0, 0, 0.8);
+    background-color: rgb(214, 0, 0);
     color: white;
 }
 thead > tr {
@@ -123,12 +123,12 @@ tr:nth-child(2n){
     margin: 3px;
 }
 #mainactivitieslist {
-    font-size: 10px;
+    font-size: 11px;
     padding: 0;
     padding-left: 10px;
     margin: 3px;
 }
 #mainbackgroundcolor {
     background-color: whitesmoke;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 2px 6px 0 rgba(0, 0, 0, 0.19);
 }

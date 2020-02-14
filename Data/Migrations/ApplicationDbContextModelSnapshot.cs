@@ -140,6 +140,21 @@ namespace LexiconLMS.Data.Migrations
                     b.ToTable("DocumentsActivities");
                 });
 
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsAssignments", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentId", "ActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("DocumentsAssignments");
+                });
+
             modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsCourses", b =>
                 {
                     b.Property<int>("DocumentId")
@@ -453,6 +468,21 @@ namespace LexiconLMS.Data.Migrations
                 {
                     b.HasOne("LexiconLMS.Core.Models.Activity", "Activity")
                         .WithMany("Documents")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LexiconLMS.Core.Models.Documents.Document", "Document")
+                        .WithMany()
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LexiconLMS.Core.Models.Documents.DocumentsAssignments", b =>
+                {
+                    b.HasOne("LexiconLMS.Core.Models.Activity", "Activity")
+                        .WithMany()
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -1,4 +1,4 @@
-﻿@model LexiconLMS.Core.Models.Activity
+﻿@model LexiconLMS.Core.ViewModels.ActivityViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,45 +7,59 @@
 <h1>Activity</h1>
 
 <div>
-    <h4>Course</h4>
+    <h4>Activity</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Activity.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Activity.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
+            @Html.DisplayNameFor(model => model.Activity.StartTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartTime)
+            @Html.DisplayFor(model => model.Activity.StartTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayNameFor(model => model.Activity.EndTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndTime)
+            @Html.DisplayFor(model => model.Activity.EndTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Activity.Description)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Activity.Description)
         </dd>
     </dl>
 </div>
+@if (Model.Activity.Documents.Count > 0)
+{
+    <div>
+        @foreach (var documentActivty in Model.Activity.Documents)
+        {
+            <span>@documentActivty.Document.Name</span>
+            <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
+            <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
+        }
+    </div>
+}
+@if (User.IsInRole("Teacher"))
+{
+    <div>
+        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Activity" })
+    </div>
+}
+@if (Model.IsAssignment)
+{
+    <div>
+        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Assignment" })
+    </div>
+}
 <div>
-    @foreach (var documentActivty in Model.Documents)
-    {
-        <span>@documentActivty.Document.Name</span><br />
-    }
-</div>
-<div>
-    @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Id.ToString(), user = User, entityType = "Activity" })
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a href="@Url.Action("Details", "Module", new { id = Model.ModuleId })">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Activity.Id">Edit</a> |
+    <a href="@Url.Action("Details", "Module", new { id = Model.Activity.ModuleId })">Back to List</a>
 </div>
