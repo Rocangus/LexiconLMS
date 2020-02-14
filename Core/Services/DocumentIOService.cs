@@ -58,6 +58,27 @@ namespace LexiconLMS.Core.Services
             }
         }
 
+        public async Task<string> SaveModuleDocumentAsync(IFormFile formFile, int moduleId)
+        {
+            string path = Environment.CurrentDirectory + @"\Data\Module\" + moduleId + @"\" + Path.GetRandomFileName();
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            try
+            {
+                using (var stream = File.Create(path))
+                {
+                    await SaveFileToDisk(formFile, path, stream);
+                    return path;
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+                return string.Empty;
+            }
+        }
+
         public async Task<string> SaveUserDocumentAsync(IFormFile formFile, string userId)
         {
             string path = Environment.CurrentDirectory + @"\Data\User\" + userId + @"\" + Path.GetRandomFileName();

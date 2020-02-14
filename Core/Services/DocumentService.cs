@@ -137,7 +137,44 @@ namespace LexiconLMS.Core.Services
             _logger.LogWarning("Failed to save document to database: " + due.InnerException);
             _logger.LogTrace(due.StackTrace);
         }
-        
+
+        public async Task<bool> SaveModuleDocumentToFile(ModuleDocumentUploadViewModel model)
+        {
+            string path = await _documentIOService.SaveModuleDocumentAsync(model.FormFile, model.ModuleId);
+
+            if (path.Equals(string.Empty))
+                return false;
+
+            var document = CreateDocument(model.FormFile, model.UserId, path);
+
+            if (!await SaveDocument(document))
+                return false;
+
+            var documentId = await _context.Documents.Where(d => d.Path.Equals(path)).Select(d => d.Id).FirstOrDefaultAsync();
+
+            DocumentsModules documentsModules = new DocumentsModules
+            {
+                ModuleId = model.ModuleId,
+                DocumentId = documentId
+            };
+            return await SaveDocumentModule(documentsModules);
+        }
+
+        private async Task<bool> SaveDocumentModule(DocumentsModules documentsModules)
+        {
+            _context.DocumentsModules.Add(documentsModules);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                LogException(due);
+                return false;
+            }
+            return true;
+        }
+
         public async Task<bool> SaveUserDocumentToFile(IFormFile formFile, string userId)
         {
 
