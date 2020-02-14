@@ -89,6 +89,20 @@ namespace LexiconLMS.Core.Services
             return GetSystemUserViewModels(courseId, userCourses);
         }
 
+        public async Task<SystemUserViewModel> GetSystemUserViewModelAsync(string userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(userId));
+            if (user != null)
+            {
+                return new SystemUserViewModel
+                {
+                    Id = user.Id,
+                    Name = user.Name
+                };
+            }
+            return null;
+        }
+
         public async Task<List<SystemUserViewModel>> GetSystemUsersNotInCourse(int courseId)
         {
             var userIdsInCourse = await _context.UserCourses.Where(uc => uc.CourseId == courseId).Select(uc => uc.SystemUserId).ToListAsync();
