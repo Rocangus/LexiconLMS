@@ -35,6 +35,16 @@ $(".adduserbutton").click(function (event) {
 });
 
 function addUser(userId, courseId) {
-    $("#usercourselist").load("Courses/AddUserToCourse/" + { userId: userId, courseId: courseId });
+    $("#usercourselist").load("Courses/AddUserToCourse/" + userId + '&' + courseId)
+    /*$.ajax({
+        
+        url: "Courses/AddUserToCourse/",
+        data: { userId: userId, courseId: courseId },
+        success: function (data) {
+        },
+        error: function (data) {
+
+        }
+    })*/
 }
 //End
