@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.Services
 {
-    public class DocumentService: IDocumentService
+    public class DocumentService : IDocumentService
     {
         private readonly ApplicationDbContext _context;
 
@@ -32,9 +32,11 @@ namespace LexiconLMS.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id)
+        public async Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id)
         {
-            throw new NotImplementedException();
+            var documents = await _context.DocumentsAssignments.Include(da => da.Document).Where(da => da.ActivityId == id).Select(da => da.Document).ToListAsync();
+
+            return documents != null ? documents : new List<Document>();
         }
 
         public Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id)
@@ -52,6 +54,13 @@ namespace LexiconLMS.Core.Services
             throw new NotImplementedException();
         }
 
+        public async Task<List<Document>> GetUserDocumentsAsync(string userId)
+        {
+            var documents = await _context.Documents.Where(d => d.SystemUserId.Equals(userId)).ToListAsync();
+
+            return documents != null ? documents : new List<Document>();
+        }
+
         public async Task<Document> GetDocumentByIdAsync(int id)
         {
             return await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
@@ -65,12 +74,27 @@ namespace LexiconLMS.Core.Services
                 throw new ArgumentException($"No document with Id {model.DocumentId} could be found.");
             }
 
-            var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
-            if (documentActivity != null) 
+            var documentAssignment = await _context.DocumentsAssignments.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
+            if (documentAssignment != null)
             {
-                return await RemoveActivityDocument(document, documentActivity);
+                return RemoveAssignmentDocument(document, documentAssignment);
             }
-
+            else
+            {
+                var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == model.DocumentId && da.ActivityId == model.EntityId);
+                if (documentActivity != null)
+                {
+                    return RemoveActivityDocument(document, documentActivity);
+                }
+                else
+                {
+                    var documentModule = await _context.DocumentsModules.FirstOrDefaultAsync(dm => dm.DocumentId == model.DocumentId && dm.ModuleId == model.EntityId);
+                    if (documentModule != null)
+                    {
+                        return RemoveModuleDocument(document, documentModule);
+                    }
+                }
+            }
             _context.Documents.Remove(document);
             var fileResult = _documentIOService.RemoveDocument(document.Path);
             if (fileResult)
@@ -81,14 +105,39 @@ namespace LexiconLMS.Core.Services
             return false;
         }
 
-        private async Task<bool> RemoveActivityDocument(Document document, DocumentsActivities documentsActivities)
+        private bool RemoveAssignmentDocument(Document document, DocumentsAssignments documentAssignment)
         {
             var success = _documentIOService.RemoveDocument(document.Path);
 
             if (success)
             {
-                var documentActivity = await _context.DocumentsActivities.FirstOrDefaultAsync(da => da.DocumentId == document.Id);
+                _context.DocumentsAssignments.Remove(documentAssignment);
+                _context.Documents.Remove(document);
+                return true;
+            }
+            return false;
+        }
+
+        private bool RemoveActivityDocument(Document document, DocumentsActivities documentActivity)
+        {
+            var success = _documentIOService.RemoveDocument(document.Path);
+
+            if (success)
+            {
                 _context.DocumentsActivities.Remove(documentActivity);
+                _context.Documents.Remove(document);
+                return true;
+            }
+            return false;
+        }
+
+        private bool RemoveModuleDocument(Document document, DocumentsModules documentModule)
+        {
+            var success = _documentIOService.RemoveDocument(document.Path);
+
+            if (success)
+            {
+                _context.DocumentsModules.Remove(documentModule);
                 _context.Documents.Remove(document);
                 return true;
             }
@@ -116,10 +165,47 @@ namespace LexiconLMS.Core.Services
             };
             return await SaveDocumentActivity(documentsActivities);
         }
+        
+        public async Task<bool> SaveAssignmentDocumentToFile(AssignmentDocumentUploadViewModel model)
+        {
+            string path = await _documentIOService.SaveAssignmentDocumentAsync(model.FormFile, model.ActivityId);
+
+            if (path.Equals(string.Empty))
+                return false;
+
+            var document = CreateDocument(model.FormFile, model.UserId, path);
+
+            if (!await SaveDocument(document))
+                return false;
+
+            var documentId = await _context.Documents.Where(d => d.Path.Equals(path)).Select(d => d.Id).FirstOrDefaultAsync();
+
+            DocumentsAssignments documentsAssignment = new DocumentsAssignments
+            {
+                ActivityId = model.ActivityId,
+                DocumentId = documentId
+            };
+            return await SaveDocumentAssignment(documentsAssignment);
+        }
 
         private async Task<bool> SaveDocumentActivity(DocumentsActivities documentsActivities)
         {
             _context.DocumentsActivities.Add(documentsActivities);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                LogException(due);
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<bool> SaveDocumentAssignment(DocumentsAssignments documentsAssignment)
+        {
+            _context.DocumentsAssignments.Add(documentsAssignment);
             try
             {
                 await _context.SaveChangesAsync();
@@ -217,7 +303,7 @@ namespace LexiconLMS.Core.Services
 
 
 
-        
+
         public async Task<bool> SaveCourseDocumentToFile(IFormFile formFile, string userId, int courseId)
         {
 

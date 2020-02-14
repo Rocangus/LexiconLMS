@@ -34,7 +34,7 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            return View(await _courseRepository.GetActivity(id));
+            return View(await _courseRepository.GetActivityViewModel(id));
         }
         
         // GET: Activities/Edit/5

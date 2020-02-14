@@ -94,19 +94,47 @@ namespace LexiconLMS.Core.Repository
 
         public async Task<Activity> GetActivity(int? id)
         {
-            var activity = await _context.Activities.Include(a => a.Documents).Where(m => m.Id == id).FirstOrDefaultAsync();
+            //var activity = await _context.Activities.Include(a => a.Documents).Where(m => m.Id == id).FirstOrDefaultAsync();
 
-            foreach (var documentActivity in activity.Documents)
+            //foreach (var documentActivity in activity.Documents)
+            //{
+             //   documentActivity.Document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == documentActivity.DocumentId);
+            //}
+
+            // Alternate solution:
+            var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
+            try
             {
-                documentActivity.Document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == documentActivity.DocumentId);
+                var documents = await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == activity.Id).ToListAsync();
+                activity.Documents = documents;
+            }
+            catch (Exception e)
+            {
+                activity.Documents = new List<Models.Documents.DocumentsActivities>();
+                throw (e);
             }
 
-            /* Alternate solution:
-             * var activity = await _context.Activities.FirstOrDefaultAsync(m => m.Id == id);
-
-            activity.Documents = await _context.DocumentsActivities.Include(da => da.Document).Where(da => da.ActivityId == activity.Id).ToListAsync();*/
-
             return activity;
+        }
+
+        public async Task<ActivityViewModel> GetActivityViewModel(int? id)
+        {
+            var activity = await GetActivity(id);
+            bool isAssignment = false;
+
+            if (activity.ActivityTypeId ==
+                await _context.ActivityTypes.Where(a => a.Name.Equals("Assignment")).Select(a => a.Id).FirstOrDefaultAsync())
+            {
+                isAssignment = true;
+            }
+
+            var model = new ActivityViewModel
+            {
+                Activity = activity,
+                IsAssignment = isAssignment
+            };
+
+            return model;
         }
 
         private ModuleViewModel NotFoundModule()
@@ -118,6 +146,6 @@ namespace LexiconLMS.Core.Repository
             throw new NotImplementedException();
         }
 
-        
+
     }
 }

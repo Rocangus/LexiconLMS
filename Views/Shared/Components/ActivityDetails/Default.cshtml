@@ -4,18 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Activity</h1>
-
 <div>
-    <h4>Activity</h4>
+    <h4>@Model.Activity.Name</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Activity.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Activity.Name)
-        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Activity.StartTime)
         </dt>
@@ -36,30 +28,32 @@
         </dd>
     </dl>
 </div>
-@if (Model.Activity.Documents.Count > 0)
-{
-    <div>
-        @foreach (var documentActivty in Model.Activity.Documents)
+<div>
+    @foreach (var documentActivty in Model.Activity.Documents)
+    {
+        <span>@documentActivty.Document.Name</span>
+        @if (User.IsInRole("Teacher"))
         {
-            <span>@documentActivty.Document.Name</span>
-            <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
             <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
         }
-    </div>
-}
+        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
+    }
+
+    <!-- TODO : Need to make it so that it only shows up when documents are null, don't seem to work with an "else"-->
+    <p>No documents found...</p>
+</div>
+
 @if (User.IsInRole("Teacher"))
 {
     <div>
         @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Activity" })
     </div>
-}
-@if (Model.IsAssignment)
-{
+
+    <!--Teacher should only be able to view and download assignments-->
     <div>
         @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Activity.Id.ToString(), user = User, entityType = "Assignment" })
     </div>
+    <div>
+        <a asp-controller="Activity" asp-action="Edit" asp-route-id="@Model.Activity.Id">Edit</a> |
+    </div>
 }
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Activity.Id">Edit</a> |
-    <a href="@Url.Action("Details", "Module", new { id = Model.Activity.ModuleId })">Back to List</a>
-</div>

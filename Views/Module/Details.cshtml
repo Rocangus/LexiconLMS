@@ -47,19 +47,22 @@
 </div>
 @if (Model.Documents.Count > 0)
 {
-<div>
-    @foreach (var documentModule in Model.Documents)
-    {
-        <span>@documentModule.Document.Name</span> 
-        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentModule.DocumentId">Download</a> <text>|</text>
-        <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentModule.DocumentId" asp-route-entityId="@documentModule.ModuleId">Remove</a><br />
-    }
-</div>
+    <div>
+        @foreach (var documentModule in Model.Documents)
+        {
+            <span>@documentModule.Document.Name</span>
+            <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentModule.DocumentId">Download</a> <text>|</text>
+            <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentModule.DocumentId" asp-route-entityId="@documentModule.ModuleId">Remove</a><br />
+        }
+    </div>
 }
-<div>
-    @await  Component.InvokeAsync("DocumentUpload", new { entityId = Model.Module.Id.ToString(), user = User, entityType = "Module" })
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Module.Id">Edit</a> |
-    <a href="@Url.Action("Details", "Courses", new { id = Model.Module.CourseId })">Back to List</a>
-</div>
+@if (User.IsInRole("Teacher"))
+{
+    <div>
+        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Module.Id.ToString(), user = User, entityType = "Module" });        
+    </div>
+}
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Module.Id">Edit</a> |
+        <a href="@Url.Action("Details", "Courses", new { id = Model.Module.CourseId })">Back to List</a>
+    </div>

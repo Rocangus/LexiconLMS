@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace LexiconLMS.Core.ViewModels
 {
-    public class UserDocumentUploadViewModel
+    public class AssignmentDocumentUploadViewModel
     {
         public string UserId { get; set; }
-        [Display(Name = "Upload Document")]
+        public int ActivityId { get; set; }
+
+        [Display(Name = "Upload Assignment Submission")]
         public IFormFile FormFile { get; set; }
     }
 }
