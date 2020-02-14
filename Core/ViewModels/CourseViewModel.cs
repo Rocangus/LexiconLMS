@@ -11,7 +11,7 @@ namespace LexiconLMS.Core.ViewModels
     {
         //public int Id { get; set; }
         public Course Course { get; set; }
-        public  Document Document { get; set; }
+        public IEnumerable<Document> Documents { get; set; }
         public List<Module> Modules { get; set; }
         public Module Module { get; set; }
 

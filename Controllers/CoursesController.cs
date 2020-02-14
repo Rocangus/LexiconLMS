@@ -21,12 +21,11 @@ namespace LexiconLMS.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly IUserService _userService;
 
-        public CoursesController(ApplicationDbContext context, IUserService userService)
+        public CoursesController(ApplicationDbContext context, IUserService userService, ICourseRepository courseRepository)
         {
             _context = context;
             _userService = userService;
-
-            _courseRepository = new CourseRepository(_context, userService);
+            _courseRepository = courseRepository;
         }
 
         // GET: Courses
@@ -43,8 +42,11 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            return View(await _courseRepository.GetCourseViewModel(id));
+            //return View(await _courseRepository.GetCourseViewModel(id));
+            return View(await _courseRepository.GetCourse(id));
         }
+
+
 
         // GET: Courses/Create
         [Authorize(Roles = "Teacher")]
@@ -96,6 +98,8 @@ namespace LexiconLMS.Controllers
             }
 
             var course = await _courseRepository.GetCourseViewModel(id);
+
+
             if (course == null)
             {
                 return NotFound();

@@ -20,10 +20,10 @@ namespace LexiconLMS.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ICourseRepository _courseRepository;
 
-        public ActivityController(ApplicationDbContext context, IUserService userService)
+        public ActivityController(ApplicationDbContext context, ICourseRepository courseRepository)
         {
             _context = context;
-            _courseRepository = new CourseRepository(_context, userService);
+            _courseRepository = courseRepository;
         }
 
         // GET: Activities/Details/5
