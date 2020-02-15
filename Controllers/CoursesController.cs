@@ -235,7 +235,12 @@ namespace LexiconLMS.Controllers
             };
             _context.UserCourses.Add(userCourse);
             await _context.SaveChangesAsync();
-            return View(_userService.GetSystemUserViewModels(courseId));
+            return ViewComponent("Users", new { courseId });
+        }
+
+        public IActionResult GetUsersNotInCourseComponent(int courseId)
+        {
+            return ViewComponent("GetUsersNotInCourse", new { courseId });
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)

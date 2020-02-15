@@ -35,7 +35,8 @@ $(".adduserbutton").click(function (event) {
 });
 
 function addUser(userId, courseId) {
-    $("#usercourselist").load("Courses/AddUserToCourse/" + userId + '&' + courseId)
+    $("#usercourselist").load("Courses/AddUserToCourse/", { userId: userId, courseId: courseId });
+    
     /*$.ajax({
         
         url: "Courses/AddUserToCourse/",
