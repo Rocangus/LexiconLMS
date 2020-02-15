@@ -226,7 +226,7 @@ namespace LexiconLMS.Controllers
             //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
-        public async void AddUserToCourse(string userId, int courseId)
+        public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
         {
             var userCourse = new SystemUserCourse 
             {
@@ -235,6 +235,7 @@ namespace LexiconLMS.Controllers
             };
             _context.UserCourses.Add(userCourse);
             await _context.SaveChangesAsync();
+            return View(_userService.GetSystemUserViewModels(courseId));
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)
