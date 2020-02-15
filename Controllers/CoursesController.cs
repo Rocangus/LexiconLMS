@@ -228,14 +228,21 @@ namespace LexiconLMS.Controllers
 
         public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
         {
+            var roleId = await _context.UserRoles.Where(ur => ur.UserId.Equals(userId)).Select(ur => ur.RoleId).FirstOrDefaultAsync();
+            var roleName = await _context.Roles.Where(r => r.Id.Equals(roleId)).Select(r => r.Name).FirstOrDefaultAsync();
             var userCourse = new SystemUserCourse 
             {
                 SystemUserId = userId,
-                CourseId = courseId
+                CourseId = courseId,
+                Discriminator = roleName
             };
             _context.UserCourses.Add(userCourse);
             await _context.SaveChangesAsync();
-            return ViewComponent("Users", new { courseId });
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return ViewComponent("Users", new { courseId });
+            }
+            return View("Edit", await _courseRepository.GetCourseViewModel(courseId));
         }
 
         public IActionResult GetUsersNotInCourseComponent(int courseId)
