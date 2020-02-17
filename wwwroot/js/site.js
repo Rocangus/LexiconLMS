@@ -3,6 +3,8 @@
 
 // Write your JavaScript code.
 
+
+//For the main page change element functions
 function showActivity(id) {
     $("#maincourseelement").load("Home/ActivityDetails/" + id);
 }
@@ -22,4 +24,27 @@ $(".showactivity").click(function (event) {
     var activityId = $(this).data("activityid");
     showActivity(activityId);
 });
+//End
 
+//Add user to course
+$(".adduserbutton").click(function (event) {
+    event.preventDefault();
+    var userId = $(this).data("userid");
+    var courseId = $(this).data("courseid");
+    addUser(userId, courseId);
+});
+
+function addUser(userId, courseId) {
+    $("#usercourselist").load("Courses/AddUserToCourse/" + userId + '&' + courseId)
+    /*$.ajax({
+        
+        url: "Courses/AddUserToCourse/",
+        data: { userId: userId, courseId: courseId },
+        success: function (data) {
+        },
+        error: function (data) {
+
+        }
+    })*/
+}
+//End
