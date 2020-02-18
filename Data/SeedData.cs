@@ -81,6 +81,7 @@ namespace LexiconLMS.Data
                         };
                         context.Add(activityType);
                     }
+                    await context.SaveChangesAsync();
                 }
 
                 var faker = GetFaker();
@@ -183,13 +184,14 @@ namespace LexiconLMS.Data
                             };
                             context.Add(activity);
                         }
+                        await context.SaveChangesAsync();
                     }
                 }
 
                 var teacherRole = context.Roles.Where(r => r.Name.Equals(roleNames[1])).FirstOrDefault();
                 var courseCount = context.Courses.Count();
 
-                foreach (var user in context.Users)
+                foreach (var user in await context.Users.ToListAsync())
                 {
                     if (!context.UserCourses.Any(uc => uc.SystemUserId.Equals(user.Id)))
                     {
@@ -214,9 +216,10 @@ namespace LexiconLMS.Data
                         };
 
                         context.Add(userCourse);
+                        await context.SaveChangesAsync();
                     }
                 }
-                await context.SaveChangesAsync();
+
 
 
             }

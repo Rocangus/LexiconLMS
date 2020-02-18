@@ -215,27 +215,43 @@ namespace LexiconLMS.Controllers
             return PartialView(result);
         }
 
-        public async Task<IActionResult> RemoveUserFromCourse(string userId, int courseId)
+        public async Task<IActionResult> RemoveUserFromCourse(string userId, int courseId, bool mainPage)
         {
             var userCourse = await _context.UserCourses
                 .FirstOrDefaultAsync(m => m.SystemUserId == userId);
             _context.UserCourses.Remove(userCourse);
             await _context.SaveChangesAsync();
             var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
-            return RedirectToAction("Index", "Home");
+            if (mainPage)
+            {
+                return ViewComponent("Index", "Home");
+            }
+            return RedirectToAction("Edit", new { id = courseId });
             //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
-        public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
+        public async Task<IActionResult> AddUserToCourse(string userId, int courseId, bool mainPage)
         {
+            var roleId = await _context.UserRoles.Where(ur => ur.UserId.Equals(userId)).Select(ur => ur.RoleId).FirstOrDefaultAsync();
+            var roleName = await _context.Roles.Where(r => r.Id.Equals(roleId)).Select(r => r.Name).FirstOrDefaultAsync();
             var userCourse = new SystemUserCourse 
             {
                 SystemUserId = userId,
-                CourseId = courseId
+                CourseId = courseId,
+                Discriminator = roleName
             };
             _context.UserCourses.Add(userCourse);
             await _context.SaveChangesAsync();
-            return View(_userService.GetSystemUserViewModels(courseId));
+            if (mainPage)
+            {
+                return ViewComponent("Users", new { courseId });
+            }
+            return RedirectToAction("Edit", new { id = courseId });
+        }
+
+        public IActionResult GetUsersNotInCourseComponent(int courseId)
+        {
+            return ViewComponent("GetUsersNotInCourse", new { courseId });
         }
 
         public IEnumerable<SelectListItem> GetSelectedSystemUser(IEnumerable<SystemUser> SystemUsers)

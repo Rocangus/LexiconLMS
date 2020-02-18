@@ -31,11 +31,15 @@ $(".adduserbutton").click(function (event) {
     event.preventDefault();
     var userId = $(this).data("userid");
     var courseId = $(this).data("courseid");
-    addUser(userId, courseId);
+    var mainPage = true;
+    addUser(userId, courseId, mainPage);
 });
 
-function addUser(userId, courseId) {
-    $("#usercourselist").load("Courses/AddUserToCourse/" + userId + '&' + courseId)
+function addUser(userId, courseId, mainPage) {
+    $("#usercourselist").load("Courses/AddUserToCourse/", { userId, courseId, mainPage });
+    $("#systemUsersMainModalCenter").modal('hide');
+    $("#systemUsersMainModalCenter").removeData();
+
     /*$.ajax({
         
         url: "Courses/AddUserToCourse/",

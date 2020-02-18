@@ -3,7 +3,7 @@
     @foreach (var user in Model)
     {
         <li>
-            @user.Name <a class="adduserbutton" data-userid="@user.Id" data-courseid="@user.CourseId" href="">Add</a>
+            @user.Name <a asp-controller="Courses" asp-action="AddUserToCourse" asp-route-userId="@user.Id" asp-route-courseId="@user.CourseId">Add</a>
         </li>
     }
 </ul>

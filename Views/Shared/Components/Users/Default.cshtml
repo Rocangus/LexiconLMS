@@ -1,9 +1,6 @@
 ﻿@model IEnumerable<LexiconLMS.Core.ViewModels.SystemUserViewModel>
 
-<h5 class="text-center">Students</h5>
-<hr />
-<button type="button" id="systemUsersPopUp" class="btn btn-primary btn-sm" style="width: 100%" data-toggle="modal" data-target="systemUsersModalCenter">Add Member</button>
-<br />
+
 @{ int i = 1; }
 <div style="height: 56vh; overflow:auto; padding-right: 10px;">
     @foreach (var user in Model)
@@ -16,6 +13,7 @@
                 <a asp-controller="Courses" asp-action="RemoveUserFromCourse"
                    asp-route-userId="@user.Id"
                    asp-route-courseId="@user.CourseId"
+                   asp-route-mainPage="true"
                    data-ajax="true"
                    data-ajax-method="POST"
                    data-ajax-mode="replace"
