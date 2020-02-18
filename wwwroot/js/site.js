@@ -37,8 +37,8 @@ $(".adduserbutton").click(function (event) {
 
 function addUser(userId, courseId, mainPage) {
     $("#usercourselist").load("Courses/AddUserToCourse/", { userId, courseId, mainPage });
-    $("#systemUsersModalCenter").modal('hide');
-    $("#systemUsersModalCenter").removeData();
+    $("#systemUsersMainModalCenter").modal('hide');
+    $("#systemUsersMainModalCenter").removeData();
 
     /*$.ajax({
         

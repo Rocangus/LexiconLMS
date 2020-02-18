@@ -3,8 +3,7 @@
     @foreach (var user in Model)
     {
         <li>
-            @user.Name
-            <a class="btn btn-success float-right adduserbutton" data-userid="@user.Id" data-courseid="@user.CourseId">Add</a>
+            @user.Name <a class="adduserbutton" data-userid="@user.Id" data-courseid="@user.CourseId" href="">Add</a>
         </li>
     }
 </ul>

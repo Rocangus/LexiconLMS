@@ -215,14 +215,18 @@ namespace LexiconLMS.Controllers
             return PartialView(result);
         }
 
-        public async Task<IActionResult> RemoveUserFromCourse(string userId, int courseId)
+        public async Task<IActionResult> RemoveUserFromCourse(string userId, int courseId, bool mainPage)
         {
             var userCourse = await _context.UserCourses
                 .FirstOrDefaultAsync(m => m.SystemUserId == userId);
             _context.UserCourses.Remove(userCourse);
             await _context.SaveChangesAsync();
             var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
-            return RedirectToAction("Index", "Home");
+            if (mainPage)
+            {
+                return ViewComponent("Index", "Home");
+            }
+            return RedirectToAction("Edit", new { id = courseId });
             //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
@@ -242,7 +246,7 @@ namespace LexiconLMS.Controllers
             {
                 return ViewComponent("Users", new { courseId });
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Edit", new { id = courseId });
         }
 
         public IActionResult GetUsersNotInCourseComponent(int courseId)
