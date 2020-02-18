@@ -24,6 +24,10 @@
             @await Component.InvokeAsync("Course", new { course = Model.Course })
         </div>
         <div class="col-md-2" id="mainsystemuserselement">
+            <h5 class="text-center">Students</h5>
+            <hr />
+            <button type="button" id="systemUsersPopUp" class="btn btn-primary btn-sm" style="width: 100%" data-toggle="modal" data-target="systemUsersModalCenter">Add Member</button>
+            <br />
             <!--SystemUser Modal-->
             <div class="modal fade" id="systemUsersModalCenter" tabindex="-1" role="dialog" aria-labelledby="systemUsersModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -34,8 +38,8 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            @await Component.InvokeAsync("GetUsersNotInCourse", new { courseId = Model.Course.Id })
+                        <div class="modal-body" id="usermodalbody">
+                            @await Component.InvokeAsync("GetUsersNotInCourse", new { courseId = Model.Course.Id, mainPage = true })
                         </div>
                     </div>
                 </div>

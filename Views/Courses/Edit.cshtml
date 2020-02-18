@@ -86,7 +86,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @await Component.InvokeAsync("GetUsersNotInCourse", new { courseId = Model.Course.Id })
+                @await Component.InvokeAsync("GetUsersNotInCourse", new { courseId = Model.Course.Id, mainPage = false})
             </div>
 
         </div>

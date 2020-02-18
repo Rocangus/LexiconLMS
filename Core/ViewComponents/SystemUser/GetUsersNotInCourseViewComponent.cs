@@ -16,9 +16,9 @@ namespace LexiconLMS.Core.ViewComponents.SystemUser
             _userService = userService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int courseId)
+        public async Task<IViewComponentResult> InvokeAsync(int courseId, bool mainPage)
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (mainPage)
             {
                 return View(await _userService.GetSystemUsersNotInCourse(courseId));
 

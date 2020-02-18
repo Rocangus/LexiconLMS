@@ -226,7 +226,7 @@ namespace LexiconLMS.Controllers
             //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
         }
 
-        public async Task<IActionResult> AddUserToCourse(string userId, int courseId)
+        public async Task<IActionResult> AddUserToCourse(string userId, int courseId, bool mainPage)
         {
             var roleId = await _context.UserRoles.Where(ur => ur.UserId.Equals(userId)).Select(ur => ur.RoleId).FirstOrDefaultAsync();
             var roleName = await _context.Roles.Where(r => r.Id.Equals(roleId)).Select(r => r.Name).FirstOrDefaultAsync();
@@ -238,11 +238,11 @@ namespace LexiconLMS.Controllers
             };
             _context.UserCourses.Add(userCourse);
             await _context.SaveChangesAsync();
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (mainPage)
             {
                 return ViewComponent("Users", new { courseId });
             }
-            return View("Edit", await _courseRepository.GetCourseViewModel(courseId));
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult GetUsersNotInCourseComponent(int courseId)
