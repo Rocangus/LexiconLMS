@@ -4,23 +4,72 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row text-center" id="mainbackgroundcolor">
-    <div class="col-md-12">
-        <h2>
-            @Model.Course.Name
-        </h2>
+@if (Model.Course != null)
+{
+    <div class="row text-center" id="mainbackgroundcolor">
+        <div class="col-md-12">
+            <h2>
+                <a asp-controller="Home" asp-action="Index" style="color: black;">
+                    @Model.Course.Name
+                </a>
+            </h2>
+        </div>
     </div>
-</div>
 
+    <div class="row" id="mainbackgroundcolor">
+        <div class="col-md-2" id="mainmoduleactivityelement" style="height: 68vh; overflow:auto;">
+            @await Component.InvokeAsync("Modules", new { courseId = Model.Course.Id })
+        </div>
+        <div class="col-md-8" id="maincourseelement" style="height: 68vh; overflow:auto;">
+            @await Component.InvokeAsync("Course", new { course = Model.Course })
+        </div>
+        <div class="col-md-2" id="mainsystemuserselement">
+            <h5 class="text-center">Students</h5>
+            <hr />
+            <button type="button" id="systemUsersPopUp" class="btn btn-primary btn-sm" style="width: 100%" data-toggle="modal" data-target="systemUsersMainModalCenter">Add Member</button>
+            <br />
+            <!--SystemUser Modal-->
+            <div class="modal fade" id="systemUsersMainModalCenter" tabindex="-1" role="dialog" aria-labelledby="systemUsersModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="exampleModalLongTitle">Add Members to the course</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="usermodalbody">
+                            @await Component.InvokeAsync("GetUsersNotInCourse", new { courseId = Model.Course.Id, mainPage = true })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="usercourselist">
+                @await Component.InvokeAsync("Users", new { courseId = Model.Course.Id })
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1>No course</h1>
+    <p>This user is not registered on a course.</p>
+}
 
-<div class="row"  id="mainbackgroundcolor">
-    <div class="col-md-2" id="mainmoduleactivityelement" height: 68vh; overflow:auto;">
-        @await Component.InvokeAsync("Modules", new { courseId = Model.Course.Id })
-    </div>
-    <div class="col-md-8" id="maincourseelement">
-        @await Component.InvokeAsync("Course", new { course = Model.Course })
-    </div>
-    <div class="col-md-2" id="mainsystemuserselement"style="height: 68vh; overflow:auto; padding-right: 10px;">
-        @await Component.InvokeAsync("Users", new { courseId = Model.Course.Id })
-    </div>
-</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+
+</script>
+
+<script type="text/javascript">
+
+    $("#modulePopUp").click(function () {
+        $("#moduleModalCenter").modal('show');
+    });
+
+    $("#btnHideModal").click(function () {
+        $("#moduleModalCenter").modal('hide');
+    });
+    $("#systemUsersPopUp").click(function () {
+        $("#systemUsersMainModalCenter").modal('show');
+    });
+</script>

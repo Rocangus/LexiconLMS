@@ -7,9 +7,17 @@
 
   <ItemGroup>
     <Compile Remove="Data\User\**" />
+    <Compile Remove="Views\Courses\Components\**" />
+    <Compile Remove="Views\Shared\Components\UserDocumentUpload\**" />
     <Content Remove="Data\User\**" />
+    <Content Remove="Views\Courses\Components\**" />
+    <Content Remove="Views\Shared\Components\UserDocumentUpload\**" />
     <EmbeddedResource Remove="Data\User\**" />
+    <EmbeddedResource Remove="Views\Courses\Components\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\UserDocumentUpload\**" />
     <None Remove="Data\User\**" />
+    <None Remove="Views\Courses\Components\**" />
+    <None Remove="Views\Shared\Components\UserDocumentUpload\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,12 +75,6 @@
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Views\Courses\Components\DocumentUpload\" />
-    <Folder Include="Views\Shared\Components\UserDocumentUpload\" />
   </ItemGroup>
 
 </Project>

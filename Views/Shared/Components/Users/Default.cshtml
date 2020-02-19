@@ -1,23 +1,25 @@
 ﻿@model IEnumerable<LexiconLMS.Core.ViewModels.SystemUserViewModel>
 
-<h5>Students</h5>
-<hr />
+
 @{ int i = 1; }
-@foreach (var user in Model)
-{
-    <ul id="mainuserlist">
+<div style="height: 56vh; overflow:auto; padding-right: 10px;">
+    @foreach (var user in Model)
+    {
+        <ul id="mainuserlist">
             @i.
             <a class="hidden-link" asp-controller="SystemUser" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
-        @if (User.IsInRole("Teacher"))
-        {
-            <a asp-controller="Courses" asp-action="RemoveUserFromCourse"
-               asp-route-userId="@user.Id"
-               asp-route-courseId="@user.CourseId"
-               data-ajax="true"
-               data-ajax-method="POST"
-               data-ajax-mode="replace"
-               data-ajax-update="#mainsystemuserselement">Remove</a>
-        }
-    </ul>
-    i++;
-}
+            @if (User.IsInRole("Teacher"))
+            {
+                <a asp-controller="Courses" asp-action="RemoveUserFromCourse"
+                   asp-route-userId="@user.Id"
+                   asp-route-courseId="@user.CourseId"
+                   asp-route-mainPage="true"
+                   data-ajax="true"
+                   data-ajax-method="POST"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#mainsystemuserselement">Remove</a>
+            }
+        </ul>
+        i++;
+    }
+</div>

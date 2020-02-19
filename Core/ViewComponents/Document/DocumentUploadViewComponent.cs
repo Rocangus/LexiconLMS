@@ -30,14 +30,35 @@ namespace LexiconLMS.Core.ViewComponents.Document
             {
                 case "Activity":
                     return ActivityDocumentUpload(userId, int.Parse(entityId));
+                case "Assignment":
+                    return AssignmentDocumentUpload(userId, int.Parse(entityId));
+                case "Module":
+                    return ModuleDocumentUpload(userId, int.Parse(entityId));
+                default:
+                    break;
             }
 
-            return View(new UserDocumentUploadViewModel { UserId = userId });
+            if (!entityId.Equals(_userService.GetUserId(user)))
+            { 
+                return View();
+            }
+
+            return View("User", new UserDocumentUploadViewModel { UserId = userId });
         }
 
         private IViewComponentResult ActivityDocumentUpload(string userId, int entityId)
         {
             return View("Activity", new ActivityDocumentUploadViewModel { ActivityId = entityId, UserId = userId });
+        }
+
+        private IViewComponentResult AssignmentDocumentUpload(string userId, int entityId)
+        {
+            return View("Assignment", new AssignmentDocumentUploadViewModel { ActivityId = entityId, UserId = userId });
+        }
+
+        private IViewComponentResult ModuleDocumentUpload(string userId, int entityId)
+        {
+            return View("Module", new ModuleDocumentUploadViewModel { ModuleId = entityId, UserId = userId });
         }
     }
 }

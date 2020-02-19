@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<LexiconLMS.Core.Models.Module>
 
-<h5>Modules</h5>
+<h5 class="text-center">Modules</h5>
 <hr />
 @{ int i = 1; }
 @foreach (var item in Model)
 {
-        <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id" id="mainmoduleslist">
-            @i.  <a asp-controller="Module" asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
-            @await Component.InvokeAsync("Activities", new { moduleId = item.Id })
-        </p>
+    <p asp-controller="Module" asp-action="Delete" asp-route-id="@item.Id" id="mainmoduleslist">
+        @i.  <a asp-controller="Home" class="showmodule" data-moduleid="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+        @await Component.InvokeAsync("Activities", new { moduleId = item.Id })
+    </p>
+    
     i++;
     <hr />
 }

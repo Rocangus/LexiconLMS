@@ -1,4 +1,4 @@
-﻿@model LexiconLMS.Core.Models.SystemUser
+﻿@model LexiconLMS.Core.ViewModels.SystemUserDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,18 +7,29 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Course</h4>
+    <h4>User</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.SystemUser.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.SystemUser.Name)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @foreach (var document in Model.SystemUser.Documents)
+    {
+        <span>@document.Name</span>
+        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@document.Id">Download</a> <text>|</text>
+        <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@document.Id" asp-route-entityId="@int.Parse("0")">Remove</a><br />
+    }
+</div>
+<div>
+    @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.SystemUser.Id.ToString(), user = User, entityType = "" })
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SystemUser.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -16,9 +16,14 @@ namespace LexiconLMS.Core.ViewComponents.SystemUser
             _userService = userService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int courseId)
+        public async Task<IViewComponentResult> InvokeAsync(int courseId, bool mainPage)
         {
-            return View(await _userService.GetSystemUsersNotInCourse(courseId));
+            if (mainPage)
+            {
+                return View(await _userService.GetSystemUsersNotInCourse(courseId));
+
+            }
+            return View("StandardEdit", await _userService.GetSystemUsersNotInCourse(courseId));
         }
     }
 }
