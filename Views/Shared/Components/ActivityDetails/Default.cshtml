@@ -29,18 +29,22 @@
     </dl>
 </div>
 <div>
-    @foreach (var documentActivty in Model.Activity.Documents)
+    @if(Model.Activity.Documents.Count > 0)
     {
-        <span>@documentActivty.Document.Name</span>
-        @if (User.IsInRole("Teacher"))
+        @foreach (var documentActivty in Model.Activity.Documents)
         {
-            <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
+            <span>@documentActivty.Document.Name</span>
+            @if (User.IsInRole("Teacher"))
+            {
+                <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentActivty.DocumentId" asp-route-entityId="@documentActivty.ActivityId">Remove</a><br />
+            }
+            <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
         }
-        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentActivty.DocumentId">Download</a> <text>|</text>
+    } else { 
+        <p>No documents found...</p>
     }
 
     <!-- TODO : Need to make it so that it only shows up when documents are null, don't seem to work with an "else"-->
-    <p>No documents found...</p>
 </div>
 
 @if (User.IsInRole("Teacher"))

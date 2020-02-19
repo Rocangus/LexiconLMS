@@ -59,7 +59,7 @@
 @if (User.IsInRole("Teacher"))
 {
     <div>
-        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Module.Id.ToString(), user = User, entityType = "Module" });        
+        @await Component.InvokeAsync("DocumentUpload", new { entityId = Model.Module.Id.ToString(), user = User, entityType = "Module" })
     </div>
 }
     <div>
