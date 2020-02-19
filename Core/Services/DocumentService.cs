@@ -39,9 +39,9 @@ namespace LexiconLMS.Core.Services
             return documents != null ? documents : new List<Document>();
         }
 
-        public Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id)
+        public async Task<List<DocumentsCourses>> GetCourseDocumentsAsync(int? id)
         {
-            throw new NotImplementedException();
+            return await _context.DocumentsCourses.Include(da => da.Document).Where(c => c.CourseId.Equals(id)).ToListAsync();
         }
 
         public Task<IEnumerable<Document>> GetModuleDocumentsAsync(int id)
@@ -333,6 +333,84 @@ namespace LexiconLMS.Core.Services
             }
             return true;
         }
+
+
+
+
+
+
+
+        public async Task<bool> SaveCourseDocumentToFile(CourseDocumentUploadViewModel model)
+        {
+            string path = await _documentIOService.SaveActivityDocumentAsync(model.FormFile, model.CourseId);
+
+            if (path.Equals(string.Empty))
+                return false;
+
+            var document = CreateDocument(model.FormFile, model.UserId, path);
+
+            if (!await SaveDocument(document))
+                return false;
+
+            var documentId = await _context.Documents.Where(d => d.Path.Equals(path)).Select(d => d.Id).FirstOrDefaultAsync();
+
+            //CourseDocumentUploadViewModel documentsCourse = new CourseDocumentUploadViewModel
+            DocumentsCourses documentsCourse = new DocumentsCourses
+            {
+                CourseId = model.CourseId,
+                DocumentId = documentId
+            };
+            return await SaveDocumentCourse(documentsCourse);
+        }
+
+
+
+        private async Task<bool> SaveDocumentCourse(DocumentsCourses documentsCourses)
+        {
+            _context.DocumentsCourses.Add(documentsCourses);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                LogException(due);
+                return false;
+            }
+            return true;
+        }
+
+
+
+        //public async Task<bool> SaveCourseDocumentToFile(CourseDocumentUploadViewModel model)
+        //{
+
+        //    string path = await _documentIOService.SaveCourseDocumentAsync(model.FormFile, model.UserId, model.CourseId);
+
+        //    if (path.Equals(string.Empty))
+        //        return false;
+        //    var document = new Document
+        //    {
+        //        Path = path,
+        //        Name = model.FormFile,
+        //        SystemUserId = userId,
+        //        UploadTime = DateTime.UtcNow,
+        //        Description = string.Empty
+        //    };
+
+        //    _context.Add(document);
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException due)
+        //    {
+        //        _logger.LogWarning("Failed to save document to database: " + due.InnerException);
+        //        _logger.LogTrace(due.StackTrace);
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
 
     }

@@ -36,6 +36,24 @@
         @await Html.PartialAsync("_ModulesPartial", Model.Modules)
     </div>
 </div>
+@if (Model.Documents.Count > 0)
+{
+    <div>
+        @foreach (var documentCourse in Model.Documents)
+            {
+        <span>@documentCourse.Document.Name</span>
+        <a asp-action="DownloadDocument" asp-controller="Document" asp-route-documentId="@documentCourse.DocumentId">Download</a>  <text>|</text>
+        <a asp-controller="Document" asp-action="RemoveDocument" asp-route-documentId="@documentCourse.DocumentId" asp-route-entityId="@documentCourse.CourseId">Remove</a><br />
+            }
+    </div>
+}
+@if (User.IsInRole("Teacher"))
+{
+<div>
+
+    @await Component.InvokeAsync("DocumentUpload", new { entityId =Model.Course.Id.ToString(), user = User, entityType = "Course" })
+</div>
+}
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

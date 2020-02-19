@@ -30,6 +30,8 @@ namespace LexiconLMS.Core.ViewComponents.Document
             {
                 case "Activity":
                     return ActivityDocumentUpload(userId, int.Parse(entityId));
+                case "Course":
+                    return CourseDocumentUpload(userId, int.Parse(entityId));
                 case "Assignment":
                     return AssignmentDocumentUpload(userId, int.Parse(entityId));
                 case "Module":
@@ -49,8 +51,14 @@ namespace LexiconLMS.Core.ViewComponents.Document
         private IViewComponentResult ActivityDocumentUpload(string userId, int entityId)
         {
             return View("Activity", new ActivityDocumentUploadViewModel { ActivityId = entityId, UserId = userId });
+
         }
 
+
+        private IViewComponentResult CourseDocumentUpload(string userId, int entityId)
+        {
+            return View("Course", new CourseDocumentUploadViewModel { CourseId = entityId, UserId = userId });
+        }
         private IViewComponentResult AssignmentDocumentUpload(string userId, int entityId)
         {
             return View("Assignment", new AssignmentDocumentUploadViewModel { ActivityId = entityId, UserId = userId });
