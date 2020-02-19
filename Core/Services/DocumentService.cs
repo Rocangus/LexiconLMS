@@ -39,9 +39,9 @@ namespace LexiconLMS.Core.Services
             return documents != null ? documents : new List<Document>();
         }
 
-        public Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id)
+        public async Task<List<DocumentsCourses>> GetCourseDocumentsAsync(int? id)
         {
-            throw new NotImplementedException();
+            return await _context.DocumentsCourses.Include(da => da.Document).Where(c => c.CourseId.Equals(id)).ToListAsync();
         }
 
         public Task<IEnumerable<Document>> GetModuleDocumentsAsync(int id)

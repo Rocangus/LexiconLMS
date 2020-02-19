@@ -42,8 +42,8 @@ namespace LexiconLMS.Controllers
                 return NotFound();
             }
 
-            //return View(await _courseRepository.GetCourseViewModel(id));
-            return View(await _courseRepository.GetCourse(id));
+            return View(await _courseRepository.GetCourseViewModel(id));
+            //return View(await _courseRepository.GetCourse(id));
         }
 
 

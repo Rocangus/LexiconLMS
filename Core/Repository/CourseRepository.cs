@@ -47,7 +47,7 @@ namespace LexiconLMS.Core.Repository
 
             model.Modules = await _context.Modules.Where(m => m.CourseId == id).ToListAsync();            
             model.SystemUsers = _userService.GetSystemUserViewModels(id);
-            model.Documents = await _documentService.GetCourseDocumentsAsync((int)id);
+            model.Documents = await _documentService.GetCourseDocumentsAsync(id);
 
             model.Module = new Module
             {

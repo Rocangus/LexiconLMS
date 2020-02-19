@@ -146,7 +146,15 @@ namespace LexiconLMS.Controllers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> UploadCourseDocument(IFormFile formFile, string userId, int courseId)
         {
-            var result = await _documentService.SaveCourseDocumentToFile(formFile, userId, courseId);
+            var model = new CourseDocumentUploadViewModel
+            {
+                FormFile = formFile,
+                UserId = userId,
+                CourseId=courseId
+            };
+
+      
+            var result = await _documentService.SaveCourseDocumentToFile(model);
             return RedirectToAction(@"Details", "Courses", new { Id = courseId });
         }
 

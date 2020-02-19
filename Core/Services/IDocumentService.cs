@@ -8,7 +8,7 @@ namespace LexiconLMS.Core.Services
 {
     public interface IDocumentService
     {
-        Task<IEnumerable<Document>> GetCourseDocumentsAsync(int id);
+        Task<List<DocumentsCourses>> GetCourseDocumentsAsync(int? id);
         Task<IEnumerable<Document>> GetModuleDocumentsAsync(int id);
         Task<IEnumerable<Document>> GetActivityDocumentsAsync(int id);
         Task<IEnumerable<Document>> GetAssignmentDocumentsAsync(int id);
