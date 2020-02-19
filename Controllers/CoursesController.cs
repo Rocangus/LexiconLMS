@@ -228,7 +228,7 @@ namespace LexiconLMS.Controllers
             var SystemUserViewModel = _userService.GetSystemUserViewModels(courseId);
             if (mainPage)
             {
-                return ViewComponent("Index", "Home");
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Edit", new { id = courseId });
             //return PartialView("_SystemUsersPartialForCourse", SystemUserViewModel);
